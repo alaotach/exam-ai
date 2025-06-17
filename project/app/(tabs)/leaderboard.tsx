@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Trophy, Medal, Award, Users, Globe, GraduationCap } from 'lucide-react-native';
+import { Trophy, Medal, Award, Users, Globe, GraduationCap, TrendingUp as TrendUp } from 'lucide-react-native';
 import Card from '@/components/Card';
 import { mockLeaderboard } from '@/data/mockData';
 
@@ -152,7 +152,7 @@ export default function LeaderboardScreen() {
               </Text>
             </View>
             <View style={styles.achievementItem}>
-              <TrendingUp size={20} color="#34C759" />
+              <TrendUp size={20} color="#34C759" />
               <Text style={styles.achievementText}>
                 📈 Moved up 3 positions this week
               </Text>
@@ -174,6 +174,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F2F2F7',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   scrollView: {
     flex: 1,

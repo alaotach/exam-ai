@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, Brain, MessageSquare, TrendingUp, Trophy, User } from 'lucide-react-native';
+import { Home, Brain, MessageSquare, TrendingUp as TrendUp, Trophy, User, Bookmark, Swords } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -50,11 +50,29 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="battle"
+        options={{
+          title: 'Battle',
+          tabBarIcon: ({ size, color }) => (
+            <Swords size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="bookmarks"
+        options={{
+          title: 'Bookmarks',
+          tabBarIcon: ({ size, color }) => (
+            <Bookmark size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="progress"
         options={{
           title: 'Progress',
           tabBarIcon: ({ size, color }) => (
-            <TrendingUp size={size} color={color} />
+            <TrendUp size={size} color={color} />
           ),
         }}
       />

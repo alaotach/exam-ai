@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Animated, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Send, Bot, User } from 'lucide-react-native';
+import { Send, Bot, User, BookOpen, Lightbulb, Calculator, Beaker, Globe, Sparkles, Copy, ThumbsUp, ThumbsDown } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Card from '@/components/Card';
 import { ChatMessage } from '@/types';
 
@@ -16,25 +17,57 @@ export default function AssistantScreen() {
   ]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
+  const typingAnimation = useRef(new Animated.Value(0)).current;
 
-  const handleSendMessage = async () => {
-    if (!inputText.trim()) return;
+  const suggestions = [
+    { text: "Explain Newton's laws", icon: BookOpen, color: "#FF6B6B" },
+    { text: "Help with calculus", icon: Calculator, color: "#4ECDC4" },
+    { text: "Chemistry concepts", icon: Beaker, color: "#45B7D1" },
+    { text: "Geography facts", icon: Globe, color: "#96CEB4" },
+  ];
+
+  useEffect(() => {
+    if (isTyping) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(typingAnimation, {
+            toValue: 1,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+          Animated.timing(typingAnimation, {
+            toValue: 0,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    } else {
+      typingAnimation.setValue(0);
+    }
+  }, [isTyping]);
+
+  const handleSendMessage = async (text?: string) => {
+    const messageText = text || inputText.trim();
+    if (!messageText) return;
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
-      message: inputText.trim(),
+      message: messageText,
       isUser: true,
       timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
+    setSelectedSuggestion(null);
     setIsTyping(true);
 
     // Simulate AI response (replace with actual AI API call)
     setTimeout(() => {
-      const aiResponse = generateAIResponse(userMessage.message);
+      const aiResponse = generateAIResponse(messageText);
       const aiMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         message: aiResponse,
@@ -45,6 +78,20 @@ export default function AssistantScreen() {
       setMessages(prev => [...prev, aiMessage]);
       setIsTyping(false);
     }, 1500);
+  };
+
+  const handleSuggestionPress = (suggestion: string) => {
+    setSelectedSuggestion(suggestion);
+    handleSendMessage(suggestion);
+  };
+
+  const copyToClipboard = (text: string) => {
+    // Implementation would copy text to clipboard
+    console.log('Copying to clipboard:', text);
+  };
+
+  const provideFeedback = (messageId: string, isPositive: boolean) => {
+    console.log(`Feedback for message ${messageId}: ${isPositive ? 'positive' : 'negative'}`);
   };
 
   const generateAIResponse = (userMessage: string): string => {
@@ -118,10 +165,46 @@ Feel free to ask me anything specific about these subjects, and I'll provide det
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Bot size={24} color="#007AFF" />
-        <Text style={styles.headerTitle}>AI Study Assistant</Text>
-      </View>
+      {/* Enhanced Header */}
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerGradient}
+      >
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <View style={styles.botIcon}>
+              <Sparkles size={24} color="#FFFFFF" />
+            </View>
+            <View>
+              <Text style={styles.headerTitle}>AI Study Assistant</Text>
+              <Text style={styles.headerSubtitle}>Your personal tutor</Text>
+            </View>
+          </View>
+        </View>
+      </LinearGradient>
+
+      {/* Quick Suggestions */}
+      {messages.length <= 1 && (
+        <View style={styles.suggestionsContainer}>
+          <Text style={styles.suggestionsTitle}>Quick Start</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.suggestionsScroll}>
+            {suggestions.map((suggestion, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[styles.suggestionChip, { borderColor: suggestion.color }]}
+                onPress={() => handleSuggestionPress(suggestion.text)}
+              >
+                <suggestion.icon size={16} color={suggestion.color} />
+                <Text style={[styles.suggestionText, { color: suggestion.color }]}>
+                  {suggestion.text}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      )}
       
       <KeyboardAvoidingView 
         style={styles.chatContainer}
@@ -139,15 +222,44 @@ Feel free to ask me anything specific about these subjects, and I'll provide det
             ]}>
               <View style={styles.messageHeader}>
                 {message.isUser ? (
-                  <User size={16} color="#007AFF" />
+                  <View style={styles.userAvatar}>
+                    <User size={16} color="#FFFFFF" />
+                  </View>
                 ) : (
-                  <Bot size={16} color="#34C759" />
+                  <View style={styles.botAvatar}>
+                    <Bot size={16} color="#FFFFFF" />
+                  </View>
                 )}
                 <Text style={styles.messageSender}>
                   {message.isUser ? 'You' : 'AI Assistant'}
                 </Text>
               </View>
               <Text style={styles.messageText}>{message.message}</Text>
+              
+              {/* Action buttons for AI messages */}
+              {!message.isUser && (
+                <View style={styles.messageActions}>
+                  <TouchableOpacity 
+                    style={styles.actionButton}
+                    onPress={() => copyToClipboard(message.message)}
+                  >
+                    <Copy size={14} color="#8E8E93" />
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={styles.actionButton}
+                    onPress={() => provideFeedback(message.id, true)}
+                  >
+                    <ThumbsUp size={14} color="#8E8E93" />
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={styles.actionButton}
+                    onPress={() => provideFeedback(message.id, false)}
+                  >
+                    <ThumbsDown size={14} color="#8E8E93" />
+                  </TouchableOpacity>
+                </View>
+              )}
+              
               <Text style={styles.messageTime}>
                 {message.timestamp.toLocaleTimeString([], { 
                   hour: '2-digit', 
@@ -160,13 +272,39 @@ Feel free to ask me anything specific about these subjects, and I'll provide det
           {isTyping && (
             <View style={[styles.messageContainer, styles.aiMessage]}>
               <View style={styles.messageHeader}>
-                <Bot size={16} color="#34C759" />
+                <View style={styles.botAvatar}>
+                  <Bot size={16} color="#FFFFFF" />
+                </View>
                 <Text style={styles.messageSender}>AI Assistant</Text>
               </View>
               <View style={styles.typingIndicator}>
-                <View style={styles.typingDot} />
-                <View style={styles.typingDot} />
-                <View style={styles.typingDot} />
+                <Animated.View style={[
+                  styles.typingDot,
+                  {
+                    opacity: typingAnimation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.3, 1],
+                    }),
+                  },
+                ]} />
+                <Animated.View style={[
+                  styles.typingDot,
+                  {
+                    opacity: typingAnimation.interpolate({
+                      inputRange: [0, 0.5, 1],
+                      outputRange: [0.3, 1, 0.3],
+                    }),
+                  },
+                ]} />
+                <Animated.View style={[
+                  styles.typingDot,
+                  {
+                    opacity: typingAnimation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [1, 0.3],
+                    }),
+                  },
+                ]} />
               </View>
             </View>
           )}
@@ -182,8 +320,11 @@ Feel free to ask me anything specific about these subjects, and I'll provide det
             maxLength={500}
           />
           <TouchableOpacity 
-            style={styles.sendButton}
-            onPress={handleSendMessage}
+            style={[
+              styles.sendButton,
+              { backgroundColor: inputText.trim() ? '#007AFF' : '#E5E5EA' }
+            ]}
+            onPress={() => handleSendMessage()}
             disabled={!inputText.trim()}
           >
             <Send size={20} color={inputText.trim() ? '#FFFFFF' : '#8E8E93'} />
@@ -198,21 +339,72 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F2F2F7',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  headerGradient: {
+    paddingBottom: 1,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    gap: 12,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  botIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontFamily: 'Inter-Bold',
+    color: '#FFFFFF',
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+    color: '#FFFFFF',
+    opacity: 0.9,
+  },
+  suggestionsContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
-    gap: 8,
   },
-  headerTitle: {
-    fontSize: 18,
+  suggestionsTitle: {
+    fontSize: 16,
     fontFamily: 'Inter-SemiBold',
     color: '#1C1C1E',
+    marginBottom: 12,
+  },
+  suggestionsScroll: {
+    paddingVertical: 4,
+  },
+  suggestionChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    backgroundColor: '#FFFFFF',
+    marginRight: 12,
+    gap: 8,
+  },
+  suggestionText: {
+    fontSize: 14,
+    fontFamily: 'Inter-Medium',
   },
   chatContainer: {
     flex: 1,
@@ -224,9 +416,17 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     marginVertical: 4,
-    padding: 12,
-    borderRadius: 12,
+    padding: 16,
+    borderRadius: 16,
     maxWidth: '85%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   userMessage: {
     alignSelf: 'flex-end',
@@ -241,8 +441,24 @@ const styles = StyleSheet.create({
   messageHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginBottom: 4,
+    gap: 8,
+    marginBottom: 8,
+  },
+  userAvatar: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  botAvatar: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#34C759',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   messageSender: {
     fontSize: 12,
@@ -250,21 +466,31 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
   },
   messageText: {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: 'Inter-Regular',
-    lineHeight: 20,
+    lineHeight: 22,
     color: '#1C1C1E',
+  },
+  messageActions: {
+    flexDirection: 'row',
+    marginTop: 8,
+    gap: 8,
+  },
+  actionButton: {
+    padding: 6,
+    borderRadius: 6,
+    backgroundColor: '#F2F2F7',
   },
   messageTime: {
     fontSize: 10,
     fontFamily: 'Inter-Regular',
     color: '#8E8E93',
-    marginTop: 4,
+    marginTop: 8,
     alignSelf: 'flex-end',
   },
   typingIndicator: {
     flexDirection: 'row',
-    gap: 4,
+    gap: 6,
     paddingVertical: 8,
   },
   typingDot: {
@@ -277,30 +503,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E5E5EA',
-    gap: 8,
+    gap: 12,
   },
   textInput: {
     flex: 1,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#E5E5EA',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    borderRadius: 24,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
     fontSize: 16,
     fontFamily: 'Inter-Regular',
-    maxHeight: 100,
+    maxHeight: 120,
     backgroundColor: '#F8F9FA',
   },
   sendButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#007AFF',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#007AFF',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
 });

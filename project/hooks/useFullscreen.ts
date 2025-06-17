@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Platform, StatusBar } from 'react-native';
-import * as SystemUI from 'expo-system-ui';
 import * as NavigationBar from 'expo-navigation-bar';
 
 export const useFullscreen = () => {
@@ -8,17 +7,30 @@ export const useFullscreen = () => {
     const setupFullscreen = async () => {
       if (Platform.OS === 'android') {
         try {
-          // Configure status bar for edge-to-edge mode
+          // Configure status bar
           StatusBar.setHidden(false);
           StatusBar.setTranslucent(true);
+        //   StatusBar.setBackgroundColor('transparent', true);
           StatusBar.setBarStyle('light-content', true);
           
-          // For edge-to-edge mode, we only need to hide the navigation bar
-          // System UI colors are handled by the framework
+          // Set system UI background color to transparent
+        //   await SystemUI.setBackgroundColorAsync('transparent');
+          
+          // Configure navigation bar for true edge-to-edge fullscreen
+        //   await NavigationBar.setBackgroundColorAsync('transparent');
+        //   await NavigationBar.setBorderColorAsync('transparent');
+        //   await NavigationBar.setPositionAsync('absolute');
           await NavigationBar.setVisibilityAsync('hidden');
           
         } catch (error) {
           console.log('Fullscreen configuration failed:', error);
+          // Fallback: try basic configuration
+          try {
+            // await NavigationBar.setBackgroundColorAsync('transparent');
+            await NavigationBar.setVisibilityAsync('hidden');
+          } catch (fallbackError) {
+            console.log('Fallback configuration also failed:', fallbackError);
+          }
         }
       }
     };

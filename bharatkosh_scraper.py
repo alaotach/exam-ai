@@ -163,28 +163,28 @@ class BharatkoshScraper:
                         print(f"🔄 GET failed, trying POST for page {page_num}...")
                         time.sleep(2)
                         response = self.scraper.post(url, headers=self.headers, timeout=90)
-            else:
-                # Fallback to manual cookies
-                print(f"🔄 Fetching page {page_num} (manual cookie mode)...")
-                
-                # Try POST first
-                response = requests.post(
-                    url,
-                    headers=self.headers,
-                    cookies=self.manual_cookies,
-                    timeout=60
-                )
-                
-                # If POST fails, try GET
-                if response.status_code not in [200, 404] or len(response.text) < 1000:
-                    print(f"🔄 POST failed, trying GET for page {page_num}...")
-                    response = requests.get(
+                else:
+                    # Fallback to manual cookies
+                    print(f"🔄 Fetching page {page_num} (manual cookie mode)...")
+                    
+                    # Try POST first
+                    response = requests.post(
                         url,
                         headers=self.headers,
                         cookies=self.manual_cookies,
                         timeout=60
                     )
-            
+                    
+                    # If POST fails, try GET
+                    if response.status_code not in [200, 404] or len(response.text) < 1000:
+                        print(f"🔄 POST failed, trying GET for page {page_num}...")
+                        response = requests.get(
+                            url,
+                            headers=self.headers,
+                            cookies=self.manual_cookies,
+                            timeout=60
+                        )
+                
                 # Check if we got a Cloudflare challenge page or error
                 cloudflare_indicators = [
                     "Just a moment",
@@ -217,15 +217,17 @@ class BharatkoshScraper:
                 if response.status_code == 200:
                     print(f"✅ Successfully fetched page {page_num} (Status: 200, Length: {len(response.text)} chars)")
                     return response.text
-            elif response.status_code == 404 and len(response.text) > 10000:
-                # Sometimes 404 pages still contain content (MediaWiki behavior)
-                print(f"✅ Page {page_num} returned 404 but has content ({len(response.text)} chars)")
-                return response.text
-            else:
-                print(f"❌ Failed to fetch page {page_num}: Status {response.status_code}, Length: {len(response.text)} chars")
-                print(f"   Response preview: {response.text[:200]}...")
-                return None
-                
+                elif response.status_code == 404 and len(response.text) > 10000:
+                    # Sometimes 404 pages still contain content (MediaWiki behavior)
+                    print(f"✅ Page {page_num} returned 404 but has content ({len(response.text)} chars)")
+                    return response.text
+                else:
+                    print(f"❌ Failed to fetch page {page_num}: Status {response.status_code}, Length: {len(response.text)} chars")
+                    print(f"   Response preview: {response.text[:200]}...")
+                    if attempt < max_retries - 1:
+                        continue
+                    return None
+                    
             except requests.exceptions.Timeout:
                 print(f"⏱️ Timeout fetching page {page_num} on attempt {attempt + 1}")
                 if attempt < max_retries - 1:

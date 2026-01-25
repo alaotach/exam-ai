@@ -1,11 +1,41 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Platform, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+  StatusBar,
+  RefreshControl,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TrendingUp as TrendUp, Clock, Target, Award, Calendar, BookOpen, Zap, Star } from 'lucide-react-native';
+import { router } from 'expo-router';
+import {
+  BarChart3,
+  TrendingUp,
+  Calendar,
+  Clock,
+  Target,
+  BookOpen,
+  Award,
+  Star,
+  Brain,
+  Zap,
+  Trophy,
+  ArrowUp,
+  ArrowDown,
+  Minus,
+} from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Card from '@/components/Card';
-import StatCard from '@/components/StatCard';
-import { mockProgressData, mockUser } from '@/data/mockData';
+import EnhancedQuestionDatabase, {
+  UserPerformance,
+  TopicPerformance,
+  WeeklyProgress,
+} from '@/services/question-database';
 
 const { width } = Dimensions.get('window');
 

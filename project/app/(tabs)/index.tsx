@@ -1,261 +1,431 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Platform, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+  StatusBar,
+  RefreshControl,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { BookOpen, Target, Clock, TrendingUp as TrendUp, Zap, Award, Brain, Calendar, Star, Swords } from 'lucide-react-native';
+import {
+  BookOpen,
+  Target,
+  Clock,
+  TrendingUp as TrendUp,
+  Zap,
+  Award,
+  Brain,
+  Calendar,
+  Star,
+  Swords,
+  BarChart3,
+  Trophy,
+  Fire,
+  Users,
+  Globe,
+  Sparkles,
+} from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import { mockUser } from '@/data/mockData';
+import EnhancedQuestionDatabase, {
+  UserPerformance,
+  Achievement,
+  Recommendation,
+} from '@/services/question-database';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-export default function HomeScreen() {
-  const todayStats = {
-    questionsAttempted: 12,
-    accuracy: 85.2,
-    timeSpent: 45,
+interface DashboardStats {
+  questionsAttempted: number;
+  accuracy: number;
+  timeSpent: number;
+  streak: number;
+  rank: string;
+  weeklyImprovement: number;
+  totalTopics: number;
+  masteredTopics: number;
+}
+
+export default function EnhancedHomeScreen() {
+  const [performance, setPerformance] = useState<UserPerformance | null>(null);
+  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
+  const [questionStats, setQuestionStats] = useState<any>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+      
+      // Load user performance
+      const userPerformance = await EnhancedQuestionDatabase.getUserPerformance('default_user');
+      setPerformance(userPerformance);
+      
+      // Load question statistics
+      const qStats = await EnhancedQuestionDatabase.getQuestionStats();
+      setQuestionStats(qStats);
+      
+      // Calculate dashboard stats
+      if (userPerformance) {
+        const recentWeek = userPerformance.weeklyProgress[userPerformance.weeklyProgress.length - 1];
+        const previousWeek = userPerformance.weeklyProgress[userPerformance.weeklyProgress.length - 2];
+        
+        const masteredTopics = Object.values(userPerformance.topicWisePerformance)
+          .filter(topic => topic.masteryLevel === 'expert' || topic.masteryLevel === 'advanced').length;
+        
+        setDashboardStats({
+          questionsAttempted: userPerformance.totalQuestionsAttempted,
+          accuracy: userPerformance.overallAccuracy,
+          timeSpent: Math.round(userPerformance.timeSpent / 60), // Convert to minutes
+          streak: userPerformance.streakCurrent,
+          rank: calculateRank(userPerformance.overallAccuracy),
+          weeklyImprovement: recentWeek && previousWeek ? recentWeek.accuracy - previousWeek.accuracy : 0,
+          totalTopics: Object.keys(userPerformance.topicWisePerformance).length,
+          masteredTopics,
+        });
+      } else {
+        // Default stats for new users
+        setDashboardStats({
+          questionsAttempted: 0,
+          accuracy: 0,
+          timeSpent: 0,
+          streak: 0,
+          rank: 'Beginner',
+          weeklyImprovement: 0,
+          totalTopics: 0,
+          masteredTopics: 0,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const achievements = [
-    { id: 1, title: "7 Day Streak", icon: Star, color: "#FF6B35" },
-    { id: 2, title: "Math Master", icon: Award, color: "#FFD700" },
-    { id: 3, title: "Speed Demon", icon: Zap, color: "#00D2FF" },
-  ];
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadDashboardData();
+    setRefreshing(false);
+  };
 
-  const recentTopics = [
-    { subject: "Mathematics", progress: 85, color: "#FF6B6B" },
-    { subject: "Physics", progress: 72, color: "#4ECDC4" },
-    { subject: "Chemistry", progress: 91, color: "#45B7D1" },
-    { subject: "Biology", progress: 68, color: "#96CEB4" },
-  ];
+  const calculateRank = (accuracy: number): string => {
+    if (accuracy >= 95) return 'Grandmaster';
+    if (accuracy >= 90) return 'Master';
+    if (accuracy >= 80) return 'Expert';
+    if (accuracy >= 70) return 'Advanced';
+    if (accuracy >= 60) return 'Intermediate';
+    if (accuracy >= 40) return 'Novice';
+    return 'Beginner';
+  };
+
+  const getRankColor = (rank: string): string => {
+    const colors: Record<string, string> = {
+      Grandmaster: '#FFD700',
+      Master: '#C0C0C0',
+      Expert: '#CD7F32',
+      Advanced: '#4ECDC4',
+      Intermediate: '#45B7D1',
+      Novice: '#96CEB4',
+      Beginner: '#95A5A6',
+    };
+    return colors[rank] || '#95A5A6';
+  };
+
+  const startAITest = () => {
+    router.push('/practice?mode=ai');
+  };
+
+  const startQuickPractice = () => {
+    router.push('/practice?mode=quick');
+  };
+
+  const viewAnalytics = () => {
+    router.push('/progress');
+  };
+
+  const openBattle = () => {
+    router.push('/battle');
+  };
+
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#667eea" />
+          <Text style={styles.loadingText}>Loading your dashboard...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Enhanced Header with Gradient */}
+      <StatusBar barStyle="light-content" backgroundColor="#667eea" />
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {/* Enhanced Header with Performance Overview */}
         <LinearGradient
-          colors={['#667eea', '#764ba2']}
+          colors={['#667eea', '#764ba2', '#8B5A96']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.headerGradient}
         >
           <View style={styles.header}>
-            <View>
-              <Text style={styles.greeting}>Hello {mockUser.name} 👋</Text>
-              <Text style={styles.subtitle}>Ready to practice today?</Text>
+            <View style={styles.headerTop}>
+              <View>
+                <Text style={styles.greeting}>Hello Scholar! 👋</Text>
+                <Text style={styles.subtitle}>Ready to master Indian History?</Text>
+              </View>
+              <View style={styles.headerStats}>
+                <TouchableOpacity style={styles.streakBadge}>
+                  <Fire size={16} color="#FF6B35" />
+                  <Text style={styles.streakText}>{dashboardStats?.streak || 0}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.rankBadge, { backgroundColor: getRankColor(dashboardStats?.rank || 'Beginner') }]}
+                >
+                  <Trophy size={14} color="#FFFFFF" />
+                  <Text style={styles.rankText}>{dashboardStats?.rank || 'Beginner'}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TouchableOpacity style={styles.streakBadge}>
-              <Star size={16} color="#FF6B35" />
-              <Text style={styles.streakText}>{mockUser.streak}</Text>
-            </TouchableOpacity>
+
+            {/* Performance Metrics */}
+            <View style={styles.metricsRow}>
+              <View style={styles.metricItem}>
+                <Text style={styles.metricValue}>
+                  {dashboardStats?.questionsAttempted.toLocaleString() || '0'}
+                </Text>
+                <Text style={styles.metricLabel}>Questions</Text>
+              </View>
+              <View style={styles.metricDivider} />
+              <View style={styles.metricItem}>
+                <Text style={styles.metricValue}>
+                  {dashboardStats?.accuracy.toFixed(1) || '0.0'}%
+                </Text>
+                <Text style={styles.metricLabel}>Accuracy</Text>
+              </View>
+              <View style={styles.metricDivider} />
+              <View style={styles.metricItem}>
+                <Text style={styles.metricValue}>{dashboardStats?.timeSpent || '0'}m</Text>
+                <Text style={styles.metricLabel}>Study Time</Text>
+              </View>
+              <View style={styles.metricDivider} />
+              <View style={styles.metricItem}>
+                <Text style={styles.metricValue}>
+                  {dashboardStats?.masteredTopics || 0}/{dashboardStats?.totalTopics || 0}
+                </Text>
+                <Text style={styles.metricLabel}>Topics</Text>
+              </View>
+            </View>
           </View>
         </LinearGradient>
 
-        {/* Enhanced Stats Card */}
-        <Card style={styles.summaryCard}>
-          <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>Today's Practice</Text>
-            <TouchableOpacity style={styles.calendarButton}>
-              <Calendar size={20} color="#007AFF" />
-            </TouchableOpacity>
+        {/* AI-Powered Quick Actions */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Sparkles size={20} color="#667eea" />
+            <Text style={styles.sectionTitle}>AI-Powered Practice</Text>
           </View>
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <View style={[styles.statIconContainer, { backgroundColor: '#E3F2FD' }]}>
-                <BookOpen size={24} color="#007AFF" />
-              </View>
-              <Text style={styles.statNumber}>{todayStats.questionsAttempted}</Text>
-              <Text style={styles.statLabel}>Questions</Text>
-            </View>
-            <View style={styles.statItem}>
-              <View style={[styles.statIconContainer, { backgroundColor: '#E8F5E8' }]}>
-                <Target size={24} color="#34C759" />
-              </View>
-              <Text style={styles.statNumber}>{todayStats.accuracy}%</Text>
-              <Text style={styles.statLabel}>Accuracy</Text>
-            </View>
-            <View style={styles.statItem}>
-              <View style={[styles.statIconContainer, { backgroundColor: '#FFF3E0' }]}>
-                <Clock size={24} color="#FF9500" />
-              </View>
-              <Text style={styles.statNumber}>{todayStats.timeSpent}m</Text>
-              <Text style={styles.statLabel}>Time</Text>
-            </View>
-          </View>
-        </Card>
 
-        {/* Achievement Badges */}
-        <Card style={{ marginHorizontal: 16 }}>
-          <Text style={styles.cardTitle}>Recent Achievements</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.achievementsScroll}>
-            {achievements.map((achievement) => (
-              <TouchableOpacity key={achievement.id} style={styles.achievementBadge}>
-                <View style={[styles.achievementIcon, { backgroundColor: achievement.color + '20' }]}>
-                  <achievement.icon size={24} color={achievement.color} />
-                </View>
-                <Text style={styles.achievementTitle}>{achievement.title}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </Card>
-
-        {/* Subject Progress */}
-        <Card style={{ marginHorizontal: 16 }}>
-          <Text style={styles.cardTitle}>Subject Progress</Text>
-          <View style={styles.subjectContainer}>
-            {recentTopics.map((topic, index) => (
-              <View key={index} style={styles.subjectItem}>
-                <View style={styles.subjectHeader}>
-                  <Text style={styles.subjectName}>{topic.subject}</Text>
-                  <Text style={styles.subjectProgress}>{topic.progress}%</Text>
-                </View>
-                <View style={styles.progressBarContainer}>
-                  <View 
-                    style={[
-                      styles.progressBar, 
-                      { 
-                        width: `${topic.progress}%`,
-                        backgroundColor: topic.color 
-                      }
-                    ]} 
-                  />
-                </View>
-              </View>
-            ))}
-          </View>
-        </Card>
-
-        {/* Enhanced Quick Actions */}
-        <Card style={{ marginHorizontal: 16 }}>
-          <Text style={styles.cardTitle}>Quick Actions</Text>
-          <View style={styles.buttonContainer}>
-            <LinearGradient
-              colors={['#667eea', '#764ba2']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.gradientButton}
-            >
-              <TouchableOpacity 
-                style={styles.gradientButtonInner}
-                onPress={() => router.push('/practice')}
+          <View style={styles.aiActionsRow}>
+            <TouchableOpacity style={styles.aiActionCard} onPress={startAITest}>
+              <LinearGradient
+                colors={['#FF6B6B', '#FF8E8E']}
+                style={styles.aiActionGradient}
               >
                 <Brain size={24} color="#FFFFFF" />
-                <Text style={styles.gradientButtonText}>Take Mock Test</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-            
-            <LinearGradient
-              colors={['#FF6B35', '#F7931E']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.gradientButton}
-            >
-              <TouchableOpacity 
-                style={styles.gradientButtonInner}
-                onPress={() => router.push('/battle')}
-              >
-                <Swords size={24} color="#FFFFFF" />
-                <Text style={styles.gradientButtonText}>Battle Arena</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-            
-            <LinearGradient
-              colors={['#11998e', '#38ef7d']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.gradientButton}
-            >
-              <TouchableOpacity 
-                style={styles.gradientButtonInner}
-                onPress={() => router.push('/practice')}
+                <Text style={styles.aiActionTitle}>AI Test</Text>
+                <Text style={styles.aiActionSubtitle}>Adaptive questions based on your performance</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.aiActionCard} onPress={startQuickPractice}>
+              <LinearGradient
+                colors={['#4ECDC4', '#44A08D']}
+                style={styles.aiActionGradient}
               >
                 <Zap size={24} color="#FFFFFF" />
-                <Text style={styles.gradientButtonText}>Personalized Practice</Text>
-              </TouchableOpacity>
+                <Text style={styles.aiActionTitle}>Quick Practice</Text>
+                <Text style={styles.aiActionSubtitle}>Random questions from all topics</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity style={styles.battleCard} onPress={openBattle}>
+            <LinearGradient
+              colors={['#667eea', '#764ba2']}
+              style={styles.battleGradient}
+            >
+              <Swords size={24} color="#FFFFFF" />
+              <View style={styles.battleContent}>
+                <Text style={styles.battleTitle}>Challenge Friends</Text>
+                <Text style={styles.battleSubtitle}>Compete in real-time history battles</Text>
+              </View>
+              <View style={styles.battleBadge}>
+                <Users size={16} color="#667eea" />
+                <Text style={styles.battleBadgeText}>Live</Text>
+              </View>
             </LinearGradient>
-          </View>
-        </Card>
-
-        {/* Study Goals */}
-        <Card style={{ marginHorizontal: 16 }}>
-          <Text style={styles.cardTitle}>Today's Goals</Text>
-          <View style={styles.goalsContainer}>
-            <View style={styles.goalItem}>
-              <View style={styles.goalCheck}>
-                <Star size={12} color="#FFD700" />
-              </View>
-              <Text style={styles.goalText}>Complete 15 questions</Text>
-              <Text style={styles.goalProgress}>12/15</Text>
-            </View>
-            <View style={styles.goalItem}>
-              <View style={styles.goalCheck}>
-                <Star size={12} color="#FFD700" />
-              </View>
-              <Text style={styles.goalText}>Maintain 80% accuracy</Text>
-              <Text style={styles.goalProgress}>85%</Text>
-            </View>
-            <View style={styles.goalItem}>
-              <View style={[styles.goalCheck, { backgroundColor: '#E8F5E8' }]}>
-                <Star size={12} color="#34C759" />
-              </View>
-              <Text style={[styles.goalText, { textDecorationLine: 'line-through', color: '#8E8E93' }]}>Study for 30 minutes</Text>
-              <Text style={styles.goalProgress}>✓</Text>
-            </View>
-          </View>
-        </Card>
-
-        <Card style={{ marginHorizontal: 16 }}>
-          <Text style={styles.cardTitle}>Your Progress</Text>
-          <View style={styles.progressContainer}>
-            <View style={styles.progressItem}>
-              <Text style={styles.progressNumber}>{mockUser.streak}</Text>
-              <Text style={styles.progressLabel}>Day Streak</Text>
-            </View>
-            <View style={styles.progressItem}>
-              <Text style={styles.progressNumber}>{mockUser.totalPractice}</Text>
-              <Text style={styles.progressLabel}>Total Practice</Text>
-            </View>
-            <View style={styles.progressItem}>
-              <Text style={styles.progressNumber}>{mockUser.accuracy}%</Text>
-              <Text style={styles.progressLabel}>Overall Accuracy</Text>
-            </View>
-          </View>
-          <TouchableOpacity 
-            style={styles.viewMoreButton}
-            onPress={() => router.push('/progress')}
-          >
-            <TrendUp size={16} color="#007AFF" />
-            <Text style={styles.viewMoreText}>View Detailed Progress</Text>
           </TouchableOpacity>
-        </Card>
+        </View>
 
-        <Card style={{ marginHorizontal: 16, marginBottom: 20 }}>
-          <Text style={styles.cardTitle}>Recent Activity</Text>
-          <View style={styles.activityContainer}>
-            <View style={styles.activityItem}>
-              <View style={styles.activityDot} />
-              <View style={styles.activityContent}>
-                <Text style={styles.activityTitle}>Completed Mathematics Quiz</Text>
-                <Text style={styles.activityTime}>2 hours ago</Text>
-              </View>
+        {/* Today's Achievements */}
+        {performance?.achievements && performance.achievements.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Award size={20} color="#FF6B35" />
+              <Text style={styles.sectionTitle}>Recent Achievements</Text>
             </View>
-            <View style={styles.activityItem}>
-              <View style={styles.activityDot} />
-              <View style={styles.activityContent}>
-                <Text style={styles.activityTitle}>Bookmarked 3 questions</Text>
-                <Text style={styles.activityTime}>5 hours ago</Text>
-              </View>
-            </View>
-            <View style={styles.activityItem}>
-              <View style={styles.activityDot} />
-              <View style={styles.activityContent}>
-                <Text style={styles.activityTitle}>Asked AI Assistant about Physics</Text>
-                <Text style={styles.activityTime}>1 day ago</Text>
-              </View>
-            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {performance.achievements.slice(-3).map((achievement) => (
+                <View key={achievement.id} style={styles.achievementCard}>
+                  <Text style={styles.achievementIcon}>{achievement.icon}</Text>
+                  <Text style={styles.achievementTitle}>{achievement.title}</Text>
+                  <Text style={styles.achievementDescription}>{achievement.description}</Text>
+                </View>
+              ))}
+            </ScrollView>
           </View>
-        </Card>
+        )}
+
+        {/* Performance Insights */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <BarChart3 size={20} color="#45B7D1" />
+            <Text style={styles.sectionTitle}>Performance Insights</Text>
+          </View>
+
+          <Card style={styles.insightsCard}>
+            <View style={styles.insightRow}>
+              <View style={styles.insightItem}>
+                <View style={styles.insightIconContainer}>
+                  <TrendUp size={16} color="#4ECDC4" />
+                </View>
+                <View style={styles.insightContent}>
+                  <Text style={styles.insightLabel}>Weekly Progress</Text>
+                  <Text
+                    style={[
+                      styles.insightValue,
+                      {
+                        color:
+                          (dashboardStats?.weeklyImprovement || 0) >= 0 ? '#4ECDC4' : '#FF6B6B',
+                      },
+                    ]}
+                  >
+                    {(dashboardStats?.weeklyImprovement || 0) >= 0 ? '+' : ''}
+                    {dashboardStats?.weeklyImprovement?.toFixed(1) || '0.0'}%
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.insightItem}>
+                <View style={styles.insightIconContainer}>
+                  <Target size={16} color="#FFD700" />
+                </View>
+                <View style={styles.insightContent}>
+                  <Text style={styles.insightLabel}>Best Streak</Text>
+                  <Text style={styles.insightValue}>{performance?.streakBest || 0} days</Text>
+                </View>
+              </View>
+            </View>
+
+            <TouchableOpacity style={styles.viewAnalyticsButton} onPress={viewAnalytics}>
+              <BarChart3 size={16} color="#667eea" />
+              <Text style={styles.viewAnalyticsText}>View Detailed Analytics</Text>
+            </TouchableOpacity>
+          </Card>
+        </View>
+
+        {/* AI Recommendations */}
+        {performance?.personalizedRecommendations && performance.personalizedRecommendations.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Brain size={20} color="#8B5A96" />
+              <Text style={styles.sectionTitle}>AI Recommendations</Text>
+            </View>
+            
+            {performance.personalizedRecommendations.slice(0, 2).map((rec, index) => (
+              <Card key={index} style={styles.recommendationCard}>
+                <View style={styles.recommendationHeader}>
+                  <View style={[
+                    styles.priorityBadge,
+                    {
+                      backgroundColor:
+                        rec.priority === 'high'
+                          ? '#FF6B6B'
+                          : rec.priority === 'medium'
+                          ? '#FFD93D'
+                          : '#4ECDC4',
+                    },
+                  ]}>
+                    <Text style={styles.priorityText}>{rec.priority.toUpperCase()}</Text>
+                  </View>
+                  <Text style={styles.impactText}>{rec.estimatedImpact}% impact</Text>
+                </View>
+                <Text style={styles.recommendationTitle}>{rec.title}</Text>
+                <Text style={styles.recommendationDescription}>{rec.description}</Text>
+                
+                <View style={styles.actionItems}>
+                  {rec.actionItems.slice(0, 2).map((action, actionIndex) => (
+                    <View key={actionIndex} style={styles.actionItem}>
+                      <View style={styles.actionBullet} />
+                      <Text style={styles.actionText}>{action}</Text>
+                    </View>
+                  ))}
+                </View>
+              </Card>
+            ))}
+          </View>
+        )}
+
+        {/* Quick Stats */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Globe size={20} color="#96CEB4" />
+            <Text style={styles.sectionTitle}>Question Bank</Text>
+          </View>
+
+          <View style={styles.quickStatsRow}>
+            <Card style={styles.statCard}>
+              <Text style={styles.statNumber}>{questionStats?.total?.toLocaleString() || '0'}</Text>
+              <Text style={styles.statLabel}>Total Questions</Text>
+            </Card>
+            
+            <Card style={styles.statCard}>
+              <Text style={styles.statNumber}>
+                {questionStats?.byTopic ? Object.keys(questionStats.byTopic).length : 0}
+              </Text>
+              <Text style={styles.statLabel}>Topics Covered</Text>
+            </Card>
+          </View>
+
+          <Card style={styles.statCard}>
+            <Text style={styles.statDescription}>
+              🏛️ Comprehensive collection of Indian History questions from BharatKosh
+            </Text>
+            <Text style={styles.statSubDescription}>
+              Covering Ancient, Medieval, and Modern Indian History with AI-powered explanations
+            </Text>
+          </Card>
+        </View>
+
+        <View style={{ height: 80 }} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -264,35 +434,53 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#F8FAFC',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#64748B',
+    fontFamily: 'Inter_500Medium',
   },
   scrollView: {
     flex: 1,
   },
   headerGradient: {
-    marginHorizontal: 16,
-    borderRadius: 16,
-    marginTop: 16,
-    overflow: 'hidden',
+    paddingTop: Platform.OS === 'ios' ? 0 : 20,
+    paddingBottom: 32,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   header: {
+    paddingTop: 20,
+  },
+  headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 24,
-    paddingHorizontal: 20,
+    alignItems: 'flex-start',
+    marginBottom: 24,
   },
   greeting: {
     fontSize: 28,
-    fontFamily: 'Inter-Bold',
+    fontWeight: 'bold',
     color: '#FFFFFF',
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
-    color: '#FFFFFF',
+    color: '#E0E7FF',
     opacity: 0.9,
+  },
+  headerStats: {
+    flexDirection: 'row',
+    gap: 12,
   },
   streakBadge: {
     flexDirection: 'row',
@@ -304,216 +492,308 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   streakText: {
-    fontSize: 16,
-    fontFamily: 'Inter-Bold',
     color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 14,
   },
-  summaryCard: {
-    marginHorizontal: 16,
-    marginVertical: 8,
+  rankBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
   },
-  cardHeader: {
+  rankText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 12,
+  },
+  metricsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
   },
-  cardTitle: {
-    fontSize: 18,
-    fontFamily: 'Inter-SemiBold',
-    color: '#1C1C1E',
-  },
-  calendarButton: {
-    padding: 8,
-    borderRadius: 8,
-    backgroundColor: '#F2F2F7',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  statItem: {
+  metricItem: {
     alignItems: 'center',
+    flex: 1,
+  },
+  metricValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  metricLabel: {
+    fontSize: 12,
+    color: '#E0E7FF',
+    opacity: 0.8,
+  },
+  metricDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  section: {
+    paddingHorizontal: 20,
+    paddingVertical: 24,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
     gap: 8,
   },
-  statIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1E293B',
+  },
+  aiActionsRow: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 16,
+  },
+  aiActionCard: {
+    flex: 1,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  aiActionGradient: {
+    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 120,
   },
-  statNumber: {
-    fontSize: 24,
-    fontFamily: 'Inter-Bold',
-    color: '#1C1C1E',
+  aiActionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginTop: 8,
+    marginBottom: 4,
   },
-  statLabel: {
+  aiActionSubtitle: {
     fontSize: 12,
-    fontFamily: 'Inter-Medium',
-    color: '#8E8E93',
+    color: '#FFFFFF',
+    opacity: 0.9,
+    textAlign: 'center',
   },
-  achievementsScroll: {
-    paddingVertical: 8,
+  battleCard: {
+    borderRadius: 20,
+    overflow: 'hidden',
   },
-  achievementBadge: {
+  battleGradient: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 16,
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: '#F8F9FA',
-    minWidth: 80,
+    padding: 20,
+    gap: 16,
+  },
+  battleContent: {
+    flex: 1,
+  },
+  battleTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  battleSubtitle: {
+    fontSize: 14,
+    color: '#E0E7FF',
+    opacity: 0.9,
+  },
+  battleBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 16,
+    gap: 6,
+  },
+  battleBadgeText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#667eea',
+  },
+  achievementCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    marginRight: 12,
+    width: 140,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   achievementIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    fontSize: 32,
     marginBottom: 8,
   },
   achievementTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#1E293B',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  achievementDescription: {
     fontSize: 12,
-    fontFamily: 'Inter-Medium',
-    color: '#1C1C1E',
+    color: '#64748B',
     textAlign: 'center',
   },
-  subjectContainer: {
-    gap: 16,
+  insightsCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 20,
   },
-  subjectItem: {
+  insightRow: {
+    flexDirection: 'row',
+    gap: 20,
+    marginBottom: 20,
+  },
+  insightItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  insightIconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  insightContent: {
+    flex: 1,
+  },
+  insightLabel: {
+    fontSize: 12,
+    color: '#64748B',
+    marginBottom: 2,
+  },
+  insightValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1E293B',
+  },
+  viewAnalyticsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F8FAFC',
+    borderRadius: 12,
+    paddingVertical: 12,
     gap: 8,
   },
-  subjectHeader: {
+  viewAnalyticsText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#667eea',
+  },
+  recommendationCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+  },
+  recommendationHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 12,
   },
-  subjectName: {
-    fontSize: 16,
-    fontFamily: 'Inter-Medium',
-    color: '#1C1C1E',
+  priorityBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
-  subjectProgress: {
-    fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
-    color: '#007AFF',
-  },
-  progressBarContainer: {
-    height: 8,
-    backgroundColor: '#E5E5EA',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressBar: {
-    height: '100%',
-    borderRadius: 4,
-  },
-  buttonContainer: {
-    gap: 12,
-  },
-  gradientButton: {
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  gradientButtonInner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    gap: 12,
-  },
-  gradientButtonText: {
-    fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+  priorityText: {
+    fontSize: 10,
+    fontWeight: 'bold',
     color: '#FFFFFF',
   },
-  goalsContainer: {
-    gap: 12,
+  impactText: {
+    fontSize: 12,
+    color: '#64748B',
+    fontWeight: '600',
   },
-  goalItem: {
+  recommendationTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1E293B',
+    marginBottom: 8,
+  },
+  recommendationDescription: {
+    fontSize: 14,
+    color: '#64748B',
+    marginBottom: 12,
+  },
+  actionItems: {
+    gap: 8,
+  },
+  actionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
   },
-  goalCheck: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#FFF3CD',
-    alignItems: 'center',
-    justifyContent: 'center',
+  actionBullet: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#667eea',
   },
-  goalText: {
+  actionText: {
+    fontSize: 13,
+    color: '#475569',
     flex: 1,
-    fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    color: '#1C1C1E',
   },
-  goalProgress: {
-    fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
-    color: '#007AFF',
-  },
-  progressContainer: {
+  quickStatsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    gap: 16,
     marginBottom: 16,
   },
-  progressItem: {
-    alignItems: 'center',
-  },
-  progressNumber: {
-    fontSize: 20,
-    fontFamily: 'Inter-Bold',
-    color: '#007AFF',
-  },
-  progressLabel: {
-    fontSize: 12,
-    fontFamily: 'Inter-Medium',
-    color: '#8E8E93',
-    marginTop: 4,
-  },
-  viewMoreButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 8,
-  },
-  viewMoreText: {
-    fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    color: '#007AFF',
-  },
-  activityContainer: {
-    gap: 12,
-  },
-  activityItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 12,
-  },
-  activityDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#007AFF',
-    marginTop: 6,
-  },
-  activityContent: {
+  statCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
     flex: 1,
+    alignItems: 'center',
   },
-  activityTitle: {
-    fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    color: '#1C1C1E',
+  statNumber: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#1E293B',
+    marginBottom: 4,
   },
-  activityTime: {
+  statLabel: {
     fontSize: 12,
-    fontFamily: 'Inter-Regular',
-    color: '#8E8E93',
-    marginTop: 2,
+    color: '#64748B',
+    textAlign: 'center',
+  },
+  statDescription: {
+    fontSize: 14,
+    color: '#1E293B',
+    textAlign: 'center',
+    marginBottom: 8,
+    fontWeight: '600',
+  },
+  statSubDescription: {
+    fontSize: 12,
+    color: '#64748B',
+    textAlign: 'center',
+    lineHeight: 18,
   },
 });

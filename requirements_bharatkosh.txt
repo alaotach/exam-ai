@@ -1,0 +1,21 @@
+# BharatKosh Scraper Requirements
+# Complete dependencies for scraping, AI processing, and database storage
+
+# Web scraping
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+html5lib>=1.1
+requests>=2.31.0
+cloudscraper>=1.2.71
+
+# AI and Language Models (matching server-py requirements)
+langchain==0.3.14
+langchain-openai==0.3.3
+
+# Environment variables
+python-dotenv==1.0.1
+
+# Data validation
+pydantic>=2.0.0
+
+# Note: Uses HackClub AI proxy - configure in .env file

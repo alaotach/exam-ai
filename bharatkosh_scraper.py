@@ -27,9 +27,16 @@ try:
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
     HAS_UNDETECTED_CHROME = True
-except ImportError:
+except ImportError as e:
     HAS_UNDETECTED_CHROME = False
-    print("⚠️ undetected-chromedriver not installed. Run: pip install undetected-chromedriver selenium")
+    print(f"⚠️ undetected-chromedriver import failed: {e}")
+    print("   Run: pip install undetected-chromedriver selenium")
+except Exception as e:
+    HAS_UNDETECTED_CHROME = False
+    print(f"⚠️ Chrome driver error: {e}")
+    print("   On Ubuntu/AWS, you may need to install Chrome browser:")
+    print("   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb")
+    print("   sudo apt install ./google-chrome-stable_current_amd64.deb")
 
 # Add server-py/src to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), 'server-py', 'src'))

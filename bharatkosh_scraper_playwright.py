@@ -74,19 +74,21 @@ class BharatkoshScraperPlaywright:
         self.progress_file = os.path.join(self.cache_dir, "scraper_progress.json")
         self.skip_on_error = False
         self.failed_pages = []
+        self.test_mode = False
         
         # Browser instance (initialized in run)
         self.browser: Optional[Browser] = None
         self.context = None
+        self.playwright = None
     
     async def init_browser(self):
         """Initialize Playwright browser with anti-detection settings"""
         print("🌐 Initializing Playwright browser (AWS-hardened)...")
         
-        playwright = await async_playwright().start()
+        self.playwright = await async_playwright().start()
         
         # Launch Chromium with stealth settings
-        self.browser = await playwright.chromium.launch(
+        self.browser = await self.playwright.chromium.launch(
             headless=True,
             args=[
                 '--disable-blink-features=AutomationControlled',
@@ -211,10 +213,23 @@ class BharatkoshScraperPlaywright:
     
     async def cleanup_browser(self):
         """Clean up browser resources"""
-        if self.context:
-            await self.context.close()
-        if self.browser:
-            await self.browser.close()
+        try:
+            if self.context:
+                await self.context.close()
+        except:
+            pass
+        
+        try:
+            if self.browser:
+                await self.browser.close()
+        except:
+            pass
+        
+        try:
+            if self.playwright:
+                await self.playwright.stop()
+        except:
+            pass
     
     def load_progress(self) -> int:
         """Load last successful page from progress file"""
@@ -481,10 +496,13 @@ Please respond in the following JSON format:
         print(f"🔄 Skip on error: {self.skip_on_error}")
         print("="*60 + "\n")
         
-        # Load progress
-        resume_from = self.load_progress()
-        if resume_from > self.start_page:
-            self.start_page = resume_from
+        # Load progress (skip in test mode)
+        if not self.test_mode:
+            resume_from = self.load_progress()
+            if resume_from > self.start_page:
+                self.start_page = resume_from
+        else:
+            print("🧪 Test mode: Ignoring resume progress")
         
         self.stats["start_time"] = datetime.now()
         
@@ -573,6 +591,7 @@ async def main():
     )
     
     scraper.skip_on_error = args.skip_on_error
+    scraper.test_mode = args.test
     
     await scraper.run()
 

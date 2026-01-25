@@ -61,26 +61,40 @@ class BharatkoshScraper:
                  end_page: int = 566,
                  output_dir: str = "server-py/data",
                  delay_between_requests: float = 5.0,
-                 auto_cookie: bool = True):
+                 auto_cookie: bool = True,
+                 proxy: Optional[str] = None):
         
         self.start_page = start_page
         self.end_page = end_page
         self.output_dir = output_dir
         self.delay_between_requests = delay_between_requests
         self.auto_cookie = auto_cookie
+        self.proxy = proxy
         
         # Initialize cloudscraper session for automatic Cloudflare bypass
-        self.scraper = cloudscraper.create_scraper(
-            browser={
+        scraper_kwargs = {
+            'browser': {
                 'browser': 'chrome',
                 'platform': 'windows',
                 'desktop': True
             }
-        )
+        }
+        if proxy:
+            scraper_kwargs['proxies'] = {
+                'http': proxy,
+                'https': proxy
+            }
+            print(f"🌐 Using proxy: {proxy}")
+        
+        self.scraper = cloudscraper.create_scraper(**scraper_kwargs)
         
         # Fallback manual cookies (used if auto_cookie=False)
+        # To get fresh cookies:
+        # 1. Visit bharatdiscovery.org in browser on AWS machine
+        # 2. Open DevTools > Application > Cookies
+        # 3. Copy cf_clearance value and update here
         self.manual_cookies = {
-            "cf_clearance": "bF2crImAphPcjaHbZeqxeLBq0mtduTZc3K0PfFt6I.4-1769355865-1.2.1.1-ivy3Nm7a6mNUwGuwbdp7_UizNVaVXmLO_NwZz_4PPsnivolid4lxHAzOgINj0q.H5tJaO.JBMn60i.3sbMDSLlVZeop6YDZRfSdudZruR.PLh2qXWK5chJ_02S9u87b52HcgFw8irfFao_JsUVj.U5UdXbs2VIhuQBgKynJuMYQezYtnfH2t2hvLMv3A8fc7_d9o8nt_pjM7c9OdvVFuY5pBfwPAMp6Z4hk9qWzl6BE"
+            "cf_clearance": os.getenv("CF_CLEARANCE") or "bF2crImAphPcjaHbZeqxeLBq0mtduTZc3K0PfFt6I.4-1769355865-1.2.1.1-ivy3Nm7a6mNUwGuwbdp7_UizNVaVXmLO_NwZz_4PPsnivolid4lxHAzOgINj0q.H5tJaO.JBMn60i.3sbMDSLlVZeop6YDZRfSdudZruR.PLh2qXWK5chJ_02S9u87b52HcgFw8irfFao_JsUVj.U5UdXbs2VIhuQBgKynJuMYQezYtnfH2t2hvLMv3A8fc7_d9o8nt_pjM7c9OdvVFuY5pBfwPAMp6Z4hk9qWzl6BE"
         }
         
         self.headers = {
@@ -151,14 +165,23 @@ class BharatkoshScraper:
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument('--disable-gpu')
+            options.add_argument('--disable-software-rasterizer')
+            options.add_argument('--disable-extensions')
             options.add_argument('--window-size=1920,1080')
             options.add_argument('--lang=hi-IN')
+            options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36')
             
+            # Try to create Chrome driver
+            print("   Creating Chrome driver (this may take 30-60 seconds)...")
             self.chrome_driver = uc.Chrome(options=options, version_main=131)
-            print("✅ Chrome browser initialized")
+            print("✅ Chrome browser initialized successfully")
             return True
         except Exception as e:
             print(f"❌ Failed to initialize Chrome: {e}")
+            print(f"   Error type: {type(e).__name__}")
+            print("   Make sure Chrome is installed:")
+            print("   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb")
+            print("   sudo apt install ./google-chrome-stable_current_amd64.deb -y")
             return False
     
     def _fetch_with_chrome(self, url: str) -> Optional[str]:
@@ -168,9 +191,12 @@ class BharatkoshScraper:
                 return None
         
         try:
+            print(f"   Chrome: Loading {url[:80]}...")
             self.chrome_driver.get(url)
+            
             # Wait for page to load
-            time.sleep(3)
+            print("   Chrome: Waiting for page load...")
+            time.sleep(5)
             
             # Wait for content to appear
             WebDriverWait(self.chrome_driver, 30).until(
@@ -180,15 +206,18 @@ class BharatkoshScraper:
             # Get page source
             html = self.chrome_driver.page_source
             
-            if len(html) > 5000 and "Just a moment" not in html:
+            # Check if we got blocked by Cloudflare
+            cloudflare_check = any(x in html for x in ["Just a moment", "Checking your browser", "cf-spinner"])
+            
+            if len(html) > 5000 and not cloudflare_check:
                 print(f"✅ Chrome fetched page successfully ({len(html)} chars)")
                 return html
             else:
-                print(f"⚠️ Chrome got incomplete page ({len(html)} chars)")
+                print(f"⚠️ Chrome got {'Cloudflare page' if cloudflare_check else 'incomplete page'} ({len(html)} chars)")
                 return None
                 
         except Exception as e:
-            print(f"❌ Chrome fetch error: {e}")
+            print(f"❌ Chrome fetch error: {type(e).__name__}: {e}")
             return None
     
     def _cleanup_chrome(self):
@@ -353,15 +382,24 @@ class BharatkoshScraper:
                 if response.status_code == 200 or (response.status_code == 404 and len(response.text) > 10000):
                     print(f"✅ Successfully fetched page {page_num} (manual fallback)")
                     return response.text
+                else:
+                    print(f"⚠️ Manual cookies failed (Status: {response.status_code})")
             except Exception as e2:
-                print(f"❌ Manual fallback also failed: {e2}")
+                print(f"❌ Manual fallback error: {e2}")
         
         # Final fallback: Use Chrome browser
-        if HAS_UNDETECTED_CHROME and self.use_chrome:
-            print(f"🌐 Trying Chrome browser for page {page_num}...")
-            html = self._fetch_with_chrome(url)
-            if html:
-                return html
+        if self.use_chrome:
+            if HAS_UNDETECTED_CHROME:
+                print(f"🌐 Trying Chrome browser for page {page_num}...")
+                html = self._fetch_with_chrome(url)
+                if html:
+                    return html
+                else:
+                    print(f"❌ Chrome browser also failed for page {page_num}")
+            else:
+                print(f"⚠️ Chrome mode enabled but Chrome not available (install Chrome + setuptools)")
+        else:
+            print(f"💡 Tip: Try --use-chrome flag to bypass Cloudflare with Chrome browser")
         
         return None
     
@@ -842,6 +880,7 @@ async def main():
     parser.add_argument('--skip-on-error', action='store_true', help='Skip failed pages and continue (for AWS long-running jobs)')
     parser.add_argument('--resume', action='store_true', help='Resume from last successful page')
     parser.add_argument('--use-chrome', action='store_true', help='Use Chrome browser for Cloudflare bypass (requires undetected-chromedriver)')
+    parser.add_argument('--proxy', type=str, help='Proxy URL (e.g., http://user:pass@host:port or socks5://host:port)')
     
     args = parser.parse_args()
     
@@ -857,7 +896,8 @@ async def main():
         end_page=args.end,
         output_dir=args.output,
         delay_between_requests=args.delay,
-        auto_cookie=auto_cookie_mode
+        auto_cookie=auto_cookie_mode,
+        proxy=args.proxy
     )
     
     scraper.skip_on_error = args.skip_on_error

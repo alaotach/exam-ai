@@ -129,11 +129,19 @@ class BharatkoshScraper:
     def save_progress(self, page_num: int):
         """Save current progress"""
         try:
+            # Create a serializable copy of stats
+            serializable_stats = {}
+            for key, value in self.stats.items():
+                if isinstance(value, datetime):
+                    serializable_stats[key] = value.isoformat()
+                else:
+                    serializable_stats[key] = value
+            
             progress = {
                 'last_successful_page': page_num,
                 'failed_pages': self.failed_pages,
                 'timestamp': datetime.now().isoformat(),
-                'stats': self.stats
+                'stats': serializable_stats
             }
             with open(self.progress_file, 'w') as f:
                 json.dump(progress, f, indent=2)

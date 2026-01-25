@@ -20,6 +20,17 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 import sys
 
+# Try to import undetected-chromedriver for robust Cloudflare bypass
+try:
+    import undetected_chromedriver as uc
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    HAS_UNDETECTED_CHROME = True
+except ImportError:
+    HAS_UNDETECTED_CHROME = False
+    print("⚠️ undetected-chromedriver not installed. Run: pip install undetected-chromedriver selenium")
+
 # Add server-py/src to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), 'server-py', 'src'))
 from database_improved import QuestionDatabase
@@ -109,6 +120,72 @@ class BharatkoshScraper:
         self.progress_file = os.path.join(self.cache_dir, "scraper_progress.json")
         self.skip_on_error = False
         self.failed_pages = []
+        
+        # Chrome driver for Cloudflare bypass (initialized lazily)
+        self.chrome_driver = None
+        self.use_chrome = False
+    
+    def _init_chrome_driver(self):
+        """Initialize undetected Chrome driver for Cloudflare bypass"""
+        if not HAS_UNDETECTED_CHROME:
+            print("❌ undetected-chromedriver not available")
+            return False
+        
+        try:
+            print("🌐 Initializing Chrome browser for Cloudflare bypass...")
+            options = uc.ChromeOptions()
+            options.add_argument('--headless=new')  # New headless mode
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--disable-gpu')
+            options.add_argument('--window-size=1920,1080')
+            options.add_argument('--lang=hi-IN')
+            
+            self.chrome_driver = uc.Chrome(options=options, version_main=131)
+            print("✅ Chrome browser initialized")
+            return True
+        except Exception as e:
+            print(f"❌ Failed to initialize Chrome: {e}")
+            return False
+    
+    def _fetch_with_chrome(self, url: str) -> Optional[str]:
+        """Fetch page using Chrome browser (bypasses Cloudflare)"""
+        if not self.chrome_driver:
+            if not self._init_chrome_driver():
+                return None
+        
+        try:
+            self.chrome_driver.get(url)
+            # Wait for page to load
+            time.sleep(3)
+            
+            # Wait for content to appear
+            WebDriverWait(self.chrome_driver, 30).until(
+                EC.presence_of_element_located((By.TAG_NAME, "body"))
+            )
+            
+            # Get page source
+            html = self.chrome_driver.page_source
+            
+            if len(html) > 5000 and "Just a moment" not in html:
+                print(f"✅ Chrome fetched page successfully ({len(html)} chars)")
+                return html
+            else:
+                print(f"⚠️ Chrome got incomplete page ({len(html)} chars)")
+                return None
+                
+        except Exception as e:
+            print(f"❌ Chrome fetch error: {e}")
+            return None
+    
+    def _cleanup_chrome(self):
+        """Clean up Chrome driver"""
+        if self.chrome_driver:
+            try:
+                self.chrome_driver.quit()
+            except:
+                pass
+            self.chrome_driver = None
         
     def load_progress(self) -> int:
         """Load last successful page from progress file"""
@@ -265,6 +342,13 @@ class BharatkoshScraper:
                     return response.text
             except Exception as e2:
                 print(f"❌ Manual fallback also failed: {e2}")
+        
+        # Final fallback: Use Chrome browser
+        if HAS_UNDETECTED_CHROME and self.use_chrome:
+            print(f"🌐 Trying Chrome browser for page {page_num}...")
+            html = self._fetch_with_chrome(url)
+            if html:
+                return html
         
         return None
     
@@ -744,6 +828,7 @@ async def main():
     parser.add_argument('--no-auto-cookie', action='store_true', help='Disable automatic cookie generation (use manual cookies)')
     parser.add_argument('--skip-on-error', action='store_true', help='Skip failed pages and continue (for AWS long-running jobs)')
     parser.add_argument('--resume', action='store_true', help='Resume from last successful page')
+    parser.add_argument('--use-chrome', action='store_true', help='Use Chrome browser for Cloudflare bypass (requires undetected-chromedriver)')
     
     args = parser.parse_args()
     
@@ -763,14 +848,26 @@ async def main():
     )
     
     scraper.skip_on_error = args.skip_on_error
+    scraper.use_chrome = args.use_chrome
     
     if args.skip_on_error:
         print("⚠️ Skip-on-error mode: Will continue scraping even if pages fail")
     
+    if args.use_chrome:
+        if HAS_UNDETECTED_CHROME:
+            print("🌐 Chrome mode: Will use Chrome browser as fallback for Cloudflare bypass")
+        else:
+            print("⚠️ Chrome mode requested but undetected-chromedriver not installed")
+            print("   Run: pip install undetected-chromedriver selenium")
+    
     if args.resume:
         print("🔄 Resume mode: Will start from last successful page")
     
-    await scraper.run()
+    try:
+        await scraper.run()
+    finally:
+        # Clean up Chrome if used
+        scraper._cleanup_chrome()
 
 
 if __name__ == "__main__":

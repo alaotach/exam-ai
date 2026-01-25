@@ -29,8 +29,14 @@ try:
     HAS_UNDETECTED_CHROME = True
 except ImportError as e:
     HAS_UNDETECTED_CHROME = False
+    error_msg = str(e)
     print(f"⚠️ undetected-chromedriver import failed: {e}")
-    print("   Run: pip install undetected-chromedriver selenium")
+    
+    if "distutils" in error_msg:
+        print("   Python 3.12+ removed distutils. Fix:")
+        print("   pip install setuptools")
+    else:
+        print("   Run: pip install undetected-chromedriver selenium")
 except Exception as e:
     HAS_UNDETECTED_CHROME = False
     print(f"⚠️ Chrome driver error: {e}")
@@ -303,8 +309,8 @@ class BharatkoshScraper:
                         )
                         continue
                     else:
-                        print(f"❌ Failed to bypass Cloudflare after {max_retries} attempts")
-                        return None
+                        print(f"⚠️ Cloudflare blocked after {max_retries} attempts, trying fallback methods...")
+                        # Don't return - let it try manual cookies and Chrome
                 
                 if response.status_code == 200:
                     print(f"✅ Successfully fetched page {page_num} (Status: 200, Length: {len(response.text)} chars)")

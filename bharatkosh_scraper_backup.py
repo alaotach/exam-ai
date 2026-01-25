@@ -36,7 +36,7 @@ class BharatkoshScraper:
                  start_page: int = 1, 
                  end_page: int = 566,
                  output_dir: str = "server-py/data",
-                 delay_between_requests: float = 5.0,
+                 delay_between_requests: float = 2.0,
                  auto_cookie: bool = True):
         
         self.start_page = start_page
@@ -59,20 +59,28 @@ class BharatkoshScraper:
             "cf_clearance": "bF2crImAphPcjaHbZeqxeLBq0mtduTZc3K0PfFt6I.4-1769355865-1.2.1.1-ivy3Nm7a6mNUwGuwbdp7_UizNVaVXmLO_NwZz_4PPsnivolid4lxHAzOgINj0q.H5tJaO.JBMn60i.3sbMDSLlVZeop6YDZRfSdudZruR.PLh2qXWK5chJ_02S9u87b52HcgFw8irfFao_JsUVj.U5UdXbs2VIhuQBgKynJuMYQezYtnfH2t2hvLMv3A8fc7_d9o8nt_pjM7c9OdvVFuY5pBfwPAMp6Z4hk9qWzl6BE"
         }
         
+        # Multiple user agents for rotation
+        self.user_agents = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        ]
+        
         self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+            "User-Agent": random.choice(self.user_agents),
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
             "Accept-Language": "hi-IN,hi;q=0.9,en-US;q=0.8,en;q=0.7",
             "Accept-Encoding": "gzip, deflate, br",
             "DNT": "1",
             "Connection": "keep-alive",
             "Upgrade-Insecure-Requests": "1",
+            "Referer": "https://bharatdiscovery.org/",
             "Sec-Fetch-Dest": "document",
             "Sec-Fetch-Mode": "navigate",
-            "Sec-Fetch-Site": "none",
-            "Sec-Fetch-User": "?1",
-            "Cache-Control": "max-age=0",
-            "Referer": "https://bharatdiscovery.org/"
+            "Sec-Fetch-Site": "same-origin",
+            "Cache-Control": "no-cache"
         }
         
         # Initialize database
@@ -105,64 +113,109 @@ class BharatkoshScraper:
         self.cache_dir = os.path.join(output_dir, "..", "cache", "bharatkosh")
         os.makedirs(self.cache_dir, exist_ok=True)
         
-        # Progress tracking for resume capability
-        self.progress_file = os.path.join(self.cache_dir, "scraper_progress.json")
-        self.skip_on_error = False
+        # Recovery tracking
         self.failed_pages = []
+        self.session_refresh_count = 0
+        self.last_successful_page = None
+    
+    def refresh_session(self):
+        """Refresh the scraper session to bypass potential IP/session blocks"""
+        print(f"🔄 Refreshing scraper session (attempt {self.session_refresh_count + 1})...")
         
-    def load_progress(self) -> int:
-        """Load last successful page from progress file"""
-        try:
-            if os.path.exists(self.progress_file):
-                with open(self.progress_file, 'r') as f:
-                    progress = json.load(f)
-                    last_page = progress.get('last_successful_page', self.start_page - 1)
-                    self.failed_pages = progress.get('failed_pages', [])
-                    print(f"📂 Resuming from page {last_page + 1}")
-                    if self.failed_pages:
-                        print(f"⚠️ Previously failed pages: {self.failed_pages}")
-                    return last_page + 1
-        except Exception as e:
-            print(f"⚠️ Could not load progress: {e}")
-        return self.start_page
+        # Rotate user agent
+        new_agent = random.choice(self.user_agents)
+        self.headers["User-Agent"] = new_agent
+        print(f"🔄 Using new User-Agent: {new_agent[:50]}...")
+        
+        # Create new cloudscraper session with different browser config
+        browser_configs = [
+            {'browser': 'chrome', 'platform': 'windows', 'desktop': True},
+            {'browser': 'chrome', 'platform': 'darwin', 'desktop': True}, 
+            {'browser': 'firefox', 'platform': 'windows', 'desktop': True},
+            {'browser': 'chrome', 'platform': 'linux', 'desktop': True}
+        ]
+        
+        config = random.choice(browser_configs)
+        self.scraper = cloudscraper.create_scraper(browser=config)
+        self.session_refresh_count += 1
+        
+        # Add random delay after session refresh
+        delay = random.uniform(5, 15)
+        print(f"⏳ Waiting {delay:.1f}s after session refresh...")
+        time.sleep(delay)
     
-    def save_progress(self, page_num: int):
-        """Save current progress"""
-        try:
-            progress = {
-                'last_successful_page': page_num,
-                'failed_pages': self.failed_pages,
-                'timestamp': datetime.now().isoformat(),
-                'stats': self.stats
-            }
-            with open(self.progress_file, 'w') as f:
-                json.dump(progress, f, indent=2)
-        except Exception as e:
-            print(f"⚠️ Could not save progress: {e}")
+    def should_retry_failed_pages(self) -> bool:
+        """Determine if we should retry failed pages"""
+        if len(self.failed_pages) == 0:
+            return False
+            
+        success_rate = (self.stats["pages_processed"] - len(self.failed_pages)) / max(1, self.stats["pages_processed"])
+        
+        # Retry if we have less than 80% success rate and haven't tried too many session refreshes
+        return success_rate < 0.8 and self.session_refresh_count < 5
     
-    def fetch_page(self, page_num: int, max_retries: int = 3) -> Optional[str]:
-        """Fetch HTML content from a specific page with automatic Cloudflare bypass"""
+    def retry_failed_pages(self):
+        """Retry previously failed pages with fresh session"""
+        if not self.failed_pages:
+            return
+        
+        print(f"\n🔄 Retrying {len(self.failed_pages)} failed pages...")
+        failed_copy = self.failed_pages.copy()
+        self.failed_pages.clear()
+        
+        # Refresh session before retrying
+        self.refresh_session()
+        
+        for page_num in failed_copy:
+            print(f"\n🔄 Retrying page {page_num}...")
+            
+            # Check if we already have cached data
+            if self._has_cached_data(page_num):
+                print(f"📦 Using cached data for page {page_num}")
+                continue
+                
+            html_content = self.fetch_page(page_num, max_retries=3)
+            if html_content:
+                questions = self.extract_questions_from_html(html_content, page_num)
+                if questions:
+                    self.process_questions(questions, page_num)
+                    print(f"✅ Successfully recovered page {page_num} with {len(questions)} questions")
+                else:
+                    self.failed_pages.append(page_num)
+            else:
+                self.failed_pages.append(page_num)
+                
+            # Add delay between retry attempts
+            time.sleep(random.uniform(3, 7))
+    
+    def _has_cached_data(self, page_num: int) -> bool:
+        """Check if we already have processed data for this page"""
+        cache_file = os.path.join(self.cache_dir, f"page_{page_num}.json")
+        return os.path.exists(cache_file)
+        
+    def fetch_page(self, page_num: int, max_retries: int = 5) -> Optional[str]:
+        """Fetch HTML content from a specific page with automatic Cloudflare bypass and retry logic"""
         url = self.BASE_URL.format(page_num)
         
-        for attempt in range(max_retries):
+        for retry in range(max_retries):
             try:
-                if attempt > 0:
-                    wait_time = (attempt * 3) + random.uniform(2, 5)
-                    print(f"⏳ Waiting {wait_time:.1f}s before retry {attempt + 1}/{max_retries}...")
-                    time.sleep(wait_time)
+                # Implement exponential backoff for retries
+                if retry > 0:
+                    delay = min(30, (2 ** retry) + random.uniform(1, 3))
+                    print(f"⏳ Waiting {delay:.1f}s before retry {retry}/{max_retries-1} for page {page_num}...")
+                    time.sleep(delay)
                 
                 if self.auto_cookie:
                     # Use cloudscraper for automatic Cloudflare bypass
-                    print(f"🔄 Fetching page {page_num} (auto-cookie mode, attempt {attempt + 1}/{max_retries})...")
+                    print(f"🔄 Fetching page {page_num} (auto-cookie mode, attempt {retry + 1}/{max_retries})...")
                     
-                    # Try GET first with updated headers
-                    response = self.scraper.get(url, headers=self.headers, timeout=90)
+                    # Try POST first (BharatDiscovery prefers POST for content pages)
+                    response = self.scraper.post(url, timeout=60, allow_redirects=True)
                     
-                    # If GET fails, try POST as fallback
+                    # If POST fails, try GET as fallback
                     if response.status_code not in [200, 404] or len(response.text) < 1000:
-                        print(f"🔄 GET failed, trying POST for page {page_num}...")
-                        time.sleep(2)
-                        response = self.scraper.post(url, headers=self.headers, timeout=90)
+                        print(f"🔄 POST failed, trying GET for page {page_num}...")
+                        response = self.scraper.get(url, timeout=60, allow_redirects=True)
             else:
                 # Fallback to manual cookies
                 print(f"🔄 Fetching page {page_num} (manual cookie mode)...")
@@ -185,38 +238,50 @@ class BharatkoshScraper:
                         timeout=60
                     )
             
-                # Check if we got a Cloudflare challenge page or error
-                cloudflare_indicators = [
-                    "Just a moment",
-                    "Checking your browser",
-                    "cf-spinner",
-                    "ray ID",
-                    "__cf_chl_jschl_tk__",
-                    "cf_clearance"
-                ]
-                
-                is_cloudflare_page = any(indicator in response.text for indicator in cloudflare_indicators)
-                
-                if response.status_code == 403 or is_cloudflare_page:
-                    print(f"⚠️ Cloudflare protection detected for page {page_num} (Status: {response.status_code})")
-                    if attempt < max_retries - 1:
-                        print(f"   Retrying with fresh session...")
-                        # Recreate scraper session
-                        self.scraper = cloudscraper.create_scraper(
-                            browser={
-                                'browser': 'chrome',
-                                'platform': 'windows',
-                                'desktop': True
-                            }
-                        )
+                # Handle different response scenarios
+                if response.status_code == 200:
+                    # Check if we got actual content or Cloudflare challenge
+                    if "Checking your browser" in response.text or "cf-spinner" in response.text or "Just a moment" in response.text:
+                        print(f"⚠️ Cloudflare challenge detected for page {page_num}, attempt {retry + 1}...")
+                        if retry < max_retries - 1:
+                            continue  # Retry with exponential backoff
+                        else:
+                            print(f"❌ Max retries reached for Cloudflare challenge on page {page_num}")
+                            return None
+                    
+                    # Check for valid content
+                    if len(response.text) > 1000 and "इतिहास" in response.text:
+                        print(f"✅ Successfully fetched page {page_num} (Status: 200, Length: {len(response.text)} chars)")
+                        return response.text
+                    else:
+                        print(f"⚠️ Page {page_num} has insufficient content, retrying...")
+                        if retry < max_retries - 1:
+                            continue
+                        
+                elif response.status_code == 403:
+                    print(f"🚫 403 Forbidden for page {page_num} - Cloudflare protection active")
+                    if "cloudflare" in response.text.lower() or "cf-ray" in response.text.lower():
+                        print(f"🛡️ Detected Cloudflare protection, switching strategies...")
+                        
+                        # Try to get new session
+                        if self.auto_cookie and retry < max_retries - 1:
+                            print(f"🔄 Creating new scraper session...")
+                            self.scraper = cloudscraper.create_scraper(
+                                browser={
+                                    'browser': 'chrome',
+                                    'platform': 'windows',
+                                    'desktop': True
+                                }
+                            )
+                            continue
+                    
+                    if retry < max_retries - 1:
                         continue
                     else:
-                        print(f"❌ Failed to bypass Cloudflare after {max_retries} attempts")
+                        print(f"❌ Max retries reached for 403 error on page {page_num}")
                         return None
-                
-                if response.status_code == 200:
-                    print(f"✅ Successfully fetched page {page_num} (Status: 200, Length: {len(response.text)} chars)")
-                    return response.text
+                    
+                return response.text
             elif response.status_code == 404 and len(response.text) > 10000:
                 # Sometimes 404 pages still contain content (MediaWiki behavior)
                 print(f"✅ Page {page_num} returned 404 but has content ({len(response.text)} chars)")
@@ -226,37 +291,26 @@ class BharatkoshScraper:
                 print(f"   Response preview: {response.text[:200]}...")
                 return None
                 
-            except requests.exceptions.Timeout:
-                print(f"⏱️ Timeout fetching page {page_num} on attempt {attempt + 1}")
-                if attempt < max_retries - 1:
-                    continue
-            except requests.exceptions.ConnectionError:
-                print(f"🔌 Connection error for page {page_num} on attempt {attempt + 1}")
-                if attempt < max_retries - 1:
-                    time.sleep(5)
-                    continue
-            except Exception as e:
-                print(f"❌ Error fetching page {page_num} on attempt {attempt + 1}: {e}")
-                if attempt < max_retries - 1:
-                    continue
-        
-        # All retries failed, try manual cookies as last resort
-        if self.auto_cookie:
-            print(f"🔄 All automatic attempts failed, trying manual cookies for page {page_num}...")
-            try:
-                response = requests.get(
-                    url,
-                    headers=self.headers,
-                    cookies=self.manual_cookies,
-                    timeout=90
-                )
-                if response.status_code == 200 or (response.status_code == 404 and len(response.text) > 10000):
-                    print(f"✅ Successfully fetched page {page_num} (manual fallback)")
-                    return response.text
-            except Exception as e2:
-                print(f"❌ Manual fallback also failed: {e2}")
-        
-        return None
+        except Exception as e:
+            print(f"❌ Error fetching page {page_num}: {e}")
+            
+            # Try switching modes if auto-cookie fails
+            if self.auto_cookie:
+                print(f"🔄 Retrying page {page_num} with manual cookies...")
+                try:
+                    response = requests.get(
+                        url,
+                        headers=self.headers,
+                        cookies=self.manual_cookies,
+                        timeout=60
+                    )
+                    if response.status_code == 200 or (response.status_code == 404 and len(response.text) > 10000):
+                        print(f"✅ Successfully fetched page {page_num} (manual fallback)")
+                        return response.text
+                except Exception as e2:
+                    print(f"❌ Manual fallback also failed: {e2}")
+            
+            return None
     
     def extract_questions_from_html(self, html_content: str, page_num: int) -> List[Dict[str, Any]]:
         """Extract questions and options from HTML content with improved detection"""
@@ -646,28 +700,18 @@ Please respond in the following JSON format:
             print(f"❌ Database save failed: {e}")
     
     async def run(self):
-        """Main scraping loop with resume capability"""
+        """Main scraping loop"""
         print("\n" + "="*60)
         print("🚀 BharatKosh History Scraper Started (HackClub AI Proxy)")
         print("="*60)
         print(f"📊 Pages: {self.start_page} to {self.end_page}")
         print(f"📁 Output: {self.output_dir}")
         print(f"⏱️ Delay between pages: {self.delay_between_requests}s")
-        print(f"🔄 Skip on error: {self.skip_on_error}")
         print("="*60 + "\n")
-        
-        # Load progress and resume from last successful page
-        resume_from = self.load_progress()
-        if resume_from > self.start_page:
-            self.start_page = resume_from
         
         self.stats["start_time"] = datetime.now()
         
         for page_num in range(self.start_page, self.end_page + 1):
-            print(f"\n{'='*60}")
-            print(f"📄 Processing Page {page_num}/{self.end_page}")
-            print(f"{'='*60}")
-            
             try:
                 questions_count, ai_count = await self.process_page(page_num)
                 
@@ -675,32 +719,18 @@ Please respond in the following JSON format:
                 self.stats["questions_extracted"] += questions_count
                 self.stats["questions_with_answers"] += ai_count
                 
-                # Save progress after successful page
-                self.save_progress(page_num)
-                
                 print(f"\n📊 Progress: {self.stats['pages_processed']}/{self.end_page - self.start_page + 1} pages")
                 print(f"   Questions: {self.stats['questions_extracted']} total, {self.stats['questions_with_answers']} with AI answers")
-                print(f"   Failed pages: {len(self.failed_pages)}")
                 
                 if page_num < self.end_page:
-                    # Add random human-like delay between requests
-                    delay = self.delay_between_requests + random.uniform(1, 3)
+                    delay = self.delay_between_requests + random.uniform(0, 1)
                     print(f"⏳ Waiting {delay:.1f}s before next page...")
                     await asyncio.sleep(delay)
                 
             except Exception as e:
                 print(f"❌ Error processing page {page_num}: {e}")
                 self.stats["errors"] += 1
-                self.failed_pages.append(page_num)
-                
-                if self.skip_on_error:
-                    print(f"⏭️ Skipping page {page_num} and continuing...")
-                    self.save_progress(page_num)
-                    await asyncio.sleep(5)
-                else:
-                    print(f"⏸️ Stopping at page {page_num}. Run again to resume.")
-                    self.save_progress(page_num - 1)
-                    break
+                await asyncio.sleep(5)
         
         self.stats["end_time"] = datetime.now()
         self._print_final_stats()
@@ -729,11 +759,9 @@ async def main():
     parser.add_argument('--start', type=int, default=1, help='Start page number')
     parser.add_argument('--end', type=int, default=566, help='End page number')
     parser.add_argument('--output', type=str, default='server-py/data', help='Output directory')
-    parser.add_argument('--delay', type=float, default=5.0, help='Delay between requests (seconds)')
+    parser.add_argument('--delay', type=float, default=2.0, help='Delay between requests (seconds)')
     parser.add_argument('--test', action='store_true', help='Test mode (only first 3 pages)')
     parser.add_argument('--no-auto-cookie', action='store_true', help='Disable automatic cookie generation (use manual cookies)')
-    parser.add_argument('--skip-on-error', action='store_true', help='Skip failed pages and continue (for AWS long-running jobs)')
-    parser.add_argument('--resume', action='store_true', help='Resume from last successful page')
     
     args = parser.parse_args()
     
@@ -751,14 +779,6 @@ async def main():
         delay_between_requests=args.delay,
         auto_cookie=auto_cookie_mode
     )
-    
-    scraper.skip_on_error = args.skip_on_error
-    
-    if args.skip_on_error:
-        print("⚠️ Skip-on-error mode: Will continue scraping even if pages fail")
-    
-    if args.resume:
-        print("🔄 Resume mode: Will start from last successful page")
     
     await scraper.run()
 

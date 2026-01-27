@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import {
   BarChart3,
-  TrendingUp,
+  TrendingUp as TrendUp,
   Calendar,
   Clock,
   Target,
@@ -31,20 +31,93 @@ import {
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Card from '@/components/Card';
-import EnhancedQuestionDatabase, {
-  UserPerformance,
-  TopicPerformance,
-  WeeklyProgress,
-} from '@/services/question-database';
+import UserService, { UserStats, UserProfile } from '@/services/user-service';
+import { TestProgressService, TestResult } from '@/services/test-progress-service';
 
 const { width } = Dimensions.get('window');
 
 export default function ProgressScreen() {
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'year'>('week');
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [testHistory, setTestHistory] = useState<TestResult[]>([]);
+  const [examRankings, setExamRankings] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    loadProgressData();
+  }, []);
+
+  const loadProgressData = async () => {
+    setLoading(true);
+    try {
+      const [stats, profile, history] = await Promise.all([
+        UserService.getUserStatistics().catch(err => {
+          console.error('Stats error:', err);
+          return null;
+        }),
+        UserService.getUserProfile().catch(err => {
+          console.error('Profile error:', err);
+          return null;
+        }),
+        TestProgressService.getTestHistory().catch(err => {
+          console.error('History error:', err);
+          return [];
+        })
+      ]);
+      
+      setUserStats(stats);
+      setUserProfile(profile);
+      setTestHistory(history);
+      
+      // Calculate exam-specific rankings
+      if (profile && profile.exams && history.length > 0) {
+        const rankings: Record<string, string> = {};
+        profile.exams.forEach(exam => {
+          const examTests = history.filter(t => t.testTitle?.includes(exam));
+          const avgAccuracy = examTests.length > 0
+            ? examTests.reduce((sum, t) => sum + t.accuracy, 0) / examTests.length
+            : 0;
+          rankings[exam] = calculateRank(avgAccuracy);
+        });
+        setExamRankings(rankings);
+      }
+    } catch (error) {
+      console.error('Error loading progress data:', error);
+      // Set default empty states to ensure UI renders
+      setUserStats({
+        questionsAttempted: 0,
+        accuracy: 0,
+        streak: 0,
+        totalTests: 0,
+      });
+      setTestHistory([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadProgressData();
+    setRefreshing(false);
+  };
+
+  const calculateRank = (accuracy: number): string => {
+    if (accuracy >= 95) return 'Grandmaster';
+    if (accuracy >= 90) return 'Master';
+    if (accuracy >= 80) return 'Expert';
+    if (accuracy >= 70) return 'Advanced';
+    if (accuracy >= 60) return 'Intermediate';
+    if (accuracy >= 40) return 'Novice';
+    return 'Beginner';
+  };
 
   const renderSimpleChart = (data: number[], color: string) => {
-    const maxValue = Math.max(...data);
-    const chartWidth = width - 64; // Account for padding
+    if (data.length === 0) return null;
+    const maxValue = Math.max(...data, 1);
+    const chartWidth = width - 64;
     const chartHeight = 120;
     
     return (
@@ -81,9 +154,28 @@ export default function ProgressScreen() {
     );
   };
 
-  const accuracyData = mockProgressData.map(d => d.accuracy);
-  const questionsData = mockProgressData.map(d => d.questionsAttempted);
-  const timeData = mockProgressData.map(d => d.timeSpent);
+  const getRecentTestsData = () => {
+    const recent = testHistory.slice(0, 7).reverse();
+    return {
+      accuracy: recent.map(t => t.accuracy),
+      questions: recent.map(t => t.totalQuestions),
+    };
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container} edges={['bottom']}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#667eea" />
+          <Text style={styles.loadingText}>Loading your progress...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const recentData = getRecentTestsData();
+  const accuracyData = recentData.accuracy;
+  const questionsData = recentData.questions;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -128,205 +220,147 @@ export default function ProgressScreen() {
         ))}
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Enhanced Stats Grid */}
-        <View style={styles.statsGrid}>
-          <StatCard
-            title="Accuracy"
-            value={`${mockUser.accuracy}%`}
-            subtitle="Overall performance"
-            icon={<Target size={20} color="#FFFFFF" />}
-            gradient={['#667eea', '#764ba2']}
-            trend={{ value: 12, isPositive: true }}
-          />
-          <StatCard
-            title="Streak"
-            value={`${mockUser.streak}`}
-            subtitle="Days in a row"
-            icon={<Zap size={20} color="#FFFFFF" />}
-            gradient={['#f093fb', '#f5576c']}
-            trend={{ value: 3, isPositive: true }}
-          />
-          <StatCard
-            title="Questions"
-            value={mockUser.totalPractice}
-            subtitle="Total attempted"
-            icon={<BookOpen size={20} color="#FFFFFF" />}
-            gradient={['#4facfe', '#00f2fe']}
-            trend={{ value: 8, isPositive: true }}
-          />
-          <StatCard
-            title="Avg Time"
-            value="2.5h"
-            subtitle="Daily practice"
-            icon={<Clock size={20} color="#FFFFFF" />}
-            gradient={['#43e97b', '#38f9d7']}
-            trend={{ value: 5, isPositive: false }}
-          />
-        </View>
-
-        {/* Performance Chart */}
-        <Card style={styles.chartCard}>
-          <View style={styles.chartHeader}>
-            <Text style={styles.cardTitle}>Performance Trend</Text>
-            <TouchableOpacity style={styles.chartInfoButton}>
-              <Text style={styles.chartInfoText}>View Details</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.chartDescription}>Your accuracy over the past 7 days</Text>
-          {renderSimpleChart(accuracyData, '#007AFF')}
-          <View style={styles.trendInfo}>
-            <View style={styles.trendBadge}>
-              <Star size={12} color="#34C759" />
-              <Text style={styles.trendText}>
-                Improving! Your accuracy increased by 12% this week
+      <ScrollView 
+        style={styles.scrollView} 
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {testHistory.length === 0 ? (
+          <Card>
+            <View style={styles.emptyState}>
+              <Trophy size={64} color="#ccc" />
+              <Text style={styles.emptyTitle}>No Progress Yet</Text>
+              <Text style={styles.emptyText}>
+                Take your first test to start tracking your progress!
               </Text>
             </View>
-          </View>
-        </Card>
+          </Card>
+        ) : (
+          <>
+            {/* Overall Stats Grid */}
+            <View style={styles.statsGrid}>
+              <View style={styles.statCard}>
+                <LinearGradient
+                  colors={['#667eea', '#764ba2']}
+                  style={styles.statGradient}
+                >
+                  <Target size={20} color="#FFFFFF" />
+                  <Text style={styles.statValue}>{userStats?.accuracy.toFixed(1) || 0}%</Text>
+                  <Text style={styles.statLabel}>Overall Accuracy</Text>
+                  <Text style={styles.statRank}>{calculateRank(userStats?.accuracy || 0)}</Text>
+                </LinearGradient>
+              </View>
+              
+              <View style={styles.statCard}>
+                <LinearGradient
+                  colors={['#f093fb', '#f5576c']}
+                  style={styles.statGradient}
+                >
+                  <Zap size={20} color="#FFFFFF" />
+                  <Text style={styles.statValue}>{userStats?.streak || 0}</Text>
+                  <Text style={styles.statLabel}>Day Streak</Text>
+                </LinearGradient>
+              </View>
+              
+              <View style={styles.statCard}>
+                <LinearGradient
+                  colors={['#4facfe', '#00f2fe']}
+                  style={styles.statGradient}
+                >
+                  <BookOpen size={20} color="#FFFFFF" />
+                  <Text style={styles.statValue}>{userStats?.questionsAttempted || 0}</Text>
+                  <Text style={styles.statLabel}>Questions</Text>
+                </LinearGradient>
+              </View>
+              
+              <View style={styles.statCard}>
+                <LinearGradient
+                  colors={['#43e97b', '#38f9d7']}
+                  style={styles.statGradient}
+                >
+                  <Trophy size={20} color="#FFFFFF" />
+                  <Text style={styles.statValue}>{userStats?.totalTests || 0}</Text>
+                  <Text style={styles.statLabel}>Tests Taken</Text>
+                </LinearGradient>
+              </View>
+            </View>
 
-        {/* Subject Breakdown */}
-        <Card>
-          <Text style={styles.cardTitle}>Subject Performance</Text>
-          <View style={styles.subjectContainer}>
-            {[
-              { subject: 'Mathematics', accuracy: 85, questions: 45, color: '#FF6B6B' },
-              { subject: 'Science', accuracy: 78, questions: 32, color: '#4ECDC4' },
-              { subject: 'Geography', accuracy: 92, questions: 28, color: '#45B7D1' },
-              { subject: 'Computer Science', accuracy: 88, questions: 51, color: '#96CEB4' },
-            ].map((item, index) => (
-              <View key={index} style={styles.subjectItem}>
-                <View style={styles.subjectInfo}>
-                  <View style={[styles.subjectIndicator, { backgroundColor: item.color }]} />
-                  <View style={styles.subjectDetails}>
-                    <Text style={styles.subjectName}>{item.subject}</Text>
-                    <Text style={styles.subjectStats}>{item.questions} questions</Text>
+            {/* Exam-Specific Rankings */}
+            {userProfile && Object.keys(examRankings).length > 0 && (
+              <Card>
+                <Text style={styles.cardTitle}>Exam Rankings</Text>
+                <Text style={styles.cardSubtitle}>Your performance by exam type</Text>
+                <View style={styles.rankingsContainer}>
+                  {Object.entries(examRankings).map(([exam, rank]) => (
+                    <View key={exam} style={styles.rankingItem}>
+                      <View style={styles.rankingLeft}>
+                        <Award size={18} color="#667eea" />
+                        <Text style={styles.rankingExam}>{exam}</Text>
+                      </View>
+                      <View style={[styles.rankingBadge, { backgroundColor: getRankColor(rank) }]}>
+                        <Text style={styles.rankingText}>{rank}</Text>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </Card>
+            )}
+
+            {/* Performance Chart */}
+            {accuracyData.length > 0 && (
+              <Card style={styles.chartCard}>
+                <View style={styles.chartHeader}>
+                  <Text style={styles.cardTitle}>Accuracy Trend</Text>
+                </View>
+                <Text style={styles.chartDescription}>Your accuracy over recent tests</Text>
+                {renderSimpleChart(accuracyData, '#007AFF')}
+              </Card>
+            )}
+
+            {/* Recent Tests */}
+            <Card>
+              <Text style={styles.cardTitle}>Recent Tests</Text>
+              <View style={styles.testsContainer}>
+                {testHistory.slice(0, 5).map((test, index) => (
+                  <View key={index} style={styles.testItem}>
+                    <View style={styles.testInfo}>
+                      <Text style={styles.testTitle} numberOfLines={1}>
+                        {test.testTitle || 'Test'}
+                      </Text>
+                      <Text style={styles.testDate}>
+                        {new Date(test.date).toLocaleDateString()}
+                      </Text>
+                    </View>
+                    <View style={styles.testStats}>
+                      <Text style={styles.testAccuracy}>{test.accuracy.toFixed(1)}%</Text>
+                      <Text style={styles.testScore}>
+                        {test.correctAnswers}/{test.totalQuestions}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <View style={styles.subjectAccuracy}>
-                  <Text style={styles.subjectAccuracyText}>{item.accuracy}%</Text>
-                </View>
+                ))}
               </View>
-            ))}
-          </View>
-        </Card>
+            </Card>
+          </>
+        )}
 
-        {/* Weekly Goals */}
-        <Card>
-          <Text style={styles.cardTitle}>Weekly Goals</Text>
-          <View style={styles.goalsContainer}>
-            <View style={styles.goalItem}>
-              <View style={styles.goalProgress}>
-                <View style={[styles.goalProgressBar, { width: '80%' }]} />
-              </View>
-              <View style={styles.goalInfo}>
-                <Text style={styles.goalText}>Complete 50 questions</Text>
-                <Text style={styles.goalStatus}>40/50 completed</Text>
-              </View>
-            </View>
-            <View style={styles.goalItem}>
-              <View style={styles.goalProgress}>
-                <View style={[styles.goalProgressBar, { width: '60%' }]} />
-              </View>
-              <View style={styles.goalInfo}>
-                <Text style={styles.goalText}>Maintain 85% accuracy</Text>
-                <Text style={styles.goalStatus}>Currently 78%</Text>
-              </View>
-            </View>
-            <View style={styles.goalItem}>
-              <View style={styles.goalProgress}>
-                <View style={[styles.goalProgressBar, { width: '100%', backgroundColor: '#34C759' }]} />
-              </View>
-              <View style={styles.goalInfo}>
-                <Text style={styles.goalText}>Study 5 days this week</Text>
-                <Text style={[styles.goalStatus, { color: '#34C759' }]}>5/5 completed ✓</Text>
-              </View>
-            </View>
-          </View>
-        </Card>
-
-        <Card>
-          <Text style={styles.cardTitle}>Questions Attempted</Text>
-          <Text style={styles.chartDescription}>Daily question practice</Text>
-          {renderSimpleChart(questionsData, '#34C759')}
-          <View style={styles.trendInfo}>
-            <Text style={styles.trendText}>
-              🎯 Great consistency! You've maintained regular practice
-            </Text>
-          </View>
-        </Card>
-
-        <Card>
-          <Text style={styles.cardTitle}>Time Spent (minutes)</Text>
-          <Text style={styles.chartDescription}>Daily study time</Text>
-          {renderSimpleChart(timeData, '#FF9500')}
-          <View style={styles.trendInfo}>
-            <Text style={styles.trendText}>
-              ⏰ Optimal study time! You're averaging 35 minutes daily
-            </Text>
-          </View>
-        </Card>
-
-        <Card>
-          <Text style={styles.cardTitle}>Subject Performance</Text>
-          <View style={styles.subjectContainer}>
-            {[
-              { subject: 'Mathematics', accuracy: 85, questions: 45, color: '#007AFF' },
-              { subject: 'Science', accuracy: 78, questions: 32, color: '#34C759' },
-              { subject: 'Computer Science', accuracy: 92, questions: 28, color: '#FF9500' },
-              { subject: 'Geography', accuracy: 71, questions: 15, color: '#AF52DE' },
-            ].map((item) => (
-              <View key={item.subject} style={styles.subjectItem}>
-                <View style={styles.subjectHeader}>
-                  <View style={[styles.subjectDot, { backgroundColor: item.color }]} />
-                  <Text style={styles.subjectName}>{item.subject}</Text>
-                </View>
-                <View style={styles.subjectStats}>
-                  <Text style={styles.subjectAccuracy}>{item.accuracy}%</Text>
-                  <Text style={styles.subjectQuestions}>{item.questions} questions</Text>
-                </View>
-                <View style={styles.progressBar}>
-                  <View 
-                    style={[
-                      styles.progressFill, 
-                      { width: `${item.accuracy}%`, backgroundColor: item.color }
-                    ]} 
-                  />
-                </View>
-              </View>
-            ))}
-          </View>
-        </Card>
-
-        <Card>
-          <Text style={styles.cardTitle}>Achievements</Text>
-          <View style={styles.achievementsContainer}>
-            {[
-              { title: '7-Day Streak', description: 'Practiced for 7 consecutive days', earned: true },
-              { title: 'Quick Learner', description: 'Completed 50 questions in a day', earned: true },
-              { title: 'Perfect Score', description: 'Got 100% in a mock test', earned: false },
-              { title: 'Subject Master', description: 'Achieve 90% accuracy in any subject', earned: true },
-            ].map((achievement, index) => (
-              <View key={index} style={[
-                styles.achievementItem,
-                achievement.earned ? styles.achievementEarned : styles.achievementLocked
-              ]}>
-                <Text style={styles.achievementTitle}>{achievement.title}</Text>
-                <Text style={styles.achievementDescription}>{achievement.description}</Text>
-                <Text style={[
-                  styles.achievementStatus,
-                  achievement.earned ? styles.earnedText : styles.lockedText
-                ]}>
-                  {achievement.earned ? '✅ Earned' : '🔒 Locked'}
-                </Text>
-              </View>
-            ))}
-          </View>
-        </Card>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const getRankColor = (rank: string): string => {
+  const colors: Record<string, string> = {
+    Grandmaster: '#FFD700',
+    Master: '#C0C0C0',
+    Expert: '#CD7F32',
+    Advanced: '#4ECDC4',
+    Intermediate: '#45B7D1',
+    Novice: '#96CEB4',
+    Beginner: '#95A5A6',
+  };
+  return colors[rank] || '#95A5A6';
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -493,6 +527,136 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Medium',
     color: '#8E8E93',
     textAlign: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#666',
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontFamily: 'Inter-Bold',
+    color: '#333',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptyText: {
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+    color: '#666',
+    textAlign: 'center',
+    paddingHorizontal: 20,
+  },
+  statCard: {
+    flex: 1,
+    minWidth: '45%',
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 8,
+  },
+  statGradient: {
+    padding: 16,
+    alignItems: 'center',
+  },
+  statValue: {
+    fontSize: 28,
+    fontFamily: 'Inter-Bold',
+    color: '#FFFFFF',
+    marginTop: 8,
+  },
+  statRank: {
+    fontSize: 12,
+    fontFamily: 'Inter-Medium',
+    color: '#FFFFFF',
+    opacity: 0.9,
+    marginTop: 4,
+  },
+  cardSubtitle: {
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+    color: '#8E8E93',
+    marginBottom: 16,
+    marginTop: -8,
+  },
+  rankingsContainer: {
+    gap: 12,
+  },
+  rankingItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 12,
+    backgroundColor: '#F8F9FA',
+    borderRadius: 8,
+  },
+  rankingLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  rankingExam: {
+    fontSize: 15,
+    fontFamily: 'Inter-Medium',
+    color: '#1C1C1E',
+  },
+  rankingBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+  },
+  rankingText: {
+    fontSize: 13,
+    fontFamily: 'Inter-SemiBold',
+    color: '#FFFFFF',
+  },
+  testsContainer: {
+    gap: 12,
+  },
+  testItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 12,
+    backgroundColor: '#F8F9FA',
+    borderRadius: 8,
+  },
+  testInfo: {
+    flex: 1,
+  },
+  testTitle: {
+    fontSize: 15,
+    fontFamily: 'Inter-Medium',
+    color: '#1C1C1E',
+    marginBottom: 4,
+  },
+  testDate: {
+    fontSize: 12,
+    fontFamily: 'Inter-Regular',
+    color: '#8E8E93',
+  },
+  testStats: {
+    alignItems: 'flex-end',
+  },
+  testAccuracy: {
+    fontSize: 18,
+    fontFamily: 'Inter-Bold',
+    color: '#007AFF',
+  },
+  testScore: {
+    fontSize: 12,
+    fontFamily: 'Inter-Regular',
+    color: '#8E8E93',
+    marginTop: 2,
   },
   chartContainer: {
     marginVertical: 12,

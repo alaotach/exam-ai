@@ -1,308 +1,121 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, Alert, Platform, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, Platform, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { ActivityIndicator } from 'react-native';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import QuestionCard from '@/components/QuestionCard';
-import Timer from '@/components/Timer';
-import { mockQuestions, mockTests } from '@/data/mockData';
-import { Question, MockTest } from '@/types';
-
-type PracticeMode = 'selection' | 'personalized' | 'mock' | 'question' | 'result';
-
-interface TestResult {
-  score: number;
-  totalQuestions: number;
-  correctAnswers: number;
-  timeTaken: number;
-  accuracy: number;
-}
+import SSCCGLService from '@/services/ssc-cgl-service';
 
 export default function PracticeScreen() {
-  const [mode, setMode] = useState<PracticeMode>('selection');
-  const [selectedSubject, setSelectedSubject] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<'Easy' | 'Medium' | 'Hard' | ''>('');
-  const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState<{[key: number]: number}>({});
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [testStartTime, setTestStartTime] = useState<Date | null>(null);
-  const [testResult, setTestResult] = useState<TestResult | null>(null);
-  const [selectedTest, setSelectedTest] = useState<MockTest | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [onlinePapers, setOnlinePapers] = useState<any[]>([]);
 
-  const handleStartPersonalizedPractice = () => {
-    if (!selectedSubject.trim()) {
-      Alert.alert('Error', 'Please enter a subject/topic');
-      return;
-    }
-    if (!selectedDifficulty) {
-      Alert.alert('Error', 'Please select a difficulty level');
-      return;
-    }
+  React.useEffect(() => {
+    SSCCGLService.fetchPapersList().then(papers => {
+         const withAns = papers.filter((p: any) => p.hasAnswers);
+         setOnlinePapers(withAns);
+     }).catch(err => console.error(err));
+  }, []);
 
-    const filteredQuestions = mockQuestions.filter(q => 
-      q.subject.toLowerCase().includes(selectedSubject.toLowerCase()) &&
-      q.difficulty === selectedDifficulty
-    );
-
-    if (filteredQuestions.length === 0) {
-      // If no exact match, show questions from selected difficulty
-      const difficultyQuestions = mockQuestions.filter(q => q.difficulty === selectedDifficulty);
-      setCurrentQuestions(difficultyQuestions.slice(0, 5));
-    } else {
-      setCurrentQuestions(filteredQuestions.slice(0, 5));
-    }
-
-    setCurrentQuestionIndex(0);
-    setUserAnswers({});
-    setMode('question');
-  };
-
-  const handleStartMockTest = (test: MockTest) => {
-    setSelectedTest(test);
-    setCurrentQuestions(test.questions);
-    setCurrentQuestionIndex(0);
-    setUserAnswers({});
-    setTestStartTime(new Date());
-    setIsTimerRunning(true);
-    setMode('mock');
-  };
-
-  const handleAnswerSelect = (selectedIndex: number, isCorrect: boolean) => {
-    setUserAnswers(prev => ({
-      ...prev,
-      [currentQuestionIndex]: selectedIndex
-    }));
-
-    // Auto-advance after 2 seconds for personalized practice
-    if (mode === 'question') {
-      setTimeout(() => {
-        if (currentQuestionIndex < currentQuestions.length - 1) {
-          setCurrentQuestionIndex(prev => prev + 1);
-        } else {
-          calculateResult();
-        }
-      }, 2000);
+  const handleStartCGLPaper = async (paper: any) => {
+    try {
+      setIsLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      const loadedTest = await SSCCGLService.fetchPaper(paper.filename);
+      
+      // Navigate to mock-test screen with testId
+      router.push({
+        pathname: '/mock-test',
+        params: { testId: loadedTest.id },
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Failed to load paper: ' + (error as any).message);
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex < currentQuestions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-    }
-  };
-
-  const handlePreviousQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
-    }
-  };
-
-  const handleSubmitTest = () => {
-    setIsTimerRunning(false);
-    calculateResult();
-  };
-
-  const calculateResult = () => {
-    const correctAnswers = Object.entries(userAnswers).reduce((count, [questionIndex, answerIndex]) => {
-      const question = currentQuestions[parseInt(questionIndex)];
-      return count + (question.correctAnswer === answerIndex ? 1 : 0);
-    }, 0);
-
-    const totalQuestions = currentQuestions.length;
-    const accuracy = (correctAnswers / totalQuestions) * 100;
-    const timeTaken = testStartTime ? Math.floor((new Date().getTime() - testStartTime.getTime()) / 1000) : 0;
-    const score = Math.floor((correctAnswers / totalQuestions) * (selectedTest?.totalMarks || 100));
-
-    setTestResult({
-      score,
-      totalQuestions,
-      correctAnswers,
-      timeTaken,
-      accuracy,
-    });
-    setMode('result');
-  };
-
-  const handleTimeUp = () => {
-    setIsTimerRunning(false);
-    calculateResult();
-  };
-
-  const resetPractice = () => {
-    setMode('selection');
-    setSelectedSubject('');
-    setSelectedDifficulty('');
-    setCurrentQuestions([]);
-    setCurrentQuestionIndex(0);
-    setUserAnswers({});
-    setIsTimerRunning(false);
-    setTestStartTime(null);
-    setTestResult(null);
-    setSelectedTest(null);
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}m ${secs}s`;
-  };
-
-  if (mode === 'result' && testResult) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          <Card>
-            <Text style={styles.title}>Test Results</Text>
-            <View style={styles.resultContainer}>
-              <View style={styles.scoreCard}>
-                <Text style={styles.scoreNumber}>{testResult.score}</Text>
-                <Text style={styles.scoreLabel}>Score</Text>
-              </View>
-              <View style={styles.statsGrid}>
-                <View style={styles.statItem}>
-                  <Text style={styles.statNumber}>{testResult.correctAnswers}/{testResult.totalQuestions}</Text>
-                  <Text style={styles.statLabel}>Correct</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <Text style={styles.statNumber}>{testResult.accuracy.toFixed(1)}%</Text>
-                  <Text style={styles.statLabel}>Accuracy</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <Text style={styles.statNumber}>{formatTime(testResult.timeTaken)}</Text>
-                  <Text style={styles.statLabel}>Time Taken</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button title="Review Answers" onPress={() => setMode('question')} variant="secondary" />
-              <Button title="Try Again" onPress={resetPractice} variant="primary" />
-            </View>
-          </Card>
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
-
-  if (mode === 'question' || mode === 'mock') {
-    const currentQuestion = currentQuestions[currentQuestionIndex];
-    const isLastQuestion = currentQuestionIndex === currentQuestions.length - 1;
-    const hasAnswered = userAnswers[currentQuestionIndex] !== undefined;
-
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.questionHeader}>
-          {mode === 'mock' && selectedTest && (
-            <Timer 
-              duration={selectedTest.duration * 60} 
-              onTimeUp={handleTimeUp}
-              isRunning={isTimerRunning}
-            />
-          )}
-          <Text style={styles.questionProgress}>
-            Question {currentQuestionIndex + 1} of {currentQuestions.length}
-          </Text>
-        </View>
-        
-        <ScrollView style={styles.scrollView}>
-          <QuestionCard 
-            question={currentQuestion}
-            onAnswerSelect={handleAnswerSelect}
-            showAnswer={testResult !== null}
-          />
-          
-          {mode === 'mock' && (
-            <View style={styles.navigationContainer}>
-              <Button 
-                title="Previous" 
-                onPress={handlePreviousQuestion}
-                disabled={currentQuestionIndex === 0}
-                variant="secondary"
-                size="medium"
-              />
-              {isLastQuestion ? (
-                <Button 
-                  title="Submit Test" 
-                  onPress={handleSubmitTest}
-                  variant="success"
-                  size="medium"
-                />
-              ) : (
-                <Button 
-                  title="Next" 
-                  onPress={handleNextQuestion}
-                  variant="primary"
-                  size="medium"
-                />
-              )}
-            </View>
-          )}
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView style={styles.scrollView}>
-        <Text style={styles.title}>Practice & Mock Tests</Text>
+        <Text style={styles.title}>Practice Tests</Text>
         
         <Card>
-          <Text style={styles.cardTitle}>Personalized Practice</Text>
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Subject/Topic</Text>
-            <TextInput
-              style={styles.textInput}
-              placeholder="e.g., Mathematics, Physics, History"
-              value={selectedSubject}
-              onChangeText={setSelectedSubject}
-            />
-          </View>
-          
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Difficulty Level</Text>
-            <View style={styles.difficultyContainer}>
-              {(['Easy', 'Medium', 'Hard'] as const).map((difficulty) => (
-                <Button
-                  key={difficulty}
-                  title={difficulty}
-                  onPress={() => setSelectedDifficulty(difficulty)}
-                  variant={selectedDifficulty === difficulty ? 'primary' : 'secondary'}
-                  size="medium"
-                  style={styles.difficultyButton}
-                />
-              ))}
-            </View>
-          </View>
-          
-          <Button 
-            title="Start Practice" 
-            onPress={handleStartPersonalizedPractice}
-            variant="success"
-            size="large"
-          />
-        </Card>
-
-        <Card>
-          <Text style={styles.cardTitle}>Mock Tests</Text>
+          <Text style={styles.cardTitle}>Official SSC CGL Papers ({onlinePapers.length})</Text>
+          <Text style={styles.cardDescription}>
+            Practice with real SSC CGL exam papers with detailed solutions
+          </Text>
+          {isLoading && <ActivityIndicator size="small" color="#667eea" style={{marginBottom: 10}} />}
           <View style={styles.mockTestsContainer}>
-            {mockTests.map((test) => (
-              <View key={test.id} style={styles.mockTestItem}>
+            {onlinePapers.slice(0, 10).map((paper) => (
+              <View key={paper.id} style={styles.mockTestItem}>
                 <View style={styles.mockTestInfo}>
-                  <Text style={styles.mockTestName}>{test.name}</Text>
-                  <Text style={styles.mockTestDetails}>
-                    {test.questions.length} Questions • {test.duration} mins • {test.totalMarks} marks
-                  </Text>
+                  <Text style={styles.mockTestName} numberOfLines={2}>{paper.title}</Text>
+                  <View style={{flexDirection: 'row', gap: 8, marginTop: 4}}>
+                    <Text style={{fontSize: 12, color: '#666'}}>Official Paper</Text>
+                    {paper.hasAnswers && <Text style={{fontSize: 12, color: 'green', fontWeight: 'bold'}}>Solutions ✓</Text>}
+                  </View>
                 </View>
                 <Button
                   title="Start"
-                  onPress={() => handleStartMockTest(test)}
+                  onPress={() => handleStartCGLPaper(paper)}
                   variant="primary"
                   size="small"
+                  disabled={isLoading}
                 />
               </View>
             ))}
+            <Button
+              title="View All Papers"
+              onPress={() => router.push('/test-list')}
+              variant="secondary"
+              size="medium"
+              style={{marginTop: 10}}
+            />
+          </View>
+        </Card>
+
+        <Card>
+          <Text style={styles.cardTitle}>Quick Access</Text>
+          <View style={styles.quickAccessContainer}>
+            <Button
+              title="All Mock Tests"
+              onPress={() => router.push('/test-list')}
+              variant="primary"
+              size="large"
+              style={{marginBottom: 12}}
+            />
+            <Button
+              title="Bookmarked Questions"
+              onPress={() => router.push('/(tabs)/bookmarks')}
+              variant="secondary"
+              size="large"
+            />
+          </View>
+        </Card>
+
+        <Card>
+          <Text style={styles.cardTitle}>Study Tips</Text>
+          <View style={styles.tipsContainer}>
+            <View style={styles.tipItem}>
+              <Text style={styles.tipNumber}>1</Text>
+              <Text style={styles.tipText}>Practice regularly with timed tests</Text>
+            </View>
+            <View style={styles.tipItem}>
+              <Text style={styles.tipNumber}>2</Text>
+              <Text style={styles.tipText}>Review detailed solutions after each test</Text>
+            </View>
+            <View style={styles.tipItem}>
+              <Text style={styles.tipNumber}>3</Text>
+              <Text style={styles.tipText}>Focus on weak areas identified in analytics</Text>
+            </View>
+            <View style={styles.tipItem}>
+              <Text style={styles.tipNumber}>4</Text>
+              <Text style={styles.tipText}>Bookmark difficult questions for later review</Text>
+            </View>
           </View>
         </Card>
       </ScrollView>
@@ -314,7 +127,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F2F2F7',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   scrollView: {
     flex: 1,
@@ -330,32 +142,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Inter-SemiBold',
     color: '#1C1C1E',
-    marginBottom: 16,
-  },
-  inputContainer: {
-    marginBottom: 16,
-  },
-  inputLabel: {
-    fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    color: '#1C1C1E',
     marginBottom: 8,
   },
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#E5E5EA',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
+  cardDescription: {
+    fontSize: 14,
     fontFamily: 'Inter-Regular',
-    backgroundColor: '#FFFFFF',
-  },
-  difficultyContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  difficultyButton: {
-    flex: 1,
+    color: '#8E8E93',
+    marginBottom: 16,
   },
   mockTestsContainer: {
     gap: 12,
@@ -372,79 +165,42 @@ const styles = StyleSheet.create({
   },
   mockTestInfo: {
     flex: 1,
+    marginRight: 12,
   },
   mockTestName: {
     fontSize: 16,
     fontFamily: 'Inter-SemiBold',
     color: '#1C1C1E',
   },
-  mockTestDetails: {
-    fontSize: 12,
-    fontFamily: 'Inter-Regular',
-    color: '#8E8E93',
-    marginTop: 2,
+  quickAccessContainer: {
+    marginTop: 8,
   },
-  questionHeader: {
+  tipsContainer: {
+    gap: 16,
+    marginTop: 8,
+  },
+  tipItem: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
-  questionProgress: {
-    fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
-    color: '#1C1C1E',
-  },
-  navigationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    alignItems: 'flex-start',
     gap: 12,
   },
-  buttonContainer: {
-    gap: 12,
-    marginTop: 16,
-  },
-  resultContainer: {
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  scoreCard: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  scoreNumber: {
-    fontSize: 48,
-    fontFamily: 'Inter-Bold',
-    color: '#007AFF',
-  },
-  scoreLabel: {
-    fontSize: 16,
-    fontFamily: 'Inter-Medium',
-    color: '#8E8E93',
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statNumber: {
+  tipNumber: {
     fontSize: 18,
     fontFamily: 'Inter-Bold',
-    color: '#1C1C1E',
+    color: '#007AFF',
+    backgroundColor: '#E3F2FF',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    textAlign: 'center',
+    lineHeight: 32,
   },
-  statLabel: {
-    fontSize: 12,
-    fontFamily: 'Inter-Medium',
-    color: '#8E8E93',
-    marginTop: 4,
+  tipText: {
+    flex: 1,
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+    color: '#1C1C1E',
+    lineHeight: 20,
+    paddingTop: 6,
   },
 });

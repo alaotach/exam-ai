@@ -1,334 +1,281 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Animated, StatusBar } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+  Alert,
+  StatusBar,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Send, Bot, User, BookOpen, Lightbulb, Calculator, Beaker, Globe, Sparkles, Copy, ThumbsUp, ThumbsDown } from 'lucide-react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import Card from '@/components/Card';
-import { ChatMessage } from '@/types';
+import { Send, Bot, User } from 'lucide-react-native';
+import {
+  ChatMessage as AIMessage,
+  chatWithHistory,
+} from '@/services/ai-assistant-service';
+
+interface Message extends AIMessage {
+  id: string;
+  timestamp: Date;
+}
+
+const QUICK_ACTIONS = [
+  { icon: '📚', label: 'Study Tips', action: 'study_tips' },
+  { icon: '💡', label: 'Explain Concept', action: 'explain' },
+  { icon: '❓', label: 'Solve Doubt', action: 'doubt' },
+  { icon: '🎯', label: 'Practice Questions', action: 'practice' },
+];
 
 export default function AssistantScreen() {
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      message: 'Hello! I\'m your AI study assistant. You can ask me questions about any subject, and I\'ll help explain concepts, solve problems, and provide detailed explanations. What would you like to learn about today?',
-      isUser: false,
+      role: 'assistant',
+      content: "Hi! I'm your AI study assistant. I can help you with:\n\n📚 Understanding difficult concepts\n💡 Getting detailed explanations\n❓ Solving doubts\n🎯 Study tips and strategies\n\nHow can I help you today?",
       timestamp: new Date(),
-    }
+    },
   ]);
   const [inputText, setInputText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
-  const typingAnimation = useRef(new Animated.Value(0)).current;
-
-  const suggestions = [
-    { text: "Explain Newton's laws", icon: BookOpen, color: "#FF6B6B" },
-    { text: "Help with calculus", icon: Calculator, color: "#4ECDC4" },
-    { text: "Chemistry concepts", icon: Beaker, color: "#45B7D1" },
-    { text: "Geography facts", icon: Globe, color: "#96CEB4" },
-  ];
 
   useEffect(() => {
-    if (isTyping) {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(typingAnimation, {
-            toValue: 1,
-            duration: 600,
-            useNativeDriver: true,
-          }),
-          Animated.timing(typingAnimation, {
-            toValue: 0,
-            duration: 600,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    } else {
-      typingAnimation.setValue(0);
-    }
-  }, [isTyping]);
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  }, [messages]);
 
-  const handleSendMessage = async (text?: string) => {
+  const sendMessage = async (text?: string) => {
     const messageText = text || inputText.trim();
-    if (!messageText) return;
+    if (!messageText || isLoading) return;
 
-    const userMessage: ChatMessage = {
+    const userMessage: Message = {
       id: Date.now().toString(),
-      message: messageText,
-      isUser: true,
+      role: 'user',
+      content: messageText,
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputText('');
-    setSelectedSuggestion(null);
-    setIsTyping(true);
+    setIsLoading(true);
 
-    // Simulate AI response (replace with actual AI API call)
-    setTimeout(() => {
-      const aiResponse = generateAIResponse(messageText);
-      const aiMessage: ChatMessage = {
+    try {
+      const history: AIMessage[] = messages
+        .filter((m) => m.role !== 'system')
+        .map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
+
+      const response = await chatWithHistory(history, messageText);
+
+      const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        message: aiResponse,
-        isUser: false,
+        role: 'assistant',
+        content: response.message,
         timestamp: new Date(),
       };
-      
-      setMessages(prev => [...prev, aiMessage]);
-      setIsTyping(false);
-    }, 1500);
+
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      Alert.alert('Error', 'Failed to get response. Please try again.');
+
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: "Sorry, I couldn't process your request. Please try again.",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSuggestionPress = (suggestion: string) => {
-    setSelectedSuggestion(suggestion);
-    handleSendMessage(suggestion);
+  const handleQuickAction = async (action: string) => {
+    let prompt = '';
+    switch (action) {
+      case 'study_tips':
+        prompt = 'Can you give me study tips for competitive exams?';
+        break;
+      case 'explain':
+        prompt = 'I need help understanding a concept. Can you explain it to me?';
+        break;
+      case 'doubt':
+        prompt = 'I have a doubt. Can you help me solve it?';
+        break;
+      case 'practice':
+        prompt = 'Can you generate some practice questions for me?';
+        break;
+    }
+    if (prompt) {
+      setInputText(prompt);
+    }
   };
 
-  const copyToClipboard = (text: string) => {
-    // Implementation would copy text to clipboard
-    console.log('Copying to clipboard:', text);
-  };
-
-  const provideFeedback = (messageId: string, isPositive: boolean) => {
-    console.log(`Feedback for message ${messageId}: ${isPositive ? 'positive' : 'negative'}`);
-  };
-
-  const generateAIResponse = (userMessage: string): string => {
-    const message = userMessage.toLowerCase();
-    
-    if (message.includes('newton') && message.includes('law')) {
-      return `Newton's Laws of Motion are fundamental principles in physics:
-
-**First Law (Law of Inertia):** An object at rest stays at rest, and an object in motion stays in motion at constant velocity, unless acted upon by an external force.
-
-**Second Law:** The acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. F = ma
-
-**Third Law:** For every action, there is an equal and opposite reaction.
-
-These laws help us understand how objects move and interact with forces. Would you like me to explain any specific law in more detail or provide examples?`;
-    }
-    
-    if (message.includes('derivative') || message.includes('calculus')) {
-      return `A derivative represents the rate of change of a function at any given point. It's one of the fundamental concepts in calculus.
-
-**Basic Rules:**
-- Power Rule: d/dx(x^n) = nx^(n-1)
-- Sum Rule: d/dx(f + g) = f' + g'
-- Product Rule: d/dx(fg) = f'g + fg'
-- Chain Rule: d/dx(f(g(x))) = f'(g(x)) × g'(x)
-
-**Example:** The derivative of x² is 2x, which means the slope of the curve y = x² at any point x is 2x.
-
-Would you like me to work through a specific derivative problem with you?`;
-    }
-    
-    if (message.includes('photosynthesis')) {
-      return `Photosynthesis is the process by which plants convert light energy into chemical energy (glucose).
-
-**Chemical Equation:**
-6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂
-
-**Two Main Stages:**
-1. **Light Reactions** (in thylakoids): Convert light energy to ATP and NADPH
-2. **Calvin Cycle** (in stroma): Use ATP and NADPH to convert CO₂ into glucose
-
-**Importance:**
-- Produces oxygen for life on Earth
-- Forms the base of most food chains
-- Removes CO₂ from the atmosphere
-
-Need help with any specific aspect of photosynthesis?`;
-    }
-    
-    // Default responses for common question types
-    if (message.includes('explain') || message.includes('what is') || message.includes('how')) {
-      return `I'd be happy to help explain that concept! However, I need a bit more specific information to give you the best answer. Could you tell me:
-
-- Which subject area this relates to?
-- Any specific aspects you'd like me to focus on?
-- Your current level of understanding?
-
-This will help me tailor my explanation to be most helpful for you.`;
-    }
-    
-    return `That's an interesting question! I'm here to help you understand various academic concepts. I can assist with:
-
-📚 **Mathematics** - Algebra, calculus, geometry, statistics
-🔬 **Science** - Physics, chemistry, biology, earth science  
-🌍 **Social Studies** - History, geography, civics
-💻 **Computer Science** - Programming concepts, algorithms
-📝 **Language Arts** - Grammar, writing, literature
-
-Feel free to ask me anything specific about these subjects, and I'll provide detailed explanations with examples!`;
+  const clearChat = () => {
+    Alert.alert(
+      'Clear Chat',
+      'Are you sure you want to clear the conversation?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Clear',
+          style: 'destructive',
+          onPress: () => {
+            setMessages([
+              {
+                id: '1',
+                role: 'assistant',
+                content: "Chat cleared! How can I help you?",
+                timestamp: new Date(),
+              },
+            ]);
+          },
+        },
+      ]
+    );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Enhanced Header */}
-      <LinearGradient
-        colors={['#667eea', '#764ba2']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.headerGradient}
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <View style={styles.botIcon}>
-              <Sparkles size={24} color="#FFFFFF" />
+              <Bot size={24} color="#667eea" />
             </View>
             <View>
-              <Text style={styles.headerTitle}>AI Study Assistant</Text>
-              <Text style={styles.headerSubtitle}>Your personal tutor</Text>
+              <Text style={styles.headerTitle}>AI Assistant</Text>
+              <View style={styles.statusContainer}>
+                <View style={styles.statusDot} />
+                <Text style={styles.statusText}>Online</Text>
+              </View>
             </View>
           </View>
+          <TouchableOpacity onPress={clearChat} style={styles.clearButton}>
+            <Text style={styles.clearButtonText}>Clear</Text>
+          </TouchableOpacity>
         </View>
-      </LinearGradient>
 
-      {/* Quick Suggestions */}
-      {messages.length <= 1 && (
-        <View style={styles.suggestionsContainer}>
-          <Text style={styles.suggestionsTitle}>Quick Start</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.suggestionsScroll}>
-            {suggestions.map((suggestion, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[styles.suggestionChip, { borderColor: suggestion.color }]}
-                onPress={() => handleSuggestionPress(suggestion.text)}
-              >
-                <suggestion.icon size={16} color={suggestion.color} />
-                <Text style={[styles.suggestionText, { color: suggestion.color }]}>
-                  {suggestion.text}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      )}
-      
-      <KeyboardAvoidingView 
-        style={styles.chatContainer}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <ScrollView 
+        {messages.length <= 1 && (
+          <View style={styles.quickActionsContainer}>
+            <Text style={styles.quickActionsTitle}>Quick Actions</Text>
+            <View style={styles.quickActions}>
+              {QUICK_ACTIONS.map((action) => (
+                <TouchableOpacity
+                  key={action.action}
+                  style={styles.quickActionButton}
+                  onPress={() => handleQuickAction(action.action)}
+                >
+                  <Text style={styles.quickActionIcon}>{action.icon}</Text>
+                  <Text style={styles.quickActionLabel}>{action.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        )}
+
+        <ScrollView
           ref={scrollViewRef}
           style={styles.messagesContainer}
-          onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
+          contentContainerStyle={styles.messagesContent}
+          showsVerticalScrollIndicator={false}
         >
           {messages.map((message) => (
-            <View key={message.id} style={[
-              styles.messageContainer,
-              message.isUser ? styles.userMessage : styles.aiMessage
-            ]}>
-              <View style={styles.messageHeader}>
-                {message.isUser ? (
-                  <View style={styles.userAvatar}>
-                    <User size={16} color="#FFFFFF" />
-                  </View>
-                ) : (
-                  <View style={styles.botAvatar}>
-                    <Bot size={16} color="#FFFFFF" />
-                  </View>
-                )}
-                <Text style={styles.messageSender}>
-                  {message.isUser ? 'You' : 'AI Assistant'}
-                </Text>
-              </View>
-              <Text style={styles.messageText}>{message.message}</Text>
-              
-              {/* Action buttons for AI messages */}
-              {!message.isUser && (
-                <View style={styles.messageActions}>
-                  <TouchableOpacity 
-                    style={styles.actionButton}
-                    onPress={() => copyToClipboard(message.message)}
-                  >
-                    <Copy size={14} color="#8E8E93" />
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                    style={styles.actionButton}
-                    onPress={() => provideFeedback(message.id, true)}
-                  >
-                    <ThumbsUp size={14} color="#8E8E93" />
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                    style={styles.actionButton}
-                    onPress={() => provideFeedback(message.id, false)}
-                  >
-                    <ThumbsDown size={14} color="#8E8E93" />
-                  </TouchableOpacity>
+            <View
+              key={message.id}
+              style={[
+                styles.messageRow,
+                message.role === 'user' ? styles.userMessageRow : styles.assistantMessageRow,
+              ]}
+            >
+              {message.role === 'assistant' && (
+                <View style={styles.messageIcon}>
+                  <Bot size={20} color="#667eea" />
                 </View>
               )}
-              
-              <Text style={styles.messageTime}>
-                {message.timestamp.toLocaleTimeString([], { 
-                  hour: '2-digit', 
-                  minute: '2-digit' 
-                })}
-              </Text>
+              <View
+                style={[
+                  styles.messageBubble,
+                  message.role === 'user' ? styles.userBubble : styles.assistantBubble,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.messageText,
+                    message.role === 'user' ? styles.userMessageText : styles.assistantMessageText,
+                  ]}
+                >
+                  {message.content}
+                </Text>
+                <Text
+                  style={[
+                    styles.messageTime,
+                    message.role === 'user' ? styles.userMessageTime : styles.assistantMessageTime,
+                  ]}
+                >
+                  {message.timestamp.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </Text>
+              </View>
+              {message.role === 'user' && (
+                <View style={styles.messageIcon}>
+                  <User size={20} color="#fff" />
+                </View>
+              )}
             </View>
           ))}
-          
-          {isTyping && (
-            <View style={[styles.messageContainer, styles.aiMessage]}>
-              <View style={styles.messageHeader}>
-                <View style={styles.botAvatar}>
-                  <Bot size={16} color="#FFFFFF" />
-                </View>
-                <Text style={styles.messageSender}>AI Assistant</Text>
-              </View>
-              <View style={styles.typingIndicator}>
-                <Animated.View style={[
-                  styles.typingDot,
-                  {
-                    opacity: typingAnimation.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0.3, 1],
-                    }),
-                  },
-                ]} />
-                <Animated.View style={[
-                  styles.typingDot,
-                  {
-                    opacity: typingAnimation.interpolate({
-                      inputRange: [0, 0.5, 1],
-                      outputRange: [0.3, 1, 0.3],
-                    }),
-                  },
-                ]} />
-                <Animated.View style={[
-                  styles.typingDot,
-                  {
-                    opacity: typingAnimation.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [1, 0.3],
-                    }),
-                  },
-                ]} />
+          {isLoading && (
+            <View style={styles.loadingContainer}>
+              <View style={styles.loadingBubble}>
+                <ActivityIndicator size="small" color="#667eea" />
+                <Text style={styles.loadingText}>Thinking...</Text>
               </View>
             </View>
           )}
         </ScrollView>
-        
+
         <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Ask me anything about your studies..."
-            value={inputText}
-            onChangeText={setInputText}
-            multiline
-            maxLength={500}
-          />
-          <TouchableOpacity 
-            style={[
-              styles.sendButton,
-              { backgroundColor: inputText.trim() ? '#007AFF' : '#E5E5EA' }
-            ]}
-            onPress={() => handleSendMessage()}
-            disabled={!inputText.trim()}
-          >
-            <Send size={20} color={inputText.trim() ? '#FFFFFF' : '#8E8E93'} />
-          </TouchableOpacity>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.input}
+              placeholder="Ask me anything..."
+              placeholderTextColor="#9CA3AF"
+              value={inputText}
+              onChangeText={setInputText}
+              multiline
+              maxLength={500}
+              editable={!isLoading}
+            />
+            <TouchableOpacity
+              style={[styles.sendButton, (!inputText.trim() || isLoading) && styles.sendButtonDisabled]}
+              onPress={() => sendMessage()}
+              disabled={!inputText.trim() || isLoading}
+            >
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Send size={20} color="#fff" />
+              )}
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.disclaimer}>
+            AI responses may not always be accurate. Verify important information.
+          </Text>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -338,18 +285,16 @@ Feel free to ask me anything specific about these subjects, and I'll provide det
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-  },
-  headerGradient: {
-    paddingBottom: 1,
+    backgroundColor: '#F9FAFB',
   },
   header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    gap: 12,
+    padding: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
   },
   headerLeft: {
     flexDirection: 'row',
@@ -360,180 +305,196 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    alignItems: 'center',
+    backgroundColor: '#EEF2FF',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 20,
-    fontFamily: 'Inter-Bold',
-    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1F2937',
   },
-  headerSubtitle: {
-    fontSize: 14,
-    fontFamily: 'Inter-Regular',
-    color: '#FFFFFF',
-    opacity: 0.9,
-  },
-  suggestionsContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-  },
-  suggestionsTitle: {
-    fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
-    color: '#1C1C1E',
-    marginBottom: 12,
-  },
-  suggestionsScroll: {
-    paddingVertical: 4,
-  },
-  suggestionChip: {
+  statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    backgroundColor: '#FFFFFF',
-    marginRight: 12,
+    gap: 4,
+    marginTop: 2,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#10B981',
+  },
+  statusText: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  clearButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    backgroundColor: '#FEE2E2',
+  },
+  clearButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#DC2626',
+  },
+  quickActionsContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  quickActionsTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#6B7280',
+    marginBottom: 12,
+  },
+  quickActions: {
+    flexDirection: 'row',
     gap: 8,
   },
-  suggestionText: {
-    fontSize: 14,
-    fontFamily: 'Inter-Medium',
-  },
-  chatContainer: {
+  quickActionButton: {
     flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+    gap: 4,
+  },
+  quickActionIcon: {
+    fontSize: 24,
+  },
+  quickActionLabel: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: '#374151',
+    textAlign: 'center',
   },
   messagesContainer: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
   },
-  messageContainer: {
-    marginVertical: 4,
+  messagesContent: {
     padding: 16,
-    borderRadius: 16,
-    maxWidth: '85%',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    gap: 16,
   },
-  userMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#007AFF',
-  },
-  aiMessage: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5E5EA',
-  },
-  messageHeader: {
+  messageRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     gap: 8,
-    marginBottom: 8,
+    maxWidth: '85%',
   },
-  userAvatar: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    alignItems: 'center',
+  userMessageRow: {
+    alignSelf: 'flex-end',
+    flexDirection: 'row-reverse',
+  },
+  assistantMessageRow: {
+    alignSelf: 'flex-start',
+  },
+  messageIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#667eea',
     justifyContent: 'center',
-  },
-  botAvatar: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#34C759',
     alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 4,
   },
-  messageSender: {
-    fontSize: 12,
-    fontFamily: 'Inter-SemiBold',
-    color: '#8E8E93',
+  messageBubble: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 12,
+  },
+  userBubble: {
+    backgroundColor: '#667eea',
+    borderBottomRightRadius: 4,
+  },
+  assistantBubble: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderBottomLeftRadius: 4,
   },
   messageText: {
     fontSize: 15,
-    fontFamily: 'Inter-Regular',
     lineHeight: 22,
-    color: '#1C1C1E',
   },
-  messageActions: {
-    flexDirection: 'row',
-    marginTop: 8,
-    gap: 8,
+  userMessageText: {
+    color: '#fff',
   },
-  actionButton: {
-    padding: 6,
-    borderRadius: 6,
-    backgroundColor: '#F2F2F7',
+  assistantMessageText: {
+    color: '#1F2937',
   },
   messageTime: {
-    fontSize: 10,
-    fontFamily: 'Inter-Regular',
-    color: '#8E8E93',
-    marginTop: 8,
-    alignSelf: 'flex-end',
+    fontSize: 11,
+    marginTop: 4,
   },
-  typingIndicator: {
+  userMessageTime: {
+    color: 'rgba(255, 255, 255, 0.7)',
+    textAlign: 'right',
+  },
+  assistantMessageTime: {
+    color: '#9CA3AF',
+  },
+  loadingContainer: {
+    alignSelf: 'flex-start',
     flexDirection: 'row',
-    gap: 6,
-    paddingVertical: 8,
+    gap: 8,
   },
-  typingDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#8E8E93',
+  loadingBubble: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    padding: 12,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: 12,
+    borderBottomLeftRadius: 4,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: '#6B7280',
   },
   inputContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+  },
+  inputWrapper: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#E5E5EA',
-    gap: 12,
+    gap: 8,
+    marginBottom: 8,
   },
-  textInput: {
+  input: {
     flex: 1,
-    borderWidth: 1.5,
-    borderColor: '#E5E5EA',
-    borderRadius: 24,
-    paddingHorizontal: 20,
+    minHeight: 44,
+    maxHeight: 100,
+    paddingHorizontal: 16,
     paddingVertical: 12,
-    fontSize: 16,
-    fontFamily: 'Inter-Regular',
-    maxHeight: 120,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F3F4F6',
+    borderRadius: 22,
+    fontSize: 15,
+    color: '#1F2937',
   },
   sendButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    alignItems: 'center',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#667eea',
     justifyContent: 'center',
-    shadowColor: '#007AFF',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    alignItems: 'center',
+  },
+  sendButtonDisabled: {
+    opacity: 0.5,
+  },
+  disclaimer: {
+    fontSize: 11,
+    color: '#9CA3AF',
+    textAlign: 'center',
   },
 });

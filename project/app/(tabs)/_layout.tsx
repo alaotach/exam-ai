@@ -12,9 +12,9 @@ export default function TabLayout() {
           backgroundColor: '#FFFFFF',
           borderTopWidth: 1,
           borderTopColor: '#E5E5EA',
-          paddingBottom: 8,
+          paddingBottom: 0,
           paddingTop: 8,
-          height: 88,
+          height: 60,
         },
         tabBarLabelStyle: {
           fontSize: 12,

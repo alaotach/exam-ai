@@ -47,7 +47,7 @@ export default function LeaderboardScreen() {
   const currentUserRank = mockLeaderboard.findIndex(user => user.name === 'Aryan') + 1;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Leaderboard</Text>
         

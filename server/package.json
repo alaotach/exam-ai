@@ -12,6 +12,7 @@
     "db:stats": "tsx src/cli/db-stats.ts"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

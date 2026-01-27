@@ -21,6 +21,7 @@ import questionRoutes from './routes/questions';
 import testRoutes from './routes/tests';
 import statsRoutes from './routes/stats';
 import processingRoutes from './routes/processing';
+import paperRoutes from './routes/papers';
 
 // Initialize Express app
 const app: Express = express();
@@ -59,6 +60,7 @@ app.use('/api/questions', questionRoutes);
 app.use('/api/tests', testRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/processing', processingRoutes);
+app.use('/api/papers', paperRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

@@ -210,7 +210,6 @@ export interface TestAnalysis {
     };
   };
 }
-}
 
 export interface AppTest {
   id: string;
@@ -519,8 +518,13 @@ class EnhancedQuestionDatabase {
   private constructor() {
     this.apiKey = process.env.EXPO_PUBLIC_BHARATKOSH_API_KEY || '';
     this.baseURL = process.env.EXPO_PUBLIC_BHARATKOSH_BASE_URL || 'https://ai.hackclub.com/proxy/v1';
-    this.loadBharatKoshQuestions();
-    this.loadUserPerformance();
+    // Load data asynchronously to prevent blocking app initialization
+    this.initializeAsync();
+  }
+
+  private async initializeAsync(): Promise<void> {
+    await this.loadBharatKoshQuestions();
+    await this.loadUserPerformance();
   }
 
   public static getInstance(): EnhancedQuestionDatabase {
@@ -533,13 +537,12 @@ class EnhancedQuestionDatabase {
   // Load BharatKosh Questions from local JSON
   private async loadBharatKoshQuestions(): Promise<void> {
     try {
-      // In production, this would be bundled with the app or fetched from API
-      const bharatkoshData = require('../../server-py/data/BharatKosh_History_General_(History_General_Knowledge_Pages_1-566).json');
-      this.bharatkoshQuestions = bharatkoshData.questions || [];
-      console.log(`✅ Loaded ${this.bharatkoshQuestions.length} BharatKosh questions`);
+      // BharatKosh data is not bundled with the app by default
+      // This is a fallback mechanism - data can be loaded via API if needed
+      console.log('ℹ️ BharatKosh questions loading skipped (not bundled in app)');
+      this.bharatkoshQuestions = this.getSampleQuestions();
     } catch (error) {
-      console.error('❌ Failed to load BharatKosh questions:', error);
-      // Fallback to sample data
+      console.warn('⚠️ Failed to load BharatKosh questions, using sample data:', error);
       this.bharatkoshQuestions = this.getSampleQuestions();
     }
   }
@@ -970,7 +973,7 @@ class EnhancedQuestionDatabase {
       recommendations.push({
         type: 'time_management',
         title: 'Improve Speed',
-        description: 'You\\'re taking longer than optimal to answer questions',
+        description: "You're taking longer than optimal to answer questions",
         priority: 'medium',
         actionItems: [
           'Practice timed tests regularly',
@@ -1303,12 +1306,6 @@ class EnhancedQuestionDatabase {
       }
     ];
   }
-}
-
-export default EnhancedQuestionDatabase.getInstance();
-      lastUpdated: this.database!.lastUpdated,
-    };
-  }
 
   // Private helper methods
 
@@ -1487,3 +1484,5 @@ export default EnhancedQuestionDatabase.getInstance();
     };
   }
 }
+
+export default EnhancedQuestionDatabase;

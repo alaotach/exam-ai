@@ -1,6 +1,7 @@
 """
-BharatKosh Scraper - Playwright Version for AWS Cloudflare Bypass
-Uses real browser engine to bypass Cloudflare's bot detection on AWS
+BharatKosh Scraper - Advanced Playwright with Stealth & Human Behavior
+Uses playwright-extra stealth plugin + human simulation for AWS Cloudflare bypass
+Install: pip install playwright-stealth
 """
 
 import asyncio
@@ -16,6 +17,15 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from playwright.async_api import async_playwright, Browser, Page
 import sys
+
+# Try to import stealth plugin
+try:
+    from playwright_stealth import stealth_async
+    HAS_STEALTH = True
+except ImportError:
+    HAS_STEALTH = False
+    print("⚠️ playwright-stealth not installed. Run: pip install playwright-stealth")
+    print("   This will significantly improve Cloudflare bypass success rate")
 
 # Add server-py/src to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), 'server-py', 'src'))
@@ -33,12 +43,14 @@ class BharatkoshScraperPlaywright:
                  start_page: int = 1, 
                  end_page: int = 566,
                  output_dir: str = "server-py/data",
-                 delay_between_requests: float = 5.0):
+                 delay_between_requests: float = 5.0,
+                 proxy: Optional[str] = None):
         
         self.start_page = start_page
         self.end_page = end_page
         self.output_dir = output_dir
         self.delay_between_requests = delay_between_requests
+        self.proxy = proxy
         
         # Initialize database
         self.db = QuestionDatabase(base_path=output_dir)
@@ -82,12 +94,12 @@ class BharatkoshScraperPlaywright:
         self.playwright = None
     
     async def init_browser(self):
-        """Initialize Playwright browser with anti-detection settings"""
-        print("🌐 Initializing Playwright browser (AWS-hardened)...")
+        """Initialize Playwright browser with advanced anti-detection"""
+        print("🌐 Initializing Playwright browser (Advanced Stealth Mode)...")
         
         self.playwright = await async_playwright().start()
         
-        # Launch Chromium with stealth settings
+        # Launch Chromium with maximum stealth
         self.browser = await self.playwright.chromium.launch(
             headless=True,
             args=[
@@ -98,17 +110,22 @@ class BharatkoshScraperPlaywright:
                 '--disable-gpu',
                 '--disable-software-rasterizer',
                 '--disable-extensions',
+                '--disable-web-security',
+                '--disable-features=IsolateOrigins,site-per-process',
                 '--window-size=1920,1080',
+                '--start-maximized',
             ]
         )
         
-        # Create context with realistic browser fingerprint
-        self.context = await self.browser.new_context(
-            viewport={'width': 1920, 'height': 1080},
-            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-            locale='hi-IN',
-            timezone_id='Asia/Kolkata',
-            extra_http_headers={
+        # Prepare context options
+        context_options = {
+            'viewport': {'width': 1920, 'height': 1080},
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            'locale': 'hi-IN',
+            'timezone_id': 'Asia/Kolkata',
+            'permissions': ['geolocation'],
+            'geolocation': {'latitude': 28.6139, 'longitude': 77.2090},  # Delhi coordinates
+            'extra_http_headers': {
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
                 'Accept-Language': 'hi-IN,hi;q=0.9,en-US;q=0.8,en;q=0.7',
                 'Accept-Encoding': 'gzip, deflate, br',
@@ -117,19 +134,42 @@ class BharatkoshScraperPlaywright:
                 'Sec-Fetch-Site': 'none',
                 'Sec-Fetch-User': '?1',
                 'Upgrade-Insecure-Requests': '1',
+                'DNT': '1',
             }
-        )
+        }
         
-        # Add anti-detection scripts
+        # Add proxy if provided
+        if self.proxy:
+            # Parse proxy URL for credentials
+            if '@' in self.proxy:
+                auth, server = self.proxy.split('@')
+                username, password = auth.replace('http://', '').replace('https://', '').split(':')
+                context_options['proxy'] = {
+                    'server': f"http://{server}",
+                    'username': username,
+                    'password': password
+                }
+            else:
+                context_options['proxy'] = {'server': self.proxy}
+            print(f"🌐 Using proxy: {self.proxy.split('@')[-1] if '@' in self.proxy else self.proxy}")
+        
+        # Create context
+        self.context = await self.browser.new_context(**context_options)
+        
+        # Add advanced anti-detection scripts
         await self.context.add_init_script("""
             // Remove webdriver property
             Object.defineProperty(navigator, 'webdriver', {
                 get: () => undefined
             });
             
-            // Mock plugins
+            // Mock plugins with realistic values
             Object.defineProperty(navigator, 'plugins', {
-                get: () => [1, 2, 3, 4, 5]
+                get: () => [
+                    {name: 'Chrome PDF Plugin', filename: 'internal-pdf-viewer', description: 'Portable Document Format'},
+                    {name: 'Chrome PDF Viewer', filename: 'mhjfbmdgcfjbbpaeojofohoefgiehjai', description: ''},
+                    {name: 'Native Client', filename: 'internal-nacl-plugin', description: ''}
+                ]
             });
             
             // Mock languages
@@ -139,22 +179,143 @@ class BharatkoshScraperPlaywright:
             
             // Chrome runtime
             window.chrome = {
-                runtime: {}
+                runtime: {},
+                loadTimes: function() {},
+                csi: function() {},
+                app: {}
             };
             
-            // Permissions
+            // Permissions API
             const originalQuery = window.navigator.permissions.query;
             window.navigator.permissions.query = (parameters) => (
                 parameters.name === 'notifications' ?
                     Promise.resolve({ state: Notification.permission }) :
                     originalQuery(parameters)
             );
+            
+            // Randomize canvas fingerprint
+            const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
+            HTMLCanvasElement.prototype.toDataURL = function(type) {
+                const canvas = this;
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    // Add minimal noise to randomize fingerprint
+                    for (let i = 0; i < imageData.data.length; i += 4) {
+                        imageData.data[i] += Math.floor(Math.random() * 3) - 1;
+                    }
+                    ctx.putImageData(imageData, 0, 0);
+                }
+                return originalToDataURL.call(this, type);
+            };
+            
+            // Randomize WebGL fingerprint
+            const getParameter = WebGLRenderingContext.prototype.getParameter;
+            WebGLRenderingContext.prototype.getParameter = function(parameter) {
+                if (parameter === 37445) {
+                    return 'Intel Inc.'; // UNMASKED_VENDOR_WEBGL
+                }
+                if (parameter === 37446) {
+                    return 'Intel Iris OpenGL Engine'; // UNMASKED_RENDERER_WEBGL
+                }
+                return getParameter.call(this, parameter);
+            };
+            
+            // Add battery API
+            navigator.getBattery = () => Promise.resolve({
+                charging: true,
+                chargingTime: 0,
+                dischargingTime: Infinity,
+                level: 1
+            });
         """)
         
-        print("✅ Browser initialized successfully")
+        print("✅ Browser initialized with advanced stealth")
+    
+    def _random_delay(self, min_ms: int = 500, max_ms: int = 2000) -> int:
+        """Generate random delay in milliseconds"""
+        return random.randint(min_ms, max_ms)
+    
+    async def _human_scroll(self, page: Page):
+        """Simulate human-like scrolling behavior"""
+        try:
+            scroll_height = await page.evaluate('() => document.body.scrollHeight')
+            viewport_height = await page.evaluate('() => window.innerHeight')
+            
+            # Scroll in random chunks
+            current_position = 0
+            while current_position < scroll_height - viewport_height:
+                scroll_amount = random.randint(200, 600)
+                current_position = min(current_position + scroll_amount, scroll_height)
+                
+                await page.evaluate(f'() => window.scrollTo(0, {current_position})')
+                await asyncio.sleep(self._random_delay(300, 800) / 1000)
+                
+                # Random chance to scroll back up a bit
+                if random.random() < 0.15:
+                    back_scroll = random.randint(50, 150)
+                    current_position = max(0, current_position - back_scroll)
+                    await page.evaluate(f'() => window.scrollTo(0, {current_position})')
+                    await asyncio.sleep(self._random_delay(200, 500) / 1000)
+        except Exception as e:
+            print(f"   ⚠️ Scroll simulation error: {e}")
+    
+    async def _human_mouse_movement(self, page: Page):
+        """Simulate random mouse movements"""
+        try:
+            for _ in range(random.randint(2, 5)):
+                x = random.randint(100, 1800)
+                y = random.randint(100, 900)
+                steps = random.randint(10, 30)
+                
+                await page.mouse.move(x, y, steps=steps)
+                await asyncio.sleep(self._random_delay(100, 400) / 1000)
+        except Exception as e:
+            print(f"   ⚠️ Mouse movement error: {e}")
+    
+    async def _wait_for_cloudflare(self, page: Page, timeout: int = 30000) -> bool:
+        """Wait for Cloudflare challenge to complete"""
+        try:
+            # Check if we're on a Cloudflare challenge page
+            is_challenge = await page.evaluate('''
+                () => {
+                    const title = document.title;
+                    const body = document.body.innerText;
+                    return title.includes('Just a moment') || 
+                           body.includes('Checking your browser') ||
+                           body.includes('Verify you are human') ||
+                           document.querySelector('#challenge-form') !== null;
+                }
+            ''')
+            
+            if is_challenge:
+                print(f"   ⚙️ Cloudflare challenge detected, waiting for resolution...")
+                
+                # Wait for challenge to disappear
+                await page.wait_for_function(
+                    '''
+                    () => {
+                        const title = document.title;
+                        const body = document.body.innerText;
+                        return !title.includes('Just a moment') && 
+                               !body.includes('Checking your browser');
+                    }
+                    ''',
+                    timeout=timeout
+                )
+                
+                print(f"   ✅ Cloudflare challenge passed")
+                await asyncio.sleep(self._random_delay(1000, 3000) / 1000)
+                return True
+            
+            return False
+            
+        except Exception as e:
+            print(f"   ⚠️ Cloudflare challenge timeout or error: {e}")
+            return False
     
     async def fetch_page(self, page_num: int, max_retries: int = 3) -> Optional[str]:
-        """Fetch page using Playwright browser"""
+        """Fetch page with advanced stealth and human behavior simulation"""
         url = self.BASE_URL.format(page_num)
         
         for attempt in range(max_retries):
@@ -165,10 +326,14 @@ class BharatkoshScraperPlaywright:
                     print(f"⏳ Waiting {wait_time:.1f}s before retry {attempt + 1}/{max_retries}...")
                     await asyncio.sleep(wait_time)
                 
-                print(f"🔄 Fetching page {page_num} with Playwright (attempt {attempt + 1}/{max_retries})...")
+                print(f"🚀 Fetching page {page_num} with advanced stealth (attempt {attempt + 1}/{max_retries})...")
                 
                 # Create new page
                 page = await self.context.new_page()
+                
+                # Apply playwright-stealth if available
+                if HAS_STEALTH:
+                    await stealth_async(page)
                 
                 # Set realistic timeout
                 page.set_default_timeout(60000)
@@ -176,25 +341,30 @@ class BharatkoshScraperPlaywright:
                 # Navigate to URL
                 response = await page.goto(url, wait_until='domcontentloaded')
                 
-                # Wait a bit for any JS to execute
-                await asyncio.sleep(random.uniform(2, 4))
+                # Simulate human behavior
+                await asyncio.sleep(self._random_delay(1000, 2500) / 1000)
+                await self._human_mouse_movement(page)
+                await asyncio.sleep(self._random_delay(500, 1500) / 1000)
                 
-                # Check if we got Cloudflare challenge
+                # Wait for Cloudflare challenge if present
+                await self._wait_for_cloudflare(page, timeout=30000)
+                
+                # Scroll like a human
+                await self._human_scroll(page)
+                
+                # Wait a bit more
+                await asyncio.sleep(self._random_delay(1000, 2000) / 1000)
+                
+                # Get content
                 content = await page.content()
                 
-                if response.status == 403 or any(x in content for x in ["Just a moment", "Checking your browser", "cf-spinner"]):
-                    print(f"⚠️ Cloudflare challenge detected, waiting for resolution...")
-                    # Wait longer for Cloudflare to resolve
-                    await asyncio.sleep(5)
-                    content = await page.content()
-                
                 # Check if we got valid content
-                if len(content) > 10000 and "Just a moment" not in content:
+                if len(content) > 10000 and not any(x in content for x in ["Just a moment", "Checking your browser"]):
                     print(f"✅ Successfully fetched page {page_num} ({len(content)} chars)")
                     await page.close()
                     return content
                 else:
-                    print(f"⚠️ Got incomplete page ({len(content)} chars)")
+                    print(f"⚠️ Got incomplete or blocked page ({len(content)} chars)")
                     if attempt < max_retries - 1:
                         await page.close()
                         continue
@@ -203,11 +373,17 @@ class BharatkoshScraperPlaywright:
                 print(f"❌ Error fetching page {page_num} on attempt {attempt + 1}: {type(e).__name__}: {e}")
                 if attempt < max_retries - 1:
                     if page:
-                        await page.close()
+                        try:
+                            await page.close()
+                        except:
+                            pass
                     continue
             finally:
                 if page and not page.is_closed():
-                    await page.close()
+                    try:
+                        await page.close()
+                    except:
+                        pass
         
         return None
     
@@ -575,6 +751,7 @@ async def main():
     parser.add_argument('--delay', type=float, default=8.0, help='Delay between requests (seconds)')
     parser.add_argument('--skip-on-error', action='store_true', help='Skip failed pages and continue')
     parser.add_argument('--test', action='store_true', help='Test mode (pages 1-3)')
+    parser.add_argument('--proxy', type=str, help='Proxy URL (format: http://user:pass@host:port or http://host:port)')
     
     args = parser.parse_args()
     
@@ -587,7 +764,8 @@ async def main():
         start_page=args.start,
         end_page=args.end,
         output_dir=args.output,
-        delay_between_requests=args.delay
+        delay_between_requests=args.delay,
+        proxy=args.proxy
     )
     
     scraper.skip_on_error = args.skip_on_error

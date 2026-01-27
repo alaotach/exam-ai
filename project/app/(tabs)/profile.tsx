@@ -1,27 +1,71 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Switch, Alert, Platform, StatusBar } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Switch, Alert, Platform, StatusBar, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { User, Settings, Bell, BookOpen, LogOut, CreditCard as Edit3, Save, X } from 'lucide-react-native';
+import { User, Settings, Bell, BookOpen, LogOut, CreditCard as Edit3, Save, X, Target } from 'lucide-react-native';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import { mockUser, mockBookmarks } from '@/data/mockData';
+import { useAuth } from '@/context/auth-context';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/services/firebaseConfig';
+import UserService, { UserProfile, UserStats } from '@/services/user-service';
 
 export default function ProfileScreen() {
+  const { user } = useAuth();
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [userName, setUserName] = useState(mockUser.name);
-  const [userEmail, setUserEmail] = useState(mockUser.email);
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [selectedBookmark, setSelectedBookmark] = useState<string | null>(null);
-  const [bookmarkNotes, setBookmarkNotes] = useState<{[key: string]: string}>({});
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleSaveProfile = () => {
-    setIsEditingProfile(false);
-    Alert.alert('Success', 'Profile updated successfully!');
+  useEffect(() => {
+    loadUserData();
+  }, [user]);
+
+  const loadUserData = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    try {
+      const profile = await UserService.getUserProfile();
+      const stats = await UserService.getUserStatistics();
+      
+      if (profile) {
+        setUserProfile(profile);
+        setUserName(profile.displayName);
+        setUserEmail(profile.email);
+      }
+      
+      setUserStats(stats);
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    if (!userName.trim()) {
+      Alert.alert('Error', 'Name cannot be empty');
+      return;
+    }
+
+    try {
+      await UserService.updateUserProfile({
+        displayName: userName,
+      });
+      setIsEditingProfile(false);
+      Alert.alert('Success', 'Profile updated successfully!');
+      loadUserData();
+    } catch (error) {
+      Alert.alert('Error', 'Failed to update profile');
+    }
   };
 
   const handleCancelEdit = () => {
-    setUserName(mockUser.name);
-    setUserEmail(mockUser.email);
+    setUserName(userProfile?.displayName || '');
+    setUserEmail(userProfile?.email || '');
     setIsEditingProfile(false);
   };
 
@@ -31,18 +75,36 @@ export default function ProfileScreen() {
       'Are you sure you want to logout?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Logout', style: 'destructive', onPress: () => console.log('Logged out') }
+        { 
+          text: 'Logout', 
+          style: 'destructive', 
+          onPress: async () => {
+            try {
+              await signOut(auth);
+            } catch (e) {
+              Alert.alert("Error", "Failed to logout");
+            }
+          } 
+        }
       ]
     );
   };
 
-  const handleSaveNote = (bookmarkId: string) => {
-    setSelectedBookmark(null);
-    Alert.alert('Success', 'Note saved successfully!');
-  };
+
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container} edges={['bottom']}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#667eea" />
+          <Text style={styles.loadingText}>Loading profile...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Profile & Settings</Text>
         
@@ -66,6 +128,7 @@ export default function ProfileScreen() {
                     onChangeText={setUserEmail}
                     placeholder="Email"
                     keyboardType="email-address"
+                    editable={false}
                   />
                   <View style={styles.editButtons}>
                     <TouchableOpacity style={styles.saveButton} onPress={handleSaveProfile}>
@@ -80,7 +143,7 @@ export default function ProfileScreen() {
                 </View>
               ) : (
                 <View>
-                  <Text style={styles.profileName}>{userName}</Text>
+                  <Text style={styles.profileName}>{userName || 'User'}</Text>
                   <Text style={styles.profileEmail}>{userEmail}</Text>
                   <TouchableOpacity 
                     style={styles.editProfileButton}
@@ -97,104 +160,57 @@ export default function ProfileScreen() {
 
         <Card>
           <Text style={styles.cardTitle}>Study Statistics</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>{mockUser.streak}</Text>
-              <Text style={styles.statLabel}>Day Streak</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>{mockUser.totalPractice}</Text>
-              <Text style={styles.statLabel}>Questions</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>{mockUser.accuracy}%</Text>
-              <Text style={styles.statLabel}>Accuracy</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>12</Text>
-              <Text style={styles.statLabel}>Tests Taken</Text>
-            </View>
-          </View>
-        </Card>
-
-        <Card>
-          <Text style={styles.cardTitle}>Bookmarks & Notes</Text>
-          <View style={styles.bookmarksContainer}>
-            {mockBookmarks.map((bookmark) => (
-              <View key={bookmark.id} style={styles.bookmarkItem}>
-                <View style={styles.bookmarkHeader}>
-                  <BookOpen size={16} color="#007AFF" />
-                  <Text style={styles.bookmarkSubject}>{bookmark.question.subject}</Text>
-                  <Text style={styles.bookmarkDifficulty}>{bookmark.question.difficulty}</Text>
-                </View>
-                <Text style={styles.bookmarkQuestion} numberOfLines={2}>
-                  {bookmark.question.question}
-                </Text>
-                {selectedBookmark === bookmark.id ? (
-                  <View style={styles.noteEditContainer}>
-                    <TextInput
-                      style={styles.noteInput}
-                      value={bookmarkNotes[bookmark.id] || bookmark.notes || ''}
-                      onChangeText={(text) => setBookmarkNotes(prev => ({...prev, [bookmark.id]: text}))}
-                      placeholder="Add your notes..."
-                      multiline
-                    />
-                    <View style={styles.noteButtons}>
-                      <TouchableOpacity 
-                        style={styles.saveNoteButton}
-                        onPress={() => handleSaveNote(bookmark.id)}
-                      >
-                        <Text style={styles.saveNoteText}>Save</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity 
-                        style={styles.cancelNoteButton}
-                        onPress={() => setSelectedBookmark(null)}
-                      >
-                        <Text style={styles.cancelNoteText}>Cancel</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                ) : (
-                  <View>
-                    {(bookmark.notes || bookmarkNotes[bookmark.id]) && (
-                      <Text style={styles.bookmarkNotes}>
-                        📝 {bookmarkNotes[bookmark.id] || bookmark.notes}
-                      </Text>
-                    )}
-                    <TouchableOpacity 
-                      style={styles.editNoteButton}
-                      onPress={() => setSelectedBookmark(bookmark.id)}
-                    >
-                      <Edit3 size={12} color="#007AFF" />
-                      <Text style={styles.editNoteText}>
-                        {bookmark.notes || bookmarkNotes[bookmark.id] ? 'Edit Note' : 'Add Note'}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
+          {userStats ? (
+            <View style={styles.statsGrid}>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{userStats.streak}</Text>
+                <Text style={styles.statLabel}>Day Streak</Text>
               </View>
-            ))}
-          </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{userStats.questionsAttempted}</Text>
+                <Text style={styles.statLabel}>Questions</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{userStats.accuracy.toFixed(1)}%</Text>
+                <Text style={styles.statLabel}>Accuracy</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{userStats.totalTests}</Text>
+                <Text style={styles.statLabel}>Tests Taken</Text>
+              </View>
+            </View>
+          ) : (
+            <Text style={styles.noDataText}>Start taking tests to see your statistics</Text>
+          )}
         </Card>
 
-        <Card>
-          <Text style={styles.cardTitle}>Exam Preferences</Text>
-          <View style={styles.preferencesContainer}>
-            <View style={styles.preferenceItem}>
-              <Text style={styles.preferenceLabel}>Primary Exam Focus</Text>
-              <Text style={styles.preferenceValue}>JEE Advanced</Text>
+        {userProfile && userProfile.exams && userProfile.exams.length > 0 && (
+          <Card>
+            <Text style={styles.cardTitle}>Exam Preferences</Text>
+            <View style={styles.preferencesContainer}>
+              <View style={styles.preferenceItem}>
+                <Target size={18} color="#667eea" style={{marginRight: 8}} />
+                <View style={{flex: 1}}>
+                  <Text style={styles.preferenceLabel}>Target Exams</Text>
+                  <Text style={styles.preferenceValue}>{userProfile.exams.join(', ')}</Text>
+                </View>
+              </View>
+              <View style={styles.preferenceItem}>
+                <Text style={styles.preferenceLabel}>Experience Level</Text>
+                <Text style={styles.preferenceValue}>
+                  {userProfile.experienceLevel === 'beginner' ? 'Just Started' :
+                   userProfile.experienceLevel === 'intermediate' ? 'Preparing' : 'Advanced'}
+                </Text>
+              </View>
+              {userProfile.targetExamDate && (
+                <View style={styles.preferenceItem}>
+                  <Text style={styles.preferenceLabel}>Target Date</Text>
+                  <Text style={styles.preferenceValue}>{userProfile.targetExamDate}</Text>
+                </View>
+              )}
             </View>
-            <View style={styles.preferenceItem}>
-              <Text style={styles.preferenceLabel}>Difficulty Level</Text>
-              <Text style={styles.preferenceValue}>Medium to Hard</Text>
-            </View>
-            <View style={styles.preferenceItem}>
-              <Text style={styles.preferenceLabel}>Study Goal</Text>
-              <Text style={styles.preferenceValue}>2 hours daily</Text>
-            </View>
-          </View>
-          <Button title="Update Preferences" onPress={() => {}} variant="secondary" />
-        </Card>
+          </Card>
+        )}
 
         <Card>
           <Text style={styles.cardTitle}>Settings</Text>
@@ -236,6 +252,23 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666',
+  },
+  noDataText: {
+    fontSize: 14,
+    color: '#999',
+    textAlign: 'center',
+    paddingVertical: 20,
+    fontStyle: 'italic',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F2F2F7',

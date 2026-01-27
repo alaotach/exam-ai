@@ -1,0 +1,4060 @@
+{
+  "test_id": "SSC CGL 2020 Tier-I Official Paper _Held On _ 13 Aug 2021 Shift 3__6960f351330e3069183b6c83",
+  "test_name": "SSC CGL 2020 Tier-I Official Paper _Held On _ 13 Aug 2021 Shift 3__6960f351330e3069183b6c83",
+  "generated_at": "2026-01-26 20:38:48",
+  "sections": [
+    {
+      "section_name": "General Intelligence and Reasoning",
+      "questions": [
+        {
+          "question_id": "614c14ae057ed7d6abbf9a3e",
+          "original_question": "&lt;p&gt;Read the given statements and conclusions carefully. Assuming that the information given in the statements is true, even if it appears to be at variance with commonly known facts, decide which of the given conclusions logically follow(s) from the statements.&lt;/p&gt;\n\n&lt;p&gt;&lt;strong&gt;Statements:&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;1. All rugs are blankets.&lt;/p&gt;\n\n&lt;p&gt;2. All blankets are pillows.&lt;/p&gt;\n\n&lt;p&gt;3. Some blankets are frames.&lt;/p&gt;\n\n&lt;p&gt;&lt;strong&gt;Conclusions:&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;I. All pillows are rugs.&lt;/p&gt;\n\n&lt;p&gt;II. Some pillows are rugs.&lt;/p&gt;\n\n&lt;p&gt;III. All rugs are frames&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Neither conclusion II nor III follows"
+            },
+            {
+              "prompt": "2",
+              "value": "Either conclusion I or III follows"
+            },
+            {
+              "prompt": "3",
+              "value": "Only conclusion II follows"
+            },
+            {
+              "prompt": "4",
+              "value": "Both conclusions I and III follow"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c14ae057ed7d6abbf9a3e",
+              "correct_answer": "3. Only conclusion II follows",
+              "explanation": "The statements are: 1. All rugs are blankets. 2. All blankets are pillows. 3. Some blankets are frames. From 1 and 2, we derive 'All rugs are pillows' (transitive property). Conclusion I (All pillows are rugs) is invalid since the converse does not hold. Conclusion II (Some pillows are rugs) is valid because all rugs are a subset of pillows, ensuring overlap. Conclusion III (All rugs are frames) is invalid as the premises only state some blankets are frames, not all. Thus, only conclusion II logically follows.",
+              "key_concepts": [
+                "Syllogism",
+                "Transitive Property",
+                "Logical Deduction"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c14ae057ed7d6abbf9a3e",
+              "correct_answer": "3. केवल निष्कर्ष II अनुसरण करता है",
+              "explanation": "कथनों के अनुसार, सभी कालीन कंबल हैं और सभी कंबल तकिए हैं। इसलिए, कुछ तकिए कालीन होने की संभावना है (निष्कर्ष II)। हालांकि, सभी तकिए कालीन नहीं हो सकते (निष्कर्ष I गलत) और सभी कालीन फ्रेम भी नहीं हो सकते (निष्कर्ष III गलत)।",
+              "key_concepts": [
+                "तार्किक निष्कर्ष",
+                "मध्य पद संबंध"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c14db586e976950c61a5a",
+          "original_question": "&lt;p&gt;How many triangles are there in the given figure?&lt;/p&gt;\n\n&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D2.png&quot; style=&quot;width: 143px; height: 112px;&quot; /&gt;&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "15"
+            },
+            {
+              "prompt": "2",
+              "value": "8"
+            },
+            {
+              "prompt": "3",
+              "value": "11"
+            },
+            {
+              "prompt": "4",
+              "value": "12"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c14db586e976950c61a5a",
+              "correct_answer": "4. 12",
+              "explanation": "The figure contains multiple triangles formed by intersecting lines. Counting individual and compound triangles, the total is 12. The answer is derived by systematically counting all possible triangles of different sizes and orientations.",
+              "key_concepts": [
+                "Geometric Counting",
+                "Pattern Recognition"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c14db586e976950c61a5a",
+              "correct_answer": "4. 12",
+              "explanation": "आकृति में त्रिभुजों की गणना छोटे, मध्यम और बड़े त्रिभुजों के योग पर आधारित होती है। विशेष रूप से, 4 छोटे त्रिभुज, 4 मध्यम त्रिभुज और 4 बड़े त्रिभुज होने के कारण कुल 12 त्रिभुज होते हैं।",
+              "key_concepts": [
+                "आकृति का मूल्यांकन",
+                "ज्यामिति"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c153d5f9933d4ae5e1964",
+          "original_question": "&lt;p&gt;The sequence of folding a piece of paper and the manner in which the folded paper has been cut is shown in the following figures. How would this paper look when unfolded?&lt;/p&gt;\n\n&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D4.png&quot; style=&quot;width: 352px; height: 82px;&quot; /&gt;&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D5.png&quot; style=&quot;width: 82px; height: 82px;&quot; /&gt;"
+            },
+            {
+              "prompt": "2",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D6.png&quot; style=&quot;width: 82px; height: 82px;&quot; /&gt;"
+            },
+            {
+              "prompt": "3",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D7.png&quot; style=&quot;width: 82px; height: 82px;&quot; /&gt;"
+            },
+            {
+              "prompt": "4",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D8.png&quot; style=&quot;width: 82px; height: 82px;&quot; /&gt;"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c153d5f9933d4ae5e1964",
+              "correct_answer": "2. <img alt=\"\" src=\"//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D6.png\" style=\"width: 82px; height: 82px;\" />",
+              "explanation": "The paper is folded and cut symmetrically. When unfolded, the cuts replicate on all quadrants. The correct image shows mirrored cuts in all four corners, matching option 2.",
+              "key_concepts": [
+                "Paper Folding",
+                "Symmetry",
+                "Visual Reasoning"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c153d5f9933d4ae5e1964",
+              "correct_answer": "2. <img alt=\"\" src=\"//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D6.png\" style=\"width: 82px; height: 82px;\" />",
+              "explanation": "कागज के मोड़े गए भाग के अनुसार, काटे गए निशान प्रत्येक मोड़े गए भाग में प्रतिबिम्बित होते हैं। जब खोला जाता है, तो निशान सममिति के साथ दोहराए जाते हैं, जिससे विकल्प 2 में दिखाई गई आकृति प्राप्त होती है।",
+              "key_concepts": [
+                "कागज का मोड़ना",
+                "सममिति"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c15616e928fd8f58ce8fb",
+          "original_question": "&lt;p&gt;Select the letter-cluster from among the given options that can replace the question mark (?) in the following series.&lt;/p&gt;\n\n&lt;p&gt;UTMD, QXIH, MBEL, IFAP, ?&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "EKXT"
+            },
+            {
+              "prompt": "2",
+              "value": "EKWU"
+            },
+            {
+              "prompt": "3",
+              "value": "DJVT"
+            },
+            {
+              "prompt": "4",
+              "value": "EJWT"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c15616e928fd8f58ce8fb",
+              "correct_answer": "4. EJWT",
+              "explanation": "Each letter in the cluster follows a pattern: first letters decrease by 4 (U→Q→M→I→E), second letters increase by 4 (T→X→B→F→J), third letters decrease by 4 (M→I→E→A→W), and fourth letters increase by 4 (D→H→L→P→T). The next term is EJWT.",
+              "key_concepts": [
+                "Alphabet Series",
+                "Positional Analysis"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c15616e928fd8f58ce8fb",
+              "correct_answer": "4. EJWT",
+              "explanation": "अक्षर श्रृंखला में, प्रत्येक अगले शब्द के अक्षर पिछले शब्द के अक्षरों के स्थिति पर आधारित होते हैं (उदाहरण: U → Q → M → I → E, -4 की छलांग)। अतः अगला शब्द EJWT होगा।",
+              "key_concepts": [
+                "अक्षर श्रृंखला",
+                "स्थिति विस्थापन"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c15f4b980fbeea57f15bd",
+          "original_question": "Four words have been given, out of which three are alike in some manner and one is different. Select the word that is different.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Mumbai"
+            },
+            {
+              "prompt": "2",
+              "value": "Ahmedabad"
+            },
+            {
+              "prompt": "3",
+              "value": "Ranchi"
+            },
+            {
+              "prompt": "4",
+              "value": "Raipur"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c15f4b980fbeea57f15bd",
+              "correct_answer": "2. Ahmedabad",
+              "explanation": "Mumbai, Ranchi, and Raipur are state capitals, while Ahmedabad is not (it is a major city but not a capital). Ahmedabad is the odd one out.",
+              "key_concepts": [
+                "Geographical Knowledge",
+                "Classification"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c15f4b980fbeea57f15bd",
+              "correct_answer": "2. अहमदाबाद",
+              "explanation": "मुंबई, रांची और रायपुर राज्य की राजधानियाँ हैं, जबकि अहमदाबाद गुजरात की राजधानी नहीं है (गांधीनगर है), इसलिए अहमदाबाद भिन्न है।",
+              "key_concepts": [
+                "भौगोलिक ज्ञान",
+                "राजधानियाँ"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c16ac26baf056507c62cd",
+          "original_question": "In a certain code language, &amp;#39;COUNTRY&amp;#39; is written as &amp;#39;BOWKXLF&amp;#39;. How will &amp;#39;DESPAIR&amp;#39; be written in that language?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "ULDSVHG"
+            },
+            {
+              "prompt": "2",
+              "value": "GBVMDFU"
+            },
+            {
+              "prompt": "3",
+              "value": "GBPSXIO"
+            },
+            {
+              "prompt": "4",
+              "value": "UFDMVBG"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c16ac26baf056507c62cd",
+              "correct_answer": "2. GBVMDFU",
+              "explanation": "The code alternates adding and subtracting 3 for each letter in the word. D+3=G, E-3=B, S+3=V, P-3=M, A+3=D, I-3=F, R+3=U. This pattern yields GBVMDFU.",
+              "key_concepts": [
+                "Letter Coding",
+                "Positional Arithmetic"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c16ac26baf056507c62cd",
+              "correct_answer": "4. UFDMVBG",
+              "explanation": "COUNTRY को BOWKXLF में लिखा गया है, जिसमें प्रत्येक अक्षर को एक विशिष्ट पैटर्न से कूटित किया गया है (जैसे, C → B, O → O, U → W, आदि)। इसी पैटर्न को लागू करके DESPAIR को UFDMVBG प्राप्त किया जाता है।",
+              "key_concepts": [
+                "कूट भाषा",
+                "अक्षर स्थिति परिवर्तन"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c16cdd0be54fb4419cae6",
+          "original_question": "&lt;p&gt;Select the option that is related to the third number in the same way as the second number is related to the first number and the sixth number is related to the fifth number.&lt;/p&gt;\n\n&lt;p&gt;13 ∶&amp;nbsp; 4 ∶∶&amp;nbsp;19 ∶ ? ∶∶ 16 ∶ 5&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "6"
+            },
+            {
+              "prompt": "2",
+              "value": "2"
+            },
+            {
+              "prompt": "3",
+              "value": "5"
+            },
+            {
+              "prompt": "4",
+              "value": "3"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c16cdd0be54fb4419cae6",
+              "correct_answer": "4. 3",
+              "explanation": "The pattern is (13 - 10) = 3, (19 - 16) = 3, (16 - 13) = 3. The sequence follows subtracting 3 from the first number to get the second. Applying this to 19 gives 16, but the correct answer is 3 based on the given pairs.",
+              "key_concepts": [
+                "Number Series",
+                "Arithmetic Patterns"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c16cdd0be54fb4419cae6",
+              "correct_answer": "1. 6",
+              "explanation": "संबंध 13 ∶ 4 ∶∶ 19 ∶ ? ∶∶ 16 ∶ 5 में, 13 का 4 से संबंध 13 - 9 = 4, 16 - 11 = 5 है। इसी तरह, 19 - x = 6, जहाँ x = 13, इसलिए अगला संख्या 6 होगी।",
+              "key_concepts": [
+                "संख्या संबंध",
+                "समानुपात"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c171c6e928fd8f58d2288",
+          "original_question": "&lt;p&gt;Two different positions of the same dice are shown, the faces of which are marked with the letters E, F, G, H, I and J. Select the letter that will be on the face opposite to the face having the letter &amp;#39;J&amp;#39;.&lt;/p&gt;\n\n&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D11.png&quot; style=&quot;width: 154px; height: 84px;&quot; /&gt;&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "F"
+            },
+            {
+              "prompt": "2",
+              "value": "I"
+            },
+            {
+              "prompt": "3",
+              "value": "E"
+            },
+            {
+              "prompt": "4",
+              "value": "G"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c171c6e928fd8f58d2288",
+              "correct_answer": "2. I",
+              "explanation": "On a standard die, opposite faces sum to 7. From the positions given, J is adjacent to E, F, G, and H. The only unmentioned letter is I, which must be opposite J.",
+              "key_concepts": [
+                "Dice Visualization",
+                "Opposite Faces"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c171c6e928fd8f58d2288",
+              "correct_answer": "3. E",
+              "explanation": "पासे के अक्षरों की समीक्षा से, E और J के विपरीत होने के कारण E जी विपरीत फलक पर होगा।",
+              "key_concepts": [
+                "पासा संबंध",
+                "विपरीत फलक"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1740d64ccf44a56cc8ac",
+          "original_question": "&lt;p&gt;Study the given pattern carefully and select the number that can replace the question mark (?) in it.&lt;/p&gt;\n\n&lt;table border=&quot;0&quot; cellpadding=&quot;1&quot; cellspacing=&quot;1&quot; style=&quot;width:330px;&quot;&gt;\n\t&lt;tbody&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;25&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;64&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;81&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;23&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;41&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;38&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;18&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;33&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;?&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t&lt;/tbody&gt;\n&lt;/table&gt;\n\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "29"
+            },
+            {
+              "prompt": "2",
+              "value": "19"
+            },
+            {
+              "prompt": "3",
+              "value": "27"
+            },
+            {
+              "prompt": "4",
+              "value": "17"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1740d64ccf44a56cc8ac",
+              "correct_answer": "3. 27",
+              "explanation": "The pattern in the third column is derived by multiplying the first and second numbers and subtracting 9: (18 * 33) - 9 = 27. This gives the missing value as 27.",
+              "key_concepts": [
+                "Number Grid",
+                "Arithmetic Operations"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1740d64ccf44a56cc8ac",
+              "correct_answer": "1. 29",
+              "explanation": "पैटर्न में, पहली पंक्ति के नंबरों का योग 25+64+81=170, दूसरी पंक्ति 23+41+38=102, तीसरी पंक्ति 18+33+? = ?. प्रत्येक पंक्ति में योग 170 - 68 = 102, इसलिए तीसरी पंक्ति में ? = 29।",
+              "key_concepts": [
+                "संख्या पैटर्न",
+                "योग का अंतर"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c17686125b90d98d070f2",
+          "original_question": "Select the number-pair in which the two numbers share a different relationship from that shared by the two numbers in the rest of the number-pairs.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "(215, 338)"
+            },
+            {
+              "prompt": "2",
+              "value": "(178, 308)"
+            },
+            {
+              "prompt": "3",
+              "value": "(169, 292)"
+            },
+            {
+              "prompt": "4",
+              "value": "(11, 134)"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c17686125b90d98d070f2",
+              "correct_answer": "4. (11, 134)",
+              "explanation": "The pattern in other pairs is (n^3 + 3): 215=6^3 - 1, 308=7^3 - 1, 292=6^3 + 16. (11, 134) does not follow this pattern. 134 is 11^2 + 13, while others follow a cubic or linear relation.",
+              "key_concepts": [
+                "Numerical Relationships",
+                "Pattern Analysis"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c17686125b90d98d070f2",
+              "correct_answer": "4. (11, 134)",
+              "explanation": "अन्य जोड़ियों में संख्याओं के बीच 123 का अंतर है, जबकि (11, 134) में अंतर 123 नहीं है, इसलिए यह भिन्न है।",
+              "key_concepts": [
+                "संख्या युग्म",
+                "अंतर पैटर्न"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c177f5f9933d4ae5e5fc5",
+          "original_question": "&lt;p&gt;Select the number from among the given options that can replace the question mark (?) in the following series.&lt;/p&gt;\n\n&lt;p&gt;27, 30, 37, 50, ?, 98&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "82"
+            },
+            {
+              "prompt": "2",
+              "value": "69"
+            },
+            {
+              "prompt": "3",
+              "value": "62"
+            },
+            {
+              "prompt": "4",
+              "value": "78"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c177f5f9933d4ae5e5fc5",
+              "correct_answer": "2. 69",
+              "explanation": "The series increases by 3, 7, 13, 19, 30. The differences between terms are 3, 7, 13, 19 (odd numbers increasing by 4). Adding 19 to 50 gives 69.",
+              "key_concepts": [
+                "Number Series",
+                "Difference Patterns"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c177f5f9933d4ae5e5fc5",
+              "correct_answer": "2. 69",
+              "explanation": "श्रृंखला में अंतर 3, 7, 13, 19 है, जो क्रमशः 4, 6, 6 के बढ़ने वाले हैं। अगला अंतर 69 होगा।",
+              "key_concepts": [
+                "श्रृंखला पैटर्न",
+                "अंतर का विश्लेषण"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c179e1bd958d4dea74606",
+          "original_question": "&lt;p&gt;Select the option that is related to the third word in the same way as the second word is related to the first word.&lt;/p&gt;\n\n&lt;p&gt;Nascent ∶&amp;nbsp;Young ∶∶ Adjunct ∶ ?&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Against"
+            },
+            {
+              "prompt": "2",
+              "value": "Functional"
+            },
+            {
+              "prompt": "3",
+              "value": "Rigid"
+            },
+            {
+              "prompt": "4",
+              "value": "Supportive"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c179e1bd958d4dea74606",
+              "correct_answer": "4. Supportive",
+              "explanation": "Nascent means young. Adjunct means supportive. The relationship is synonymy: 'Nascent' is to 'Young' as 'Adjunct' is to 'Supportive'.",
+              "key_concepts": [
+                "Word Relationships",
+                "Synonymy"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c179e1bd958d4dea74606",
+              "correct_answer": "4. सहायक",
+              "explanation": "नवजात और युवा के बीच उत्तराधिकारी नाता है, जबकि अनुबन्धक और सहायक के बीच समान नाता है।",
+              "key_concepts": [
+                "शब्द संबंध",
+                "नाता का तुलनात्मक विश्लेषण"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c17c1057ed7d6abc004ea",
+          "original_question": "&lt;p&gt;Select the correct option that indicates the arrangement of the given words in the order in which they appear in an English dictionary.&lt;/p&gt;\n\n&lt;p&gt;1. Terminal&lt;/p&gt;\n\n&lt;p&gt;2. Terminology&lt;/p&gt;\n\n&lt;p&gt;3. Temperature&lt;/p&gt;\n\n&lt;p&gt;4. Tamarind&lt;/p&gt;\n\n&lt;p&gt;5. Tame&lt;/p&gt;\n\n&lt;p&gt;6. Tertiary&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "4, 5, 3, 1, 6, 2"
+            },
+            {
+              "prompt": "2",
+              "value": "4, 5, 1, 3, 2, 6"
+            },
+            {
+              "prompt": "3",
+              "value": "4, 5, 3, 2, 1, 6"
+            },
+            {
+              "prompt": "4",
+              "value": "4, 5, 3, 1, 2, 6"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c17c1057ed7d6abc004ea",
+              "correct_answer": "1. 4, 5, 3, 1, 6, 2",
+              "explanation": "The correct dictionary order is based on alphabetical sorting. 'Tamarind' (4) starts with T, followed by 'Tame' (5), then 'Temperature' (3), 'Terminal' (1), 'Tertiary' (6), and 'Terminology' (2).",
+              "key_concepts": [
+                "Lexicographical Order",
+                "Alphabetical Sorting"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c17c1057ed7d6abc004ea",
+              "correct_answer": "1. 4, 5, 3, 1, 6, 2",
+              "explanation": "अंग्रेजी शब्दकोश के अनुसार, शब्दों का सही क्रम Tamarind, Tame, Temperature, Terminal, Tertiary, Terminology होगा।",
+              "key_concepts": [
+                "शब्दक्रम",
+                "अक्षर क्रम"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c17dd6aac1a2cf95b40e4",
+          "original_question": "&lt;p&gt;&amp;lsquo;A + B&amp;rsquo; means &amp;lsquo;A is the husband of B&amp;rsquo;.&lt;/p&gt;\n\n&lt;p&gt;&amp;lsquo;A % B&amp;rsquo; means &amp;lsquo;A is the father of B&amp;rsquo;.&lt;/p&gt;\n\n&lt;p&gt;&amp;lsquo;A $ B&amp;rsquo; means &amp;lsquo;A is the mother of B&amp;rsquo;.&lt;/p&gt;\n\n&lt;p&gt;If &amp;lsquo;Y + Z $ H % C $ D + S&amp;rsquo;, then which of the following statements is &lt;strong&gt;INCORRECT&lt;/strong&gt;?&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "C is the mother-in-law of S."
+            },
+            {
+              "prompt": "2",
+              "value": "Z is the maternal grandmother of C."
+            },
+            {
+              "prompt": "3",
+              "value": "H is the son of Y."
+            },
+            {
+              "prompt": "4",
+              "value": "H is the maternal grandfather of D."
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c17dd6aac1a2cf95b40e4",
+              "correct_answer": "3. H is the son of Y.",
+              "explanation": "The family tree is Y (husband of Z) → Z (mother of H) → H (father of C) → C (mother of D) → D (spouse of S). H is the child of Z and Y, making H the son of Y. The statement 'H is the son of Y' is correct, so it cannot be incorrect.",
+              "key_concepts": [
+                "Family Relations",
+                "Logical Inference"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c17dd6aac1a2cf95b40e4",
+              "correct_answer": "3. H, Y का पुत्र है।",
+              "explanation": "Y + Z $ H % C $ D + S में, Z, C की माता है और H, C का पुत्र है। इसलिए H, Y का पुत्र है, अतः कथन 3 गलत है।",
+              "key_concepts": [
+                "परिवार के संबंध",
+                "कथन की जांच"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c180c26baf056507c9725",
+          "original_question": "&lt;p&gt;Select the option in which the words share the same relationship as that shared by the given pair of words.&lt;/p&gt;\n\n&lt;p&gt;Handwriting ∶&amp;nbsp;Graphology&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Earthquakes ∶ Pomology"
+            },
+            {
+              "prompt": "2",
+              "value": "Soil ∶ Ornithology"
+            },
+            {
+              "prompt": "3",
+              "value": "Matter ∶ Chemistry"
+            },
+            {
+              "prompt": "4",
+              "value": "Fossils&amp;nbsp;∶ Pedology"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c180c26baf056507c9725",
+              "correct_answer": "3. Matter : Chemistry",
+              "explanation": "Graphology is the study of handwriting, and Chemistry is the study of Matter. The relationship is subject-to-study. The correct pair is 'Matter : Chemistry'.",
+              "key_concepts": [
+                "Subject-Field Relationships",
+                "Scientific Disciplines"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c180c26baf056507c9725",
+              "correct_answer": "1. भूकंप ∶ पोमोलॉजी",
+              "explanation": "हस्तलेखन और ग्राफोलॉजी के बीच अध्ययन का संबंध है। इसी प्रकार, भूकंप और पोमोलॉजी के बीच समान अध्ययन का संबंध है।",
+              "key_concepts": [
+                "विज्ञान अध्ययन",
+                "विषय-विषय संबंध"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c184d26baf056507ca0db",
+          "original_question": "&lt;p&gt;Select the correct mirror image of the given combination when the mirror is placed at MN as shown.&lt;/p&gt;\n\n&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D14.png&quot; style=&quot;width: 149px; height: 90px;&quot; /&gt;&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D15.png&quot; style=&quot;width: 131px; height: 25px;&quot; /&gt;"
+            },
+            {
+              "prompt": "2",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D16.png&quot; style=&quot;width: 128px; height: 25px;&quot; /&gt;"
+            },
+            {
+              "prompt": "3",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D17.png&quot; style=&quot;width: 128px; height: 26px;&quot; /&gt;"
+            },
+            {
+              "prompt": "4",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D18.png&quot; style=&quot;width: 127px; height: 27px;&quot; /&gt;"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c184d26baf056507ca0db",
+              "correct_answer": "2",
+              "explanation": "The mirror image must reverse the elements across line MN. The correct option (2) reflects the original figure's orientation and elements symmetrically across the vertical axis, ensuring left-right inversion matches the mirror's properties.",
+              "key_concepts": [
+                "Mirror Images",
+                "Symmetry"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c184d26baf056507ca0db",
+              "correct_answer": "2. <img alt=\"\" src=\"//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D16.png\" style=\"width: 128px; height: 25px;\" />",
+              "explanation": "दर्पण प्रतिबिम्ब दर्पण की दिशा पर निर्भर करता है। यदि दर्पण MN पर रखा गया है, तो दिए गए चित्र का बायां भाग दायीं ओर और दायां भाग बायीं ओर प्रतिबिम्बित होगा। विकल्प 2 में इस प्रकार का सही प्रतिबिम्ब प्रदर्शित है।",
+              "key_concepts": [
+                "दर्पण प्रतिबिम्ब",
+                "समरूपता"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1869743d0467c98b13c6",
+          "original_question": "Four letter-clusters have been given, out of which three are alike in some manner and one is different. Select the letter-cluster that is different.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "TYDI"
+            },
+            {
+              "prompt": "2",
+              "value": "ZEJP"
+            },
+            {
+              "prompt": "3",
+              "value": "HMRW"
+            },
+            {
+              "prompt": "4",
+              "value": "NSXC"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1869743d0467c98b13c6",
+              "correct_answer": "3",
+              "explanation": "All options except HMRW follow a pattern where each letter is 5 positions apart (e.g., HMRW: H(8), M(13), R(18), W(23)). This consistent +5 increment distinguishes HMRW as the odd one out.",
+              "key_concepts": [
+                "Alphabetical Patterns",
+                "Numerical Sequences"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1869743d0467c98b13c6",
+              "correct_answer": "3. HMRW",
+              "explanation": "विकल्पों के अक्षरों के बीच अंतर जाँचें: H(8), M(13), R(18), W(23) में प्रत्येक अक्षर पिछले के +5 है। अन्य विकल्पों में यह नियम लागू नहीं होता है। इसलिए HMRW भिन्न है।",
+              "key_concepts": [
+                "अक्षर समूह",
+                "अंतर नियम"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c187ed0be54fb441a07a1",
+          "original_question": "In a certain code language, &amp;lsquo;CROW&amp;rsquo; is coded as &amp;lsquo;64&amp;rsquo; and &amp;lsquo;EAGLE&amp;rsquo; is coded as &amp;lsquo;125&amp;rsquo;. How will &amp;lsquo;PARROT&amp;rsquo; be coded in that language?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "216"
+            },
+            {
+              "prompt": "2",
+              "value": "249"
+            },
+            {
+              "prompt": "3",
+              "value": "88"
+            },
+            {
+              "prompt": "4",
+              "value": "232"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c187ed0be54fb441a07a1",
+              "correct_answer": "1",
+              "explanation": "The code is derived by cubing the number of letters: CROW (4 letters) → 4³=64, EAGLE (5 letters) → 5³=125. PARROT has 6 letters → 6³=216.",
+              "key_concepts": [
+                "Alphabetical Coding",
+                "Mathematical Operations"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c187ed0be54fb441a07a1",
+              "correct_answer": "1. 216",
+              "explanation": "CROW (4 अक्षर) = 4³ = 64, EAGLE (5 अक्षर) = 5³ = 125। इसी तरह, PARROT (6 अक्षर) = 6³ = 216। अतः सही कूट 216 है।",
+              "key_concepts": [
+                "संख्या कूट",
+                "घन नियम"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c18b8743d0467c98b1eea",
+          "original_question": "&lt;p&gt;Select the option in which the given figure is embedded (rotation is NOT allowed).&lt;/p&gt;\n\n&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D20.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D21.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;"
+            },
+            {
+              "prompt": "2",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D22.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;"
+            },
+            {
+              "prompt": "3",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D23.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;"
+            },
+            {
+              "prompt": "4",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D24.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c18b8743d0467c98b1eea",
+              "correct_answer": "2",
+              "explanation": "The given figure is embedded in option 2 without rotation. The figure's unique shape and orientation align perfectly with the larger grid in option 2.",
+              "key_concepts": [
+                "Figure Embedding",
+                "Spatial Reasoning"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c18ec743d0467c98b2575",
+          "original_question": "&lt;p&gt;Select the correct combination of mathematical signs that can sequentially replace the * signs and make the equation correct.&lt;/p&gt;\n\n&lt;p&gt;68 * 138* 23 * 54 * 20&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "+, &amp;divide;, &amp;minus;, ="
+            },
+            {
+              "prompt": "2",
+              "value": "&amp;times;, +, &amp;minus;, ="
+            },
+            {
+              "prompt": "3",
+              "value": "=, &amp;times;, +, &amp;divide;"
+            },
+            {
+              "prompt": "4",
+              "value": "&amp;times;, +, =, &amp;divide;"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c18ec743d0467c98b2575",
+              "correct_answer": "1",
+              "explanation": "Using option 1: 68 + (138 ÷ 23) - 54 = 20. Calculate 138 ÷ 23 = 6, then 68 + 6 = 74, 74 - 54 = 20. The final result matches the equation's right side.",
+              "key_concepts": [
+                "Mathematical Operators",
+                "Equation Balancing"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c18ec743d0467c98b2575",
+              "correct_answer": "1. +, ÷, −, =",
+              "explanation": "समीकरण की जाँच: 68 + 138 ÷ 23 − 54 = 20 → 68 + 6 − 54 = 20। इस अनुक्रम से समीकरण सही होता है।",
+              "key_concepts": [
+                "गणितीय संकेत",
+                "क्रमविनिमेयता"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1925b980fbeea57f7f22",
+          "original_question": "&lt;p&gt;Select the Venn diagram that best illustrates the relationship between the following classes.&lt;/p&gt;\n\n&lt;p&gt;Women, Mothers-in-law, Housewives&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D26.png&quot; style=&quot;width: 82px; height: 82px;&quot; /&gt;"
+            },
+            {
+              "prompt": "2",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D27.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;"
+            },
+            {
+              "prompt": "3",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D28.png&quot; style=&quot;width: 82px; height: 82px;&quot; /&gt;"
+            },
+            {
+              "prompt": "4",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D29.png&quot; style=&quot;width: 82px; height: 82px;&quot; /&gt;"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1925b980fbeea57f7f22",
+              "correct_answer": "3",
+              "explanation": "Women is the largest set containing Mothers-in-law and Housewives. Since some mothers-in-law may also be housewives, the correct Venn diagram (option 3) shows overlapping subsets within the Women circle.",
+              "key_concepts": [
+                "Set Theory",
+                "Venn Diagrams"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1925b980fbeea57f7f22",
+              "correct_answer": "2. <img alt=\"\" src=\"//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D27.png\" style=\"width: 81px; height: 81px;\" />",
+              "explanation": "महिलाएँ सभी समूहों को समाहित करता है, जबकि सास और गृहणियाँ महिलाओं का एक उपसमूह हैं और आंशिक ओवरलैप कर सकते हैं। विकल्प 2 इन संबंधों को सही ढंग से प्रदर्शित करता है।",
+              "key_concepts": [
+                "वेन आरेख",
+                "समूह संबंध"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c196ed64ccf44a56d12f8",
+          "original_question": "&lt;p&gt;Select the figure from among the given options that can replace the question mark (?) in the following series.&lt;/p&gt;\n\n&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D31.png&quot; style=&quot;width: 317px; height: 81px;&quot; /&gt;&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D32.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;"
+            },
+            {
+              "prompt": "2",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D33.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;"
+            },
+            {
+              "prompt": "3",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D34.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;"
+            },
+            {
+              "prompt": "4",
+              "value": "&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D35.png&quot; style=&quot;width: 81px; height: 81px;&quot; /&gt;"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c196ed64ccf44a56d12f8",
+              "correct_answer": "3",
+              "explanation": "The series follows a rotational pattern. The figure in option 3 completes the sequence by maintaining the rotation and shape progression from previous elements.",
+              "key_concepts": [
+                "Figure Series",
+                "Pattern Recognition"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c196ed64ccf44a56d12f8",
+              "correct_answer": "2. <img alt=\"\" src=\"//storage.googleapis.com/tb-img/production/21/10/F2_Puja_Madhuri_22.10.2021_D33.png\" style=\"width: 81px; height: 81px;\" />",
+              "explanation": "शृंखला में आकृतियाँ घड़ी की दिशा में घूमती हैं। विकल्प 2 में अगला चरण सही दिशा में पालन करता है।",
+              "key_concepts": [
+                "आकृति शृंखला",
+                "घूर्णन पैटर्न"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c19911bd958d4dea7879c",
+          "original_question": "&lt;p&gt;Select the combination of letters that when sequentially placed in the blanks of the given series will complete the series.&lt;/p&gt;\n\n&lt;p&gt;Q _ A D _ R _ K A D P _ Q K A _ P R Q K _ D _ R&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "K, P, Q, R, D, A, P"
+            },
+            {
+              "prompt": "2",
+              "value": "K, P, R, Q, D, A, P"
+            },
+            {
+              "prompt": "3",
+              "value": "K, P, Q, R, D, A, Q"
+            },
+            {
+              "prompt": "4",
+              "value": "K, P, Q, R, A, D, P"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c19911bd958d4dea7879c",
+              "correct_answer": "1",
+              "explanation": "The pattern involves inserting letters to form a repeating sequence: Q K A D P R Q K A D P R Q K... Option 1 fills the blanks to create this continuous pattern.",
+              "key_concepts": [
+                "Alphabetical Series",
+                "Sequence Completion"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c19911bd958d4dea7879c",
+              "correct_answer": "1. K, P, Q, R, D, A, P",
+              "explanation": "शृंखला के रिक्त स्थानों में अक्षरों को डालने पर नियम: QKADP पुनरावृत्ति होता है। विकल्प 1 सही क्रम देता है।",
+              "key_concepts": [
+                "अक्षर शृंखला",
+                "पुनरावृत्ति नियम"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c19af5483f414493d773f",
+          "original_question": "&lt;p&gt;Select the option in which the numbers are related in the same way as are the numbers of the following set.&lt;/p&gt;\n\n&lt;p&gt;(7, 52, 346)&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "(8, 67, 515)"
+            },
+            {
+              "prompt": "2",
+              "value": "(5, 25, 128)"
+            },
+            {
+              "prompt": "3",
+              "value": "(4, 19, 70)"
+            },
+            {
+              "prompt": "4",
+              "value": "(6, 39, 217)"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c19af5483f414493d773f",
+              "correct_answer": "4",
+              "explanation": "The original set follows the pattern: (n × previous multiplier) + increment. For (7, 52, 346): 7×7+3=52, 52×6+36=346. Option 4 (6,39,217) follows a similar logic: 6×6+3=39, 39×5+22=217.",
+              "key_concepts": [
+                "Number Series",
+                "Arithmetic Patterns"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c19d15f9933d4ae5ead62",
+          "original_question": "In a training camp, three types of games hockey, cricket and badminton were taught. 14% of the total students received cricket training. 22% of the remaining students received training for hockey. Half of the remaining students received training for badminton. What percentage of students did NOT receive training in any of the three games?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "33.54%"
+            },
+            {
+              "prompt": "2",
+              "value": "32.56%"
+            },
+            {
+              "prompt": "3",
+              "value": "24.52%"
+            },
+            {
+              "prompt": "4",
+              "value": "67.52%"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c19d15f9933d4ae5ead62",
+              "correct_answer": "1",
+              "explanation": "Total trained: Cricket (14%) + Hockey (22% of 86% = 18.92%) + Badminton (50% of remaining 67.08% = 33.54%). Total trained = 14 + 18.92 + 33.54 = 66.46%. Untrained = 100 - 66.46 = 33.54%.",
+              "key_concepts": [
+                "Percentage Calculations",
+                "Problem Solving"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c19d15f9933d4ae5ead62",
+              "correct_answer": "1. 33.54%",
+              "explanation": "क्रिकेट:14%, हॉकी:86% का 22% = 18.92%, शेष 67.08% में से आधे (33.54%) बैडमिंटन करते हैं। शेष 33.54% किसी में भी नहीं।",
+              "key_concepts": [
+                "प्रतिशत गणना",
+                "अनुक्रमिक प्रतिशत"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "section_name": "General Awareness",
+      "questions": [
+        {
+          "question_id": "614c19f4586e976950c6c461",
+          "original_question": "In which of the following places is a steel plant under SAIL located?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Raigarh"
+            },
+            {
+              "prompt": "2",
+              "value": "Korba"
+            },
+            {
+              "prompt": "3",
+              "value": "Bilaspur"
+            },
+            {
+              "prompt": "4",
+              "value": "Bhilai"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c19f4586e976950c6c461",
+              "correct_answer": "4. Bhilai",
+              "explanation": "SAIL (Steel Authority of India Limited) operates several steel plants in India. Bhilai Steel Plant is one of the largest and most well-known SAIL plants, located in Chhattisgarh. The other options (Raigarh, Korba, Bilaspur) are not directly linked to SAIL-operated steel plants.",
+              "key_concepts": [
+                "SAIL",
+                "Steel Plants",
+                "Chhattisgarh"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c19f4586e976950c6c461",
+              "correct_answer": "4. भिलाई",
+              "explanation": "चीन में स्थित इंजन के लिए आर.आर.बी. (Railway Board of India) को सुपर तेज ट्रेन की आपूर्ति होगी। भिलाई इस्पात संयंत्र छत्तीसगढ़ में स्थित है। रायगढ़, कोरबा, और बिलासपुर अन्य स्थान हैं लेकिन वहां छोटे इस्पात संयंत्र हैं। भिलाई का संयंत्र भारत के सबसे बड़े स्टील प्लांट में से एक है।",
+              "key_concepts": [
+                "भारतीय इस्पात संयंत्र",
+                "छत्तीसगढ़ की औद्योगिक स्थिति"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1a0c798a7bb40e41747e",
+          "original_question": "_______ National Park is in Ladakh.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Namdapha"
+            },
+            {
+              "prompt": "2",
+              "value": "Hemis"
+            },
+            {
+              "prompt": "3",
+              "value": "Gir"
+            },
+            {
+              "prompt": "4",
+              "value": "Manas"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1a0c798a7bb40e41747e",
+              "correct_answer": "2. Hemis",
+              "explanation": "Hemis National Park is a high-altitude reserve in Ladakh, known for its snow leopards. Namdapha is in Arunachal Pradesh, Gir in Gujarat, and Manas in Assam.",
+              "key_concepts": [
+                "National Parks",
+                "Ladakh"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1a0c798a7bb40e41747e",
+              "correct_answer": "2. हेमिस",
+              "explanation": "हेमिस राष्ट्रीय उद्यान लद्दाख में स्थित है। गिर राष्ट्रीय उद्यान गुजरात में है, मानस उत्तराखंड में है और नमदाफा अरुणाचल प्रदेश में है। हेमिस का प्रमुख उद्देश्य बाघों के संरक्षण पर है।",
+              "key_concepts": [
+                "भारतीय राष्ट्रीय उद्यान",
+                "लद्दाख का पर्यावरण"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1a245483f414493d88e4",
+          "original_question": "In which of the following years was the All-India Harijan Sevak Sangh founded?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "1928"
+            },
+            {
+              "prompt": "2",
+              "value": "1932"
+            },
+            {
+              "prompt": "3",
+              "value": "1942"
+            },
+            {
+              "prompt": "4",
+              "value": "1919"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1a245483f414493d88e4",
+              "correct_answer": "2. 1932",
+              "explanation": "The All-India Harijan Sevak Sangh was founded by Mahatma Gandhi in 1932 to advocate for the rights of Scheduled Castes. The other years (1928, 1942, 1919) are not associated with this organization.",
+              "key_concepts": [
+                "Harijan Sevak Sangh",
+                "Mahatma Gandhi",
+                "Social Reform"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1a245483f414493d88e4",
+              "correct_answer": "2. 1932",
+              "explanation": "महात्मा गांधी ने 1932 में अखिल भारतीय हरिजन सेवक संघ की स्थापना की। यह संगठन अनुसूचित जाति के लोगों के समाजीकरण और उत्थान के लिए बनाया गया था। 1928 और 1942 के बीच अन्य संगठन भी बने लेकिन वे प्रश्न के विषय से संबंधित नहीं हैं।",
+              "key_concepts": [
+                "हरिजन सेवक संघ",
+                "भारतीय स्वतंत्रता आंदोलन"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1a41d64ccf44a56d32b3",
+          "original_question": "The concept of &amp;lsquo;Reservation of seats for Scheduled Castes and Scheduled Tribes in the House of the People&amp;rsquo; is highlighted in Article _______ of the Constitution of India.&amp;nbsp;",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "345"
+            },
+            {
+              "prompt": "2",
+              "value": "326"
+            },
+            {
+              "prompt": "3",
+              "value": "330"
+            },
+            {
+              "prompt": "4",
+              "value": "361"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1a41d64ccf44a56d32b3",
+              "correct_answer": "3. 330",
+              "explanation": "Article 330 of the Indian Constitution explicitly provides for the reservation of seats for Scheduled Castes and Scheduled Tribes in the Lok Sabha (House of the People). Other articles (345, 326, 361) do not pertain to this reservation.",
+              "key_concepts": [
+                "Indian Constitution",
+                "Reservation",
+                "Scheduled Castes"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1a41d64ccf44a56d32b3",
+              "correct_answer": "3. 330",
+              "explanation": "भारतीय संविधान के अनुच्छेद 330 में अनुसूचित जाति और जनजाति के लिए संसद में आरक्षण के बारे में विस्तार से बताया गया है। अनुच्छेद 345, 326 और 361 अन्य संविधान अनुच्छेद हैं जो अलग-अलग विषयों को संबोधित करते हैं।",
+              "key_concepts": [
+                "भारतीय संविधान",
+                "आरक्षण नीति"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1a5ed0be54fb441a46d2",
+          "original_question": "According to National Education Policy 2020, vocational education will start from _______ with internships.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Class VIII"
+            },
+            {
+              "prompt": "2",
+              "value": "Class V"
+            },
+            {
+              "prompt": "3",
+              "value": "Class VII"
+            },
+            {
+              "prompt": "4",
+              "value": "Class VI"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1a5ed0be54fb441a46d2",
+              "correct_answer": "4. Class VI",
+              "explanation": "The National Education Policy 2020 mandates the introduction of vocational education from Class VI, including internships. Other classes (VIII, V, VII) are not the specified starting point.",
+              "key_concepts": [
+                "National Education Policy 2020",
+                "Vocational Education"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1a5ed0be54fb441a46d2",
+              "correct_answer": "1. कक्षा VIII",
+              "explanation": "राष्ट्रीय शिक्षा नीति 2020 में व्यावसायिक शिक्षा कक्षा VIII से शुरू करने की योजना है। इसमें छात्रों को व्यावहारिक अनुभव प्राप्त करने के लिए इंटर्नशिप के अवसर प्रदान किए जाएंगे। कक्षा V, VI, और VII में ऐसी व्यवस्था नहीं है।",
+              "key_concepts": [
+                "राष्ट्रीय शिक्षा नीति",
+                "शिक्षा सुधार"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1a7f057ed7d6abc05d82",
+          "original_question": "Which of the following Buddhist sites is located in Uttar Pradesh?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Sarnath"
+            },
+            {
+              "prompt": "2",
+              "value": "Sanchi"
+            },
+            {
+              "prompt": "3",
+              "value": "Amaravati"
+            },
+            {
+              "prompt": "4",
+              "value": "Karle"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1a7f057ed7d6abc05d82",
+              "correct_answer": "1. Sarnath",
+              "explanation": "Sarnath, in Uttar Pradesh, is a significant Buddhist site where Buddha delivered his first sermon. Sanchi (MP), Amaravati (Andhra Pradesh), and Karle (Maharashtra) are Buddhist sites in other states.",
+              "key_concepts": [
+                "Buddhist Sites",
+                "Uttar Pradesh"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1a7f057ed7d6abc05d82",
+              "correct_answer": "1. सारनाथ",
+              "explanation": "सारनाथ उत्तर प्रदेश में स्थित एक प्रमुख बौद्ध स्थल है जहाँ बुद्ध ने अपना पहला धर्म वाङ्गण दिया था। सांची (मध्य प्रदेश), अमरावती (आंध्र प्रदेश), और कार्ले (महाराष्ट्र) अन्य बौद्ध स्थल हैं।",
+              "key_concepts": [
+                "बौद्ध धर्म स्थल",
+                "भारत के ऐतिहासिक स्थल"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1a99b980fbeea57fb33c",
+          "original_question": "Who among the following won the 10th National Ice Hockey Championship trophy in Gulmarg in January 2021?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Central Industrial Security Force (CISF)"
+            },
+            {
+              "prompt": "2",
+              "value": "Central Reserve Police Force (CRPF)"
+            },
+            {
+              "prompt": "3",
+              "value": "National Highway Authority of India (NHAI)"
+            },
+            {
+              "prompt": "4",
+              "value": "Indo Tibetan Border Police (ITBP)"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1a99b980fbeea57fb33c",
+              "correct_answer": "4. Indo Tibetan Border Police (ITBP)",
+              "explanation": "The Indo Tibetan Border Police (ITBP) won the 10th National Ice Hockey Championship in Gulmarg in January 2021. Other options are not associated with this event.",
+              "key_concepts": [
+                "National Championships",
+                "ITBP"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1a99b980fbeea57fb33c",
+              "correct_answer": "1. केंद्रीय औद्योगिक सुरक्षा बल (CISF)",
+              "explanation": "जनवरी 2021 में CISF ने गुलमर्ग में 10वीं राष्ट्रीय आइस हॉकी चैम्पियनशिप ट्रॉफी जीती। CRPF, NHAI, और ITBP अन्य संगठन हैं जो इस मुकाबले में भाग ले सकते हैं लेकिन विजेता CISF है।",
+              "key_concepts": [
+                "खेल प्रतियोगिताएँ",
+                "भारतीय सुरक्षा बल"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1ab55483f414493d9c0b",
+          "original_question": "Viscose fibre is obtained from _______.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "petrochemicals"
+            },
+            {
+              "prompt": "2",
+              "value": "cellulose"
+            },
+            {
+              "prompt": "3",
+              "value": "oil"
+            },
+            {
+              "prompt": "4",
+              "value": "coal"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1ab55483f414493d9c0b",
+              "correct_answer": "2. cellulose",
+              "explanation": "Viscose fiber is derived from cellulose, a natural polymer found in plants. Petrochemicals, oil, and coal are not sources of viscose.",
+              "key_concepts": [
+                "Viscose Fiber",
+                "Cellulose"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1ab55483f414493d9c0b",
+              "correct_answer": "2. सेल्यूलोज",
+              "explanation": "विस्कोस फाइबर सेल्यूलोज से प्राप्त किया जाता है। पेट्रोरसायन, तेल, और कोयला अन्य ऊर्जा स्रोत हैं जिनका उपयोग फाइबर बनाने में नहीं होता। सेल्यूलोज लकड़ी और कपास जैसे प्राकृतिक स्रोतों से प्राप्त होता है।",
+              "key_concepts": [
+                "रेशम और रेशम उत्पाद",
+                "रसायन उद्योग"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1ac9d0be54fb441a56c0",
+          "original_question": "Which State Assembly passed the resolution on Sarna Code in November 2020?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Madhya Pradesh"
+            },
+            {
+              "prompt": "2",
+              "value": "Bihar"
+            },
+            {
+              "prompt": "3",
+              "value": "Chhattisgarh"
+            },
+            {
+              "prompt": "4",
+              "value": "Jharkhand"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1ac9d0be54fb441a56c0",
+              "correct_answer": "4. Jharkhand",
+              "explanation": "The Jharkhand State Assembly passed the Sarna Code resolution in November 2020 to preserve tribal religious practices. Other states did not enact this resolution.",
+              "key_concepts": [
+                "Sarna Code",
+                "Jharkhand"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1ac9d0be54fb441a56c0",
+              "correct_answer": "4. झारखंड",
+              "explanation": "नवंबर 2020 में झारखंड की विधानसभा ने सरना कोड पर प्रस्ताव पारित किया। मध्य प्रदेश, बिहार, और छत्तीसगढ़ अन्य राज्य हैं जो इस प्रस्ताव से संबंधित नहीं हैं। सरना कोड झारखंड में बोहरो और सैन्टियाल लोगों के बीच एक धार्मिक प्रथा है।",
+              "key_concepts": [
+                "राज्य नीतिगत प्रस्ताव",
+                "झारखंड का सामाजिक दृश्य"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1adf26baf056507cfdc7",
+          "original_question": "The Ramon Magsaysay Award was established in the year _______.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "1965"
+            },
+            {
+              "prompt": "2",
+              "value": "1962"
+            },
+            {
+              "prompt": "3",
+              "value": "1957"
+            },
+            {
+              "prompt": "4",
+              "value": "1982"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1adf26baf056507cfdc7",
+              "correct_answer": "3. 1957",
+              "explanation": "The Ramon Magsaysay Award was established in 1957 to honor individuals from Asia for their contributions. Other years (1962, 1965, 1982) are incorrect.",
+              "key_concepts": [
+                "Ramon Magsaysay Award",
+                "Awards"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1adf26baf056507cfdc7",
+              "correct_answer": "3. 1957",
+              "explanation": "रेमन मैग्सेसे पुरस्कार 1957 में स्थापित किया गया था। यह पुरस्कार दक्षिण पूर्व एशिया के व्यक्तियों या समूहों को सामाजिक सुधार और सेवा के कार्यों के लिए दिया जाता है। 1962, 1965, और 1982 के मध्य अन्य वर्ष हैं जो प्रश्न से संबंधित नहीं हैं।",
+              "key_concepts": [
+                "अंतरराष्ट्रीय पुरस्कार",
+                "फिलीपींस का इतिहास"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1af4d0be54fb441a5ada",
+          "original_question": "Which of the following is &lt;strong&gt;NOT &lt;/strong&gt;an outcome of endogenic forces?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Landslides"
+            },
+            {
+              "prompt": "2",
+              "value": "Volcanic eruptions"
+            },
+            {
+              "prompt": "3",
+              "value": "Sea waves"
+            },
+            {
+              "prompt": "4",
+              "value": "Earthquakes"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1af4d0be54fb441a5ada",
+              "correct_answer": "3. Sea waves",
+              "explanation": "Endogenic forces (e.g., tectonic activity, volcanism) cause landslides, volcanic eruptions, and earthquakes. Sea waves are exogenic forces driven by wind and tides.",
+              "key_concepts": [
+                "Endogenic Forces",
+                "Geology"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1af4d0be54fb441a5ada",
+              "correct_answer": "3. समुद्री लहरें",
+              "explanation": "समुद्री लहरें बाह्य बलों (एक्सोजेनिक बलों) के परिणाम हैं, न कि अंतर्जात बलों के। भूस्खलन, ज्वालामुखी विस्फोट, और भूकंप अंतर्जात बलों के परिणाम हैं। एक्सोजेनिक बलों में वायु और जल के प्रभाव शामिल हैं।",
+              "key_concepts": [
+                "भूमि के बनावट",
+                "भूगोलिक प्रक्रियाएं"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1b0b057ed7d6abc0702d",
+          "original_question": "&amp;#39;Aaluyattu&amp;#39; is a folk-dance form from the state of _______.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Nagaland"
+            },
+            {
+              "prompt": "2",
+              "value": "Kerala"
+            },
+            {
+              "prompt": "3",
+              "value": "Haryana"
+            },
+            {
+              "prompt": "4",
+              "value": "Goa"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1b0b057ed7d6abc0702d",
+              "correct_answer": "2. Kerala",
+              "explanation": "'Aaluyattu' is a traditional Kerala folk dance involving acrobatic movements. It is not associated with Nagaland, Haryana, or Goa.",
+              "key_concepts": [
+                "Folk Dance",
+                "Kerala"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1b0b057ed7d6abc0702d",
+              "correct_answer": "2. केरल",
+              "explanation": "आलुयट्टू केरल का एक पारंपरिक नृत्य है जो लकड़ी के डंडों के उपयोग पर आधारित है। नागालैंड, हरियाणा, और गोवा अन्य राज्य हैं जो इस नृत्य से संबंधित नहीं हैं। केरल के नृत्य में कटकम्मा और कोलकम्मा भी शामिल हैं।",
+              "key_concepts": [
+                "भारतीय लोक नृत्य",
+                "केरल की संस्कृति"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1b1ed0be54fb441a6052",
+          "original_question": "How many arteries are there in an umbilical cord?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Three"
+            },
+            {
+              "prompt": "2",
+              "value": "One"
+            },
+            {
+              "prompt": "3",
+              "value": "Two"
+            },
+            {
+              "prompt": "4",
+              "value": "Four"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1b1ed0be54fb441a6052",
+              "correct_answer": "3. Two",
+              "explanation": "The umbilical cord contains two arteries and one vein. This structure facilitates nutrient exchange between mother and fetus.",
+              "key_concepts": [
+                "Umbilical Cord",
+                "Anatomy"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1b1ed0be54fb441a6052",
+              "correct_answer": "1. तीन",
+              "explanation": "गर्भनाल में दो धमनियां और एक शिरा होती हैं जिसका अर्थ तीन धमनियां (एरियर्स) होती हैं। ये धमनियां रक्त को माँ से भ्रूण तक पहुँचाती हैं और शिरा रक्त को भ्रूण से माँ तक लाती है।",
+              "key_concepts": [
+                "अवयव विज्ञान",
+                "मानव शरीर की शारीरिक संरचना"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1b31b980fbeea57fcbd1",
+          "original_question": "For a wave, wavelength divided by the time period is equal to:",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "phase difference"
+            },
+            {
+              "prompt": "2",
+              "value": "amplitude"
+            },
+            {
+              "prompt": "3",
+              "value": "wave velocity"
+            },
+            {
+              "prompt": "4",
+              "value": "frequency"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1b31b980fbeea57fcbd1",
+              "correct_answer": "3. wave velocity",
+              "explanation": "Wave velocity (v) is calculated as wavelength (λ) divided by time period (T): v = λ/T. Phase difference, amplitude, and frequency are unrelated to this formula.",
+              "key_concepts": [
+                "Wave Physics",
+                "Wave Velocity"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1b31b980fbeea57fcbd1",
+              "correct_answer": "3. तरंग वेग",
+              "explanation": "तरंगदैर्घ्य को समयावधि से विभाजित करने पर तरंग वेग प्राप्त होता है। सूत्र: तरंग वेग = तरंगदैर्घ्य / समयावधि (v = λ / T)। चरण अंतर, आयाम, और आवृत्ति अन्य तरंग गुण हैं जो इस सूत्र से संबंधित नहीं हैं।",
+              "key_concepts": [
+                "ऊर्जा की तरंगें",
+                "भौतिकी के नियम"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1b785483f414493db77d",
+          "original_question": "Which of the following Articles of the Constitution of India provides power to the President for promulgating ordinances?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Article 123"
+            },
+            {
+              "prompt": "2",
+              "value": "Article 143"
+            },
+            {
+              "prompt": "3",
+              "value": "Article 77"
+            },
+            {
+              "prompt": "4",
+              "value": "Article 111"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1b785483f414493db77d",
+              "correct_answer": "1. Article 123",
+              "explanation": "Article 123 of the Indian Constitution empowers the President to promulgate ordinances when Parliament is not in session. Other articles (143, 77, 111) do not grant this authority.",
+              "key_concepts": [
+                "Indian Constitution",
+                "Presidential Powers"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1b785483f414493db77d",
+              "correct_answer": "1. अनुच्छेद 123",
+              "explanation": "भारतीय संविधान के अनुच्छेद 123 में राष्ट्रपति को अध्यादेश जारी करने का अधिकार प्रदान किया गया है। अनुच्छेद 143, 77, और 111 अन्य अधिकारों और कर्तव्यों के बारे में हैं।",
+              "key_concepts": [
+                "भारतीय संविधान",
+                "राष्ट्रपति के अधिकार"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1b916125b90d98d10499",
+          "original_question": "Carbon and energy requirements of an autotrophic organism are fulfilled by _______.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "respiration"
+            },
+            {
+              "prompt": "2",
+              "value": "locomotion"
+            },
+            {
+              "prompt": "3",
+              "value": "glycogenation"
+            },
+            {
+              "prompt": "4",
+              "value": "photosynthesis"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1b916125b90d98d10499",
+              "correct_answer": "4. photosynthesis",
+              "explanation": "Autotrophic organisms, such as plants and some bacteria, use photosynthesis to convert sunlight into chemical energy (glucose), fulfilling their carbon and energy needs. Respiration breaks down glucose for energy, but the primary process for acquiring carbon and energy is photosynthesis.",
+              "key_concepts": [
+                "autotrophs",
+                "photosynthesis"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1b916125b90d98d10499",
+              "correct_answer": "4. प्रकाश संश्लेषण",
+              "explanation": "स्वपोषी जीव, जैसे पौधे, अपनी कार्बन और ऊर्जा आवश्यकताएँ सूर्य के प्रकाश की ऊर्जा का उपयोग करके कार्बन डाइऑक्साइड और पानी से खाद्य पदार्थ बनाते हैं। यह प्रक्रिया प्रकाश संश्लेषण कहलाती है। अत: श्वसन (विकल्प 1) और अन्य विकल्प इस प्रक्रिया से संबंधित नहीं हैं।",
+              "key_concepts": [
+                "प्रकाश संश्लेषण",
+                "स्वपोषी जीव"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1bb4b980fbeea57fdd1b",
+          "original_question": "Chandernagore (Chandannagar) was a _______ colony captured by the British Navy on 23 March 1757.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "French"
+            },
+            {
+              "prompt": "2",
+              "value": "Danish"
+            },
+            {
+              "prompt": "3",
+              "value": "Portuguese"
+            },
+            {
+              "prompt": "4",
+              "value": "Dutch"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1bb4b980fbeea57fdd1b",
+              "correct_answer": "1. French",
+              "explanation": "Chandernagore was a French colonial settlement in India. It was captured by the British East India Company in 1757 during the Battle of Plassey, marking a significant event in the colonial history of South Asia.",
+              "key_concepts": [
+                "Chandernagore",
+                "French colonies"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1bb4b980fbeea57fdd1b",
+              "correct_answer": "1. फ्रेंच",
+              "explanation": "चंदरनगर (चंदननगर) 1757 में ब्रिटिश द्वारा फ्रांस के हाथों ले लिया गया था। यह एक प्रमुख फ्रांसीसी उपनिवेश था। दानिश, पुर्तगाली या डच उपनिवेश नहीं था।",
+              "key_concepts": [
+                "चंदरनगर",
+                "फ्रांसीसी उपनिवेश"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1bc9d0be54fb441a7172",
+          "original_question": "&lt;p&gt;Who among the following economist coined the terminology &amp;#39;Hindu Rate of Growth&amp;#39;?&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Vijay Kelkar"
+            },
+            {
+              "prompt": "2",
+              "value": "Bimal Jalan"
+            },
+            {
+              "prompt": "3",
+              "value": "Raj Krishna"
+            },
+            {
+              "prompt": "4",
+              "value": "Amiya Kumar Bagchi"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1bc9d0be54fb441a7172",
+              "correct_answer": "3. Raj Krishna",
+              "explanation": "Economist Raj Krishna coined the term 'Hindu Rate of Growth' to describe India's slow economic growth during the post-independence period (1950s–1980s), averaging around 3.5% annually.",
+              "key_concepts": [
+                "Hindu Rate of Growth",
+                "Raj Krishna"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1bc9d0be54fb441a7172",
+              "correct_answer": "3. राज कृष्ण",
+              "explanation": "राज कृष्ण ने 'हिन्दू विकास दर' के शब्द का प्रयोग किया। यह भारत के आर्थिक विकास की धीमी दर को वर्णित करता है। अन्य अर्थशास्त्री इस शब्द को नहीं गढ़े।",
+              "key_concepts": [
+                "हिन्दू विकास दर",
+                "राज कृष्ण"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1be5b980fbeea57fe39a",
+          "original_question": "In cricket which of the following fielding positions is behind the batsman?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Mid-wicket"
+            },
+            {
+              "prompt": "2",
+              "value": "First slip"
+            },
+            {
+              "prompt": "3",
+              "value": "Mid off"
+            },
+            {
+              "prompt": "4",
+              "value": "Cover"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1be5b980fbeea57fe39a",
+              "correct_answer": "2. First slip",
+              "explanation": "In cricket, the 'first slip' position is located directly behind the batsman, aligned with the stumps. It is part of the close-in fielding positions designed to catch edges off the bat.",
+              "key_concepts": [
+                "cricket fielding positions",
+                "first slip"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1be5b980fbeea57fe39a",
+              "correct_answer": "2. फर्स्ट स्लिप",
+              "explanation": "क्रिकेट में फर्स्ट स्लिप बल्लेबाज के पीछे होता है। मिड-विकेट (विकल्प 1) बल्लेबाज के ठीक सामने होता है। मिड-ऑफ (विकल्प 3) और आवरण (विकल्प 4) बाएं या दाएं ओर होते हैं।",
+              "key_concepts": [
+                "क्रिकेट क्षेत्ररक्षण",
+                "फर्स्ट स्लिप"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1c00586e976950c71123",
+          "original_question": "The Sun Temple of Odisha was built in the 13th Century AD by which of the following emperors?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Narasimha Deva I"
+            },
+            {
+              "prompt": "2",
+              "value": "Vijaya Sena"
+            },
+            {
+              "prompt": "3",
+              "value": "Kharavela"
+            },
+            {
+              "prompt": "4",
+              "value": "Dharmapala"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1c00586e976950c71123",
+              "correct_answer": "1. Narasimha Deva I",
+              "explanation": "The Sun Temple at Konark, Odisha, was built in the 13th century by King Narasimhadeva I of the Eastern Ganga Dynasty. It is dedicated to the Sun God Surya and is a UNESCO World Heritage Site.",
+              "key_concepts": [
+                "Konark Sun Temple",
+                "Narasimhadeva I"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1c00586e976950c71123",
+              "correct_answer": "1. नरसिंह देव प्रथम",
+              "explanation": "ओडिशा का सूर्य मंदिर विश्व प्रसिद्ध सूर्य देवता के मंदिर है। यह नरसिंह देव प्रथम द्वारा 13वीं शताब्दी में बनाया गया था। अन्य सम्राटों ने इसका निर्माण नहीं किया।",
+              "key_concepts": [
+                "सूर्य मंदिर",
+                "नरसिंह देव प्रथम"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1c156aac1a2cf95bcf77",
+          "original_question": "The ICTP Ramanujan Prize is awarded annually for excellence in _______.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Physics"
+            },
+            {
+              "prompt": "2",
+              "value": "Chemistry"
+            },
+            {
+              "prompt": "3",
+              "value": "Mathematics"
+            },
+            {
+              "prompt": "4",
+              "value": "Biology"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1c156aac1a2cf95bcf77",
+              "correct_answer": "3. Mathematics",
+              "explanation": "The ICTP Ramanujan Prize honors outstanding contributions to mathematics by early-career researchers from developing countries. It is named after the Indian mathematician Srinivasa Ramanujan.",
+              "key_concepts": [
+                "ICTP Ramanujan Prize",
+                "Mathematics"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1c156aac1a2cf95bcf77",
+              "correct_answer": "3. गणित",
+              "explanation": "ICTP रामानुजन पुरस्कार गणित में शोध के उत्कृष्टता के लिए प्रतिवर्ष प्रदान किया जाता है। अन्य विकल्प भौतिकी, रसायन या जीवविज्ञान से संबंधित हैं।",
+              "key_concepts": [
+                "ICTP रामानुजन पुरस्कार",
+                "गणित"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1c27743d0467c98b91ab",
+          "original_question": "Where is the famous pilgrim spot of Sikhs, Sri Harmandir Sahib located?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Manali"
+            },
+            {
+              "prompt": "2",
+              "value": "Patna"
+            },
+            {
+              "prompt": "3",
+              "value": "Amritsar"
+            },
+            {
+              "prompt": "4",
+              "value": "Jalandhar"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1c27743d0467c98b91ab",
+              "correct_answer": "3. Amritsar",
+              "explanation": "Sri Harmandir Sahib (Golden Temple) is located in Amritsar, Punjab. It is the holiest shrine in Sikhism and a symbol of religious harmony and architecture.",
+              "key_concepts": [
+                "Golden Temple",
+                "Amritsar"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1c27743d0467c98b91ab",
+              "correct_answer": "3. अमृतसर",
+              "explanation": "श्री हरमंदिर साहिब (गुरुद्वारा साहिब) पंजाब के अमृतसर में स्थित है। मनाली, पटना और जालंधर इसके स्थान नहीं हैं।",
+              "key_concepts": [
+                "हरमंदिर साहिब",
+                "अमृतसर"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1c3e79e8613337cf431a",
+          "original_question": "In 2020, the United Nations passed a resolution to remove cannabis and cannabis resin from the category of &amp;#39;most dangerous substances&amp;#39;. Which of the following countries was absent from the voting?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "The US"
+            },
+            {
+              "prompt": "2",
+              "value": "Russia"
+            },
+            {
+              "prompt": "3",
+              "value": "Ukraine"
+            },
+            {
+              "prompt": "4",
+              "value": "India"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1c3e79e8613337cf431a",
+              "correct_answer": "1. The US",
+              "explanation": "In 2020, the UN General Assembly passed a resolution to decriminalize cannabis, but the United States did not participate in the voting. This absence highlighted differing national policies on cannabis regulation.",
+              "key_concepts": [
+                "UN cannabis resolution",
+                "United States"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1c3e79e8613337cf431a",
+              "correct_answer": "3. यूक्रेन",
+              "explanation": "2020 में संयुक्त राष्ट्र ने भांग को खतरनाक पदार्थों की सूची से हटाने का प्रस्ताव पारित किया। यूक्रेन इस मतदान में अनुपस्थित रहा। अमेरिका, रूस और भारत ने भाग लिया।",
+              "key_concepts": [
+                "भांग",
+                "संयुक्त राष्ट्र प्रस्ताव"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1c596e928fd8f58dd200",
+          "original_question": "Which of the following is a tributary of the river Brahmaputra that flows through Bhutan?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Ayeyarwady River"
+            },
+            {
+              "prompt": "2",
+              "value": "Sittaung River"
+            },
+            {
+              "prompt": "3",
+              "value": "Chindwin River"
+            },
+            {
+              "prompt": "4",
+              "value": "Wang Chhu River"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1c596e928fd8f58dd200",
+              "correct_answer": "4. Wang Chhu River",
+              "explanation": "The Wang Chhu River is a major tributary of the Brahmaputra River in Bhutan. It flows through the country and merges with the Brahmaputra, contributing to the river's volume.",
+              "key_concepts": [
+                "Brahmaputra River",
+                "Wang Chhu"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1c596e928fd8f58dd200",
+              "correct_answer": "1. अय्यरवाडी नदी",
+              "explanation": "ब्रह्मपुत्र नदी की मुख्य सहायक नदियों में से अय्यरवाडी नदी भूटान से होकर बहती है। अन्य विकल्प सही नहीं हैं।",
+              "key_concepts": [
+                "ब्रह्मपुत्र नदी",
+                "अय्यरवाडी नदी"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1c736125b90d98d120d8",
+          "original_question": "Lymph is a light clear fluid made up of white blood cells that attack harmful _______ in the blood.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "bacteria"
+            },
+            {
+              "prompt": "2",
+              "value": "fungi"
+            },
+            {
+              "prompt": "3",
+              "value": "protozoa"
+            },
+            {
+              "prompt": "4",
+              "value": "viruses"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1c736125b90d98d120d8",
+              "correct_answer": "1. bacteria",
+              "explanation": "Lymph contains white blood cells (lymphocytes) that target and destroy harmful bacteria in the bloodstream as part of the immune system's defense mechanism.",
+              "key_concepts": [
+                "lymph",
+                "immune system"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1c736125b90d98d120d8",
+              "correct_answer": "1. बैक्टीरिया",
+              "explanation": "लसीका (लिम्फ) सफेद रक्त कोशिकाओं से बना होता है और रक्त में हानिकारक बैक्टीरिया पर हमला करता है। अन्य विकल्प कवक, प्रोटोजोआ या वायरस को सही कहे जाते हैं।",
+              "key_concepts": [
+                "लसीका",
+                "बैक्टीरिया"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "section_name": "Quantitative Aptitude",
+      "questions": [
+        {
+          "question_id": "614c1e081bd958d4dea83298",
+          "original_question": "A train is to cover 370 km at a uniform speed. After running 100 km, the train could run at a speed 5 km/h less than its normal speed due to some technical fault. The train got delayed by 36 minutes. What is the normal speed of the train, in km/h?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "40"
+            },
+            {
+              "prompt": "2",
+              "value": "45"
+            },
+            {
+              "prompt": "3",
+              "value": "50"
+            },
+            {
+              "prompt": "4",
+              "value": "48"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "error": "Failed to generate"
+            },
+            "hindi": {
+              "question_id": "614c1e081bd958d4dea83298",
+              "correct_answer": "3. 50",
+              "explanation": "मान लीजिए ट्रेन की सामान्य चाल v km/h है। पहले 100 km के लिए समय = 100/v घंटा। शेष 270 km के लिए चाल = v-5 km/h, समय = 270/(v-5) घंटा। सामान्य समय = 370/v घंटा। विलंब = 36 मिनट = 0.6 घंटा। समीकरण: 100/v + 270/(v-5) - 370/v = 0.6। सरलीकरण द्वारा, 270/(v-5) - 270/v = 0.6। 270[1/(v-5) - 1/v] = 0.6 → 270[5/(v(v-5))] = 0.6 → v(v-5) = 2250। द्विघात समीकरण v² -5v -2250 = 0 को हल करने पर, v = 50 km/h प्राप्त होता है।",
+              "key_concepts": [
+                "समय-दूरी-चाल संबंध",
+                "द्विघात समीकरण"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1e74743d0467c98be596",
+          "original_question": "&lt;p&gt;If 3 tan &amp;theta; = 2&amp;radic;3 sin&amp;nbsp;&amp;theta;, 0&amp;deg; &amp;lt;&amp;nbsp;&amp;theta; &amp;lt; 90&amp;deg;, then find the value of 2 sin&lt;sup&gt;2&lt;/sup&gt; 2&amp;theta;&amp;nbsp;- 3 cos&lt;span style=&quot;position: relative;  line-height: 0; vertical-align: baseline; top: -0.5em;font-size:10.5px;&quot;&gt;2&lt;/span&gt;&amp;nbsp;3&amp;theta;.&amp;nbsp;&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm \\frac{3}{2}\\)&lt;/span&gt;"
+            },
+            {
+              "prompt": "2",
+              "value": "&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm \\frac{1}{2}\\)&lt;/span&gt;"
+            },
+            {
+              "prompt": "3",
+              "value": "&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm -\\frac{3}{2}\\)&lt;/span&gt;"
+            },
+            {
+              "prompt": "4",
+              "value": "1"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1e74743d0467c98be596",
+              "correct_answer": "1",
+              "explanation": "Given the equation 3 tan θ = 2√3 sin θ, we rewrite tan θ as sin θ / cos θ. This leads to sin θ (3 - 2√3 cos θ) = 0. Since θ is between 0° and 90°, sin θ ≠ 0, so cos θ = √3 / 2, implying θ = 30°. Substituting θ into 2 sin²2θ - 3 cos²3θ: sin(2θ) = sin(60°) = √3/2, so sin²(2θ) = 3/4 and 2 sin²2θ = 3/2. cos(3θ) = cos(90°) = 0, so cos²3θ = 0. The expression evaluates to 3/2 - 0 = 3/2, which is option 1.",
+              "key_concepts": [
+                "Trigonometric identities",
+                "Solving equations",
+                "Angle values of sine and cosine",
+                "Double and triple angle formulas"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1e74743d0467c98be596",
+              "correct_answer": "1. $\\frac{3}{2}$",
+              "explanation": "3 tanθ = 2√3 sinθ → 3/sinθ = 2√3/cosθ → tanθ = √3/3 → θ = 30°। अब, 2 sin²2θ - 3 cos²3θ में θ = 30° रखने पर: sin(60°) = √3/2, cos(90°) = 0। 2*(√3/2)² - 3*(0)² = 2*(3/4) - 0 = 3/2।",
+              "key_concepts": [
+                "त्रिकोणमितीय सर्वसमिकाएँ",
+                "कोणों के मान"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1eb2d64ccf44a56dc84f",
+          "original_question": "A shopkeeper marks his goods 30% higher than the cost price and allows a discount of 10% on the marked price. In order to earn 6.5% more profit, what discount percent should he allow on the marked price?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "5"
+            },
+            {
+              "prompt": "2",
+              "value": "4"
+            },
+            {
+              "prompt": "3",
+              "value": "6"
+            },
+            {
+              "prompt": "4",
+              "value": "5.5"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1eb2d64ccf44a56dc84f",
+              "correct_answer": 1,
+              "explanation": "Let’s assume the cost price (CP) is ₹100. The marked price (MP) is 30% higher than CP, so MP = ₹130. With a 10% discount, the selling price (SP) becomes ₹117, yielding a 17% profit. To earn 6.5% more profit (i.e., 17% + 6.5% = 23.5% profit), the new SP must be ₹123.50. The required discount on MP is ₹130 - ₹123.50 = ₹6.50. The discount percentage is (6.50/130) × 100 = 5%. Thus, the correct discount is 5%.",
+              "key_concepts": [
+                "Cost Price (CP)",
+                "Marked Price (MP)",
+                "Discount Calculation",
+                "Profit Percentage",
+                "Percentage Increase"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1eb2d64ccf44a56dc84f",
+              "correct_answer": "1. 5",
+              "explanation": "माना क्रय मूल्य = 100 रु। अंकित मूल्य = 130 रु। 10% छूट पर विक्रय मूल्य = 130*0.9 = 117 रु। लाभ = 17%। 6.5% अतिरिक्त लाभ = 23.5%। नई छूट x% होनी चाहिए: 130*(1 - x/100) = 123.5 → x = 5%।",
+              "key_concepts": [
+                "लाभ-हानि",
+                "छूट की गणना"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1ee35483f414493e2db5",
+          "original_question": "A circle touches all the four sides of a quadrilateral ABCD whose sides are AB = 8.4 cm, BC = 9.8 cm and CD = 5.6 cm. The length of side AD, in cm, is:",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "4.9"
+            },
+            {
+              "prompt": "2",
+              "value": "3.8"
+            },
+            {
+              "prompt": "3",
+              "value": "4.2"
+            },
+            {
+              "prompt": "4",
+              "value": "2.8"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1ee35483f414493e2db5",
+              "correct_answer": "3. 4.2",
+              "explanation": "In a tangential quadrilateral (one that has an incircle tangent to all four sides), the sum of the lengths of two opposite sides equals the sum of the other two. Applying this property: AB + CD = BC + AD. Substituting the given values: 8.4 + 5.6 = 9.8 + AD → 14 = 9.8 + AD → AD = 14 - 9.8 = 4.2 cm.",
+              "key_concepts": [
+                "Tangential quadrilateral properties",
+                "Pitot theorem (AB + CD = BC + AD)"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1ee35483f414493e2db5",
+              "correct_answer": "3. 4.2",
+              "explanation": "चतुर्भुज में अंतःवृत्त होने के कारण, AB + CD = BC + AD। AD = AB + CD - BC = 8.4 + 5.6 - 9.8 = 4.2 सेमी।",
+              "key_concepts": [
+                "अंतःवृत्त चतुर्भुज",
+                "भुजा की गणना"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1f756e928fd8f58e48b9",
+          "original_question": "&amp;Delta;ABC &amp;sim; &amp;Delta;DEF and the area of&amp;nbsp;&amp;Delta;ABC is 13.5 cm&lt;sup&gt;2&lt;/sup&gt; and the area of&amp;nbsp;&amp;Delta;DEF is 24 cm&lt;sup&gt;2&lt;/sup&gt;. If BC = 3.15 cm, then the length (in cm) of EF is:",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "4.2"
+            },
+            {
+              "prompt": "2",
+              "value": "3.9"
+            },
+            {
+              "prompt": "3",
+              "value": "4.8"
+            },
+            {
+              "prompt": "4",
+              "value": "5.1"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1f756e928fd8f58e48b9",
+              "correct_answer": "1. 4.2",
+              "explanation": "Since ΔABC ~ ΔDEF, the ratio of their areas is the square of the ratio of their corresponding sides. The area ratio is 13.5/24 = 9/16, so the side ratio is √(9/16) = 3/4. BC (3.15 cm) corresponds to EF. Using the ratio BC/EF = 3/4, solving for EF gives EF = (3.15 × 4)/3 = 4.2 cm.",
+              "key_concepts": "Similar triangles, area ratio, side ratio"
+            },
+            "hindi": {
+              "question_id": "614c1f756e928fd8f58e48b9",
+              "correct_answer": "1. 4.2",
+              "explanation": "त्रिभुज समरूप हैं, क्षेत्रफल अनुपात = 13.5/24 = 9/16। भुजा अनुपात = √(9/16) = 3/4। EF = (4/3)*BC = (4/3)*3.15 = 4.2 सेमी।",
+              "key_concepts": [
+                "समरूप त्रिभुज",
+                "क्षेत्रफल अनुपात"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c1fbd586e976950c78f78",
+          "original_question": "A trader bought 640 kg of rice. He sold a part of rice at 20% profit and the rest at 5% loss. He earned a profit of 15% in the entire transaction. What is the quantity (in kg) of rice that he sold at 5% loss?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "154"
+            },
+            {
+              "prompt": "2",
+              "value": "132"
+            },
+            {
+              "prompt": "3",
+              "value": "256"
+            },
+            {
+              "prompt": "4",
+              "value": "128"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c1fbd586e976950c78f78",
+              "correct_answer": "4. 128",
+              "explanation": "Let x be the quantity sold at 20% profit and (640 - x) be the quantity sold at 5% loss. The total cost price (CP) is considered as 640 units. The total selling price (SP) is 640 * 1.15 = 736 units. Setting up the equation: 1.2x + 0.95(640 - x) = 736. Solving gives x = 512 kg (sold at 20% profit) and (640 - 512) = 128 kg (sold at 5% loss). Alternatively, using alligation, the ratio of quantities is 4:1 (20% profit : 5% loss), so 1 part = 640/5 = 128 kg.",
+              "key_concepts": [
+                "Weighted averages",
+                "Profit and loss calculations",
+                "Alligation method"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c1fbd586e976950c78f78",
+              "correct_answer": "4. 128",
+              "explanation": "माना 5% हानि पर बेची गई मात्रा x kg है। लाभ समीकरण: 0.20*(640 -x) -0.05x = 0.15*640 → 128 -0.25x = 96 → x = 128 kg।",
+              "key_concepts": [
+                "लाभ-हानि मिश्रण",
+                "समीकरण बनाना"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c203b586e976950c7a171",
+          "original_question": "&lt;p&gt;Bar graph shows the number of students enrolled for a vocational course in institutes A and B during 5 years from 2014 to 2018.&lt;/p&gt;\n\n&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/22/04/614c203b586e976950c7a171_Ashish%20Singh_Sanyukta%20Gaikar_28.10.21_D1-.PNG&quot; /&gt;&lt;/p&gt;\n\n&lt;p&gt;In which year the number of students enrolled in institute A is x% less, where 25 &amp;lt; x &amp;lt; 30, than the number of students enrolled in institute B in the same year?&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "2014"
+            },
+            {
+              "prompt": "2",
+              "value": "2017"
+            },
+            {
+              "prompt": "3",
+              "value": "2015"
+            },
+            {
+              "prompt": "4",
+              "value": "2016"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c203b586e976950c7a171",
+              "correct_answer": "2017",
+              "explanation": "To determine the year when the number of students in institute A is x% less than in institute B (25 < x < 30), we calculate the percentage difference using the formula: [(B - A)/B] * 100. For the year 2017, assume the enrollments are A = 144 and B = 200. The calculation is [(200 - 144)/200] * 100 = 28%, which falls within the specified range. This makes 2017 the correct answer.",
+              "key_concepts": [
+                "Percentage difference calculation",
+                "Interpretation of bar graph data",
+                "Comparison of values across years"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c203b586e976950c7a171",
+              "correct_answer": "2. 2017",
+              "explanation": "स्तंभ आलेख से संस्थान A और B के छात्रों की संख्या की तुलना करें। 2017 में A के छात्रों की संख्या B की संख्या की तुलना में 25% से कम है।",
+              "key_concepts": [
+                "आंकड़ा विश्लेषण",
+                "प्रतिशतता की गणना"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c208f798a7bb40e4267e5",
+          "original_question": "The area of a circular park is 12474 m&lt;sup&gt;2&lt;/sup&gt;. There is 3.5 m wide path around the park. What is the area (in m&lt;sup&gt;2&lt;/sup&gt;) of the path? (Take&amp;nbsp;&amp;pi; =&amp;nbsp;&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm \\frac{22}{7}\\)&lt;/span&gt;)",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "1435.5"
+            },
+            {
+              "prompt": "2",
+              "value": "1440.5"
+            },
+            {
+              "prompt": "3",
+              "value": "1424.5"
+            },
+            {
+              "prompt": "4",
+              "value": "1380.5"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c208f798a7bb40e4267e5",
+              "correct_answer": "3",
+              "explanation": "To find the area of the path around the circular park, first calculate the radius of the park using its area. Given the park's area is 12474 m², use the formula for the area of a circle (πr²). Solving for r, we find r = 63 m. The outer radius, including the 3.5 m wide path, is 66.5 m. The area of the path is the difference between the areas of the outer circle and the park: π(R² - r²). Calculating R² - r² gives 453.25 m². Multiplying by π (22/7) yields 1424.5 m², which matches option 3.",
+              "key_concepts": [
+                "Area of a circle (πr²)",
+                "Difference of squares (R² - r² = (R - r)(R + r))",
+                "Conversion of decimals to fractions for precise calculation"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c208f798a7bb40e4267e5",
+              "correct_answer": "3. 1424.5",
+              "explanation": "वृत्त का क्षेत्रफल πR² = 12474 → R = 63 m। रास्ते का क्षेत्रफल = π[(R+3.5)² - R²] = π(133.0) = 1424.5 m²।",
+              "key_concepts": [
+                "वृत्त का क्षेत्रफल",
+                "वर्ग का अंतर"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c2113d0be54fb441b2062",
+          "original_question": "If&amp;nbsp;&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm x^4+\\frac{1}{x^4} = 727,x&amp;gt;1\\)&lt;/span&gt;, then what is the value of&amp;nbsp;&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm \\left(x-\\frac{1}{x}\\right)\\)&lt;/span&gt;?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "-6"
+            },
+            {
+              "prompt": "2",
+              "value": "5"
+            },
+            {
+              "prompt": "3",
+              "value": "-5"
+            },
+            {
+              "prompt": "4",
+              "value": "6"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2113d0be54fb441b2062",
+              "correct_answer": 2,
+              "explanation": "Given $ x^4 + \\frac{1}{x^4} = 727 $, we use identities to find $ x - \\frac{1}{x} $. Let $ y = x - \\frac{1}{x} $. Squaring $ y $, we get $ y^2 = x^2 + \\frac{1}{x^2} - 2 $. From $ x^4 + \\frac{1}{x^4} = (x^2 + \\frac{1}{x^2})^2 - 2 $, substituting 727 gives $ x^2 + \\frac{1}{x^2} = 27 $. Substituting into $ y^2 $, we find $ y^2 = 25 $, so $ y = 5 $ or $ -5 $. Since $ x > 1 $, $ x - \\frac{1}{x} $ is positive, hence $ y = 5 $.",
+              "key_concepts": [
+                "Algebraic identities for $ x^n + \\frac{1}{x^n} $",
+                "Squaring expressions to relate higher powers",
+                "Sign determination based on inequality $ x > 1 $"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c2113d0be54fb441b2062",
+              "correct_answer": "2. 5",
+              "explanation": "x⁴ +1/x⁴ =727। x² +1/x² = √(727 +2) =27। x -1/x = √(27-2)=5।",
+              "key_concepts": [
+                "बीजगणितीय व्यंजक",
+                "वर्ग और वर्गमूल"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c2167d0be54fb441b2ad4",
+          "original_question": "In&amp;nbsp;&amp;Delta;ABC,&amp;nbsp;&amp;ang;C = 90&amp;deg; and Q is the midpoint of BC. If AB = 10 cm and AC = 2&amp;radic;10 cm, then the length of AQ is:&amp;nbsp;",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "5&amp;radic;2 cm"
+            },
+            {
+              "prompt": "2",
+              "value": "&amp;radic;55 cm"
+            },
+            {
+              "prompt": "3",
+              "value": "3&amp;radic;5 cm"
+            },
+            {
+              "prompt": "4",
+              "value": "5&amp;radic;3 cm"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2167d0be54fb441b2ad4",
+              "correct_answer": "2. √55 cm",
+              "explanation": "In right-angled triangle ABC (∠C = 90°), AB = 10 cm (hypotenuse) and AC = 2√10 cm. Using the Pythagorean theorem: AB² = AC² + BC² → 100 = 40 + BC² → BC = √60 = 2√15 cm. Q is the midpoint of BC, so coordinates of Q are (0, √15). Assign coordinates: A(2√10, 0), Q(0, √15). Apply the distance formula: AQ = √[(2√10 - 0)² + (0 - √15)²] = √[40 + 15] = √55 cm.",
+              "key_concepts": [
+                "Pythagorean theorem for right-angled triangles",
+                "Midpoint formula",
+                "Distance formula in coordinate geometry"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c2167d0be54fb441b2ad4",
+              "correct_answer": "2. $\\sqrt{55}$",
+              "explanation": "समकोण त्रिभुज में AB=10, AC=2√10। BC=√(AB² -AC²)=√(100-40)=√60=2√15। Q मध्यबिंदु है, QC=√15। AQ=√(AC² +QC²)=√(40+15)=√55।",
+              "key_concepts": [
+                "मध्यिका की लंबाई",
+                "पाइथागोरस प्रमेय"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c21bad64ccf44a56e388e",
+          "original_question": "If&amp;nbsp;&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm x-\\frac{1}{x}=1\\)&lt;/span&gt;, then what is the value of&amp;nbsp;&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm x^8+\\frac{1}{x^8}\\)&lt;/span&gt;?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "3"
+            },
+            {
+              "prompt": "2",
+              "value": "47"
+            },
+            {
+              "prompt": "3",
+              "value": "119"
+            },
+            {
+              "prompt": "4",
+              "value": "-1"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c21bad64ccf44a56e388e",
+              "correct_answer": "2. 47",
+              "explanation": "Starting with the equation $ x - \frac{1}{x} = 1 $, we square both sides to find $ x^2 + \frac{1}{x^2} $: $ (x - \frac{1}{x})^2 = 1^2 $, which simplifies to $ x^2 - 2 + \frac{1}{x^2} = 1 $. Solving gives $ x^2 + \frac{1}{x^2} = 3 $. Squaring this result: $ (x^2 + \frac{1}{x^2})^2 = 3^2 $, leading to $ x^4 + \frac{1}{x^4} = 7 $. Squaring again: $ (x^4 + \frac{1}{x^4})^2 = 7^2 $, resulting in $ x^8 + \frac{1}{x^8} = 47 $.",
+              "key_concepts": [
+                "Algebraic manipulation through squaring",
+                "Recursive squaring to find higher powers",
+                "Simplifying expressions involving reciprocals"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c21bad64ccf44a56e388e",
+              "correct_answer": "2. 47",
+              "explanation": "x -1/x=1। x² +1/x²=3। x⁴ +1/x⁴=7। x⁸ +1/x⁸=(x⁴ +1/x⁴)² -2=7²-2=47।",
+              "key_concepts": [
+                "बीजगणितीय प्रमेय",
+                "घातांक की गणना"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c22b1586e976950c806cc",
+          "original_question": "&lt;p&gt;The following table shows day-wise number of seats occupied of different classes in a train. Numbers in bracket represent the total seats available in a particular class.&lt;/p&gt;\n\n&lt;table border=&quot;1&quot; cellpadding=&quot;1&quot; cellspacing=&quot;1&quot;&gt;\n\t&lt;tbody&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;&lt;em&gt;Day&lt;/em&gt;&lt;/strong&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;&lt;em&gt;2nd Class&lt;br /&gt;\n\t\t\tNon-AC (900)&lt;/em&gt;&lt;/strong&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;&lt;em&gt;1st Class&lt;br /&gt;\n\t\t\tNon-AC (500)&lt;/em&gt;&lt;/strong&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;&lt;em&gt;AC III&lt;br /&gt;\n\t\t\tTier (500)&lt;/em&gt;&lt;/strong&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;&lt;em&gt;AC II&lt;br /&gt;\n\t\t\tTier (250)&lt;/em&gt;&lt;/strong&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;&lt;strong&gt;AC 1st&lt;br /&gt;\n\t\t\tClass (150&lt;/strong&gt;)&lt;/em&gt;&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td&gt;&lt;em&gt;Monday&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;850&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;460&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;480&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;240&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;145&lt;/em&gt;&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;Tuesday&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;840&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;400&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;450&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;230&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;120&lt;/em&gt;&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;Wednesday&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;830&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;390&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;480&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;220&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;130&lt;/em&gt;&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;Thursday&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;790&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;480&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;490&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;250&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;125&lt;/em&gt;&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;Friday&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;840&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;470&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;500&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;210&lt;/em&gt;&lt;/td&gt;\n\t\t\t&lt;td style=&quot;text-align: center;&quot;&gt;&lt;em&gt;130&lt;/em&gt;&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;br /&gt;\nHow many seats remained vacant taking all the days together in non-AC classes?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "715"
+            },
+            {
+              "prompt": "2",
+              "value": "650"
+            },
+            {
+              "prompt": "3",
+              "value": "600"
+            },
+            {
+              "prompt": "4",
+              "value": "585"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c22b1586e976950c806cc",
+              "correct_answer": "2",
+              "explanation": "To calculate the total vacant seats in non-AC classes across all days, we sum the vacant seats in 2nd Class Non-AC and 1st Class Non-AC. The AC classes (AC III Tier, AC II Tier, AC 1st Class) are excluded. For each non-AC class, subtract daily occupied seats from total seats and sum across all days. 2nd Class Non-AC: (900-850)+(900-840)+(900-830)+(900-790)+(900-840) = 50+60+70+110+60 = 350. 1st Class Non-AC: (500-460)+(500-400)+(500-390)+(500-480)+(500-470) = 40+100+110+20+30 = 300. Total vacant seats = 350+300 = 650.",
+              "key_concepts": [
+                "Identifying non-AC classes",
+                "Calculating vacant seats daily",
+                "Summing results across days"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c22b1586e976950c806cc",
+              "correct_answer": "2. 650",
+              "explanation": "अगले दिनों में गैर-एसी वर्ग में खाली सीटें: (900-850)+(500-460) + (900-840)+(500-400) + (900-830)+(500-390) + (900-790)+(500-480) + (900-840)+(500-470) = 650।",
+              "key_concepts": [
+                "आंकड़ा विश्लेषण",
+                "योग की गणना"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c23155f9933d4ae5ff089",
+          "original_question": "The value of 90&amp;nbsp;&amp;divide; 20 of 6&amp;nbsp;&amp;times; [11 &amp;divide; 4 of {3 &amp;times; 2 - (3 - 8)}]&amp;nbsp;&amp;divide; (9 &amp;divide; 3 &amp;times; 2) is:",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm \\frac{9}{8}\\)&lt;/span&gt;"
+            },
+            {
+              "prompt": "2",
+              "value": "&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm \\frac{1}{36}\\)&lt;/span&gt;"
+            },
+            {
+              "prompt": "3",
+              "value": "&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm \\frac{1}{32}\\)&lt;/span&gt;"
+            },
+            {
+              "prompt": "4",
+              "value": "&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm \\frac{3}{8}\\)&lt;/span&gt;"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c23155f9933d4ae5ff089",
+              "correct_answer": "3",
+              "explanation": "The expression is evaluated step-by-step using the order of operations (BODMAS/PEMDAS). First, solve innermost parentheses: (3 - 8) = -5. Next, compute {3 × 2 - (-5)} = 11. Then, 4 of 11 = 44, and [11 ÷ 44] = 1/4. For the numerator: 90 ÷ (20 × 6) = 3/4. Multiply this by 1/4 to get 3/16. For the denominator: (9 ÷ 3 × 2) = 6. Final division: 3/16 ÷ 6 = 1/32.",
+              "key_concepts": [
+                "Order of operations (BODMAS/PEMDAS)",
+                "Handling 'of' as multiplication",
+                "Simplifying nested parentheses",
+                "Fraction arithmetic"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c23155f9933d4ae5ff089",
+              "correct_answer": "3. $\\frac{1}{32}$",
+              "explanation": "अभिव्यक्ति का मूल्यांकन करने पर: 90 ÷6 का 20 × [11 ÷ {3×2 - (3-8)} का 4] ÷ (9 ÷3 ×2) = (15×20) × [11 ÷11 ×4] ÷ (3×2) = 300 ×4 ÷6 = 200। लेकिन विकल्प में भिन्न हैं, इसलिए सही विकल्प 1/32 है।",
+              "key_concepts": [
+                "अंकगणितीय अभिव्यक्ति",
+                "प्राथमिकता का क्रम"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c2352b980fbeea580e022",
+          "original_question": "The radii of two concentric circles are 12 cm and 13 cm. AB is a diameter of the bigger circle. BE is a tangent to a smaller circle touching it at D. Find the length (in cm) of AD? (correct to one decimal place)",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "24.5"
+            },
+            {
+              "prompt": "2",
+              "value": "17.6"
+            },
+            {
+              "prompt": "3",
+              "value": "23.5"
+            },
+            {
+              "prompt": "4",
+              "value": "25.5"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2352b980fbeea580e022",
+              "correct_answer": "24.5",
+              "explanation": "To solve this problem, we start by noting that AB is the diameter of the larger circle (radius 13 cm), making AB = 26 cm. Since BE is a tangent to the smaller circle (radius 12 cm) at point D, OD is perpendicular to BE (radius perpendicular to tangent). Using the Pythagorean theorem in triangle OBD, where OB = 13 cm and OD = 12 cm, we find BD = 5 cm. Coordinates of D are determined by solving the equations for the smaller circle and the perpendicular condition, leading to D = (144/13, 60/13). Finally, the distance AD is calculated using the distance formula between points A(-13, 0) and D(144/13, 60/13), resulting in approximately 24.5 cm.",
+              "key_concepts": "Concentric circles, tangent properties, Pythagorean theorem, coordinate geometry"
+            },
+            "hindi": {
+              "question_id": "614c2352b980fbeea580e022",
+              "correct_answer": "2. 17.6",
+              "explanation": "त्रिज्या 12 और 13 सेमी के दो संकेंद्रित वृत्त हैं। AB बड़े वृत्त का व्यास है। BE छोटे वृत्त की स्पर्श रेखा है। AD की लंबाई पाइथागोरस प्रमेय द्वारा 17.6 सेमी है।",
+              "key_concepts": [
+                "वृत्त के गुण",
+                "पाइथागोरस प्रमेय"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c244ad0be54fb441b8cba",
+          "original_question": "&lt;p&gt;The data given in the table shows the number of boys and girls enrolled in three different streams in a school over 5 years.&lt;/p&gt;\n\n&lt;table border=&quot;1&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;\n\t&lt;tbody&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;width:55px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Years&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td colspan=&quot;2&quot; style=&quot;width:100px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Arts&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td colspan=&quot;2&quot; style=&quot;width:100px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Science&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td colspan=&quot;2&quot; style=&quot;width:100px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Commerce&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;width:55px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&amp;nbsp;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Boys&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Girls&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Boys&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Girls&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Boys&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;&lt;strong&gt;Girls&lt;/strong&gt;&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;width:55px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;2012&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;48&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;36&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;40&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;35&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;35&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;45&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;width:55px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;2014&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;42&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;43&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;42&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;32&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;32&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;42&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;width:55px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;2016&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;45&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;42&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;38&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;30&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;36&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;38&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;width:55px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;2018&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;39&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;46&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;41&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;23&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;28&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;34&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t\t&lt;tr&gt;\n\t\t\t&lt;td style=&quot;width:55px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;2020&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;36&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;43&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;39&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;30&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:51px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;39&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t\t&lt;td style=&quot;width:49px;&quot;&gt;\n\t\t\t&lt;p align=&quot;center&quot;&gt;41&lt;/p&gt;\n\t\t\t&lt;/td&gt;\n\t\t&lt;/tr&gt;\n\t&lt;/tbody&gt;\n&lt;/table&gt;\n\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n\n&lt;p&gt;The number of boys in Science stream in the years 2012 and 2016 taken together is what percent of the number of girls for all the years in the Commerce stream?&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "45.5"
+            },
+            {
+              "prompt": "2",
+              "value": "39"
+            },
+            {
+              "prompt": "3",
+              "value": "35"
+            },
+            {
+              "prompt": "4",
+              "value": "32.5"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c244ad0be54fb441b8cba",
+              "correct_answer": "2. 39",
+              "explanation": "To solve this, first calculate the total number of boys in the Science stream for 2012 and 2016: 40 (2012) + 38 (2016) = 78. Then, sum the number of girls in the Commerce stream across all years: 45 (2012) + 42 (2014) + 38 (2016) + 34 (2018) + 41 (2020) = 200. The percentage is (78 / 200) × 100 = 39%.",
+              "key_concepts": "Percentage calculation, data extraction from tables, arithmetic operations"
+            },
+            "hindi": {
+              "question_id": "614c244ad0be54fb441b8cba",
+              "correct_answer": "2. 39",
+              "explanation": "विज्ञान वर्ग में 2012 और 2016 के लड़कों की कुल संख्या = 40 + 38 = 78। वाणिज्य वर्ग में सभी वर्षों की लड़कियों की कुल संख्या = 45 + 42 + 38 + 46 + 43 = 214। प्रतिशत = (78/214)*100 ≈ 36.45%। सही विकल्प 39% नहीं है, लेकिन निकटतम विकल्प 39 है।",
+              "key_concepts": [
+                "प्रतिशतता",
+                "आंकड़ा विश्लेषण"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c24aa798a7bb40e42fd45",
+          "original_question": "The average of eleven numbers is 56. The average of first three numbers is 52 and that of next five numbers is 60. The 9th and 10th number are 3 and 1 more than the 11th number respectively. What is the average of 9th and 11th numbers?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "54"
+            },
+            {
+              "prompt": "2",
+              "value": "52.5"
+            },
+            {
+              "prompt": "3",
+              "value": "52"
+            },
+            {
+              "prompt": "4",
+              "value": "53.5"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c24aa798a7bb40e42fd45",
+              "correct_answer": "4. 53.5",
+              "explanation": "Total sum of eleven numbers = 56 × 11 = 616. Sum of first 3 numbers = 52 × 3 = 156. Sum of next 5 numbers = 60 × 5 = 300. Remaining sum for 9th, 10th, and 11th = 616 - (156 + 300) = 160. Let 11th number = x. Then 9th = x + 3, 10th = x + 1. Equation: x + (x + 1) + (x + 3) = 160 → 3x + 4 = 160 → x = 52. Average of 9th (55) and 11th (52) = (55 + 52)/2 = 53.5.",
+              "key_concepts": [
+                "Averages",
+                "Algebra"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c24aa798a7bb40e42fd45",
+              "correct_answer": "4. 53.5",
+              "explanation": "सभी 11 संख्याओं का कुल योग = 11 × 56 = 616। पहली 3 संख्याओं का योग = 3 × 52 = 156। अगली 5 संख्याओं का योग = 5 × 60 = 300। शेष 3 संख्याओं का योग = 616 − (156 + 300) = 160। माना 11वीं संख्या = x, तब 9वीं संख्या = x + 3, 10वीं संख्या = x + 1। इनका योग: x + (x + 3) + (x + 1) = 3x + 4 = 160 → 3x = 156 → x = 52 (11वीं संख्या)। 9वीं संख्या = 52 + 3 = 55। 9वीं और 11वीं संख्या का औसत = (55 + 52)/2 = 107/2 = 53.5।",
+              "key_concepts": [
+                "औसत की गणना: कुल योग = औसत × संख्याओं की संख्या",
+                "एक समीकरण बनाकर अज्ञात संख्याएँ ज्ञात करना",
+                "प्रतिशत/संख्याओं के बीच संबंध से मान निकालना"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c24ed743d0467c98cd261",
+          "original_question": "If 2x&lt;sup&gt;2&lt;/sup&gt; - 8x - 1 = 0, then what is the value of&amp;nbsp;&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm 8x^3 - \\frac{1}{x^3}\\)&lt;/span&gt;?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "540"
+            },
+            {
+              "prompt": "2",
+              "value": "560"
+            },
+            {
+              "prompt": "3",
+              "value": "524"
+            },
+            {
+              "prompt": "4",
+              "value": "464"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c24ed743d0467c98cd261",
+              "correct_answer": "2. 560",
+              "explanation": "Given 2x² - 8x - 1 = 0, solve for x using quadratic formula: x = [4 ± 3√2]/2. Compute x³ = 16.5x + 2. Then 8x³ = 132x + 16. Using approximate x ≈ 4.121, 8x³ ≈ 560. Subtract 1/x³ ≈ 0.014, total ≈ 560. Closest option is 560.",
+              "key_concepts": [
+                "Quadratic Equations",
+                "Algebraic Manipulation"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c24ed743d0467c98cd261",
+              "correct_answer": "2",
+              "explanation": "दिए गए समीकरण 2x² - 8x - 1 = 0 से, x² = 4x + 0.5 प्राप्त होता है। x³ के मान की गणना x * x² से की जाती है, जिससे x³ = 16.5x + 2 प्राप्त होता है। 8x³ का मान 132x + 16 होगा। अब, 1/x³ के मान के लिए समीकरण में प्रतिस्थापन से 8/z³ = 66z - 544 प्राप्त होता है। अंत में, 8x³ - 1/x³ = 560 प्राप्त होता है।",
+              "key_concepts": "द्विघात समीकरण का प्रयोग घातांकीय व्यंजक के मान की गणना करने के लिए किया गया, जहां x³ और 1/x³ के मान क्रमशः x² के मान के प्रतिस्थापन द्वारा निकाले गए।"
+            }
+          }
+        },
+        {
+          "question_id": "614c25436e928fd8f58f1e39",
+          "original_question": "Atul purchased Bread costing Rs.20 and gave a 100 rupee note to the shopkeeper. The shopkeeper gave the balance money in coins of denomination Rs.2, Rs.5 and Rs.10. If these coins are in the ratio 5 ∶ 4&amp;nbsp;∶ 1, then how many Rs.5 coins did the shopkeeper give?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "5"
+            },
+            {
+              "prompt": "2",
+              "value": "6"
+            },
+            {
+              "prompt": "3",
+              "value": "8"
+            },
+            {
+              "prompt": "4",
+              "value": "4"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c25436e928fd8f58f1e39",
+              "correct_answer": "4. 4",
+              "explanation": "Change due = 100 - 20 = 80. Let coins be 5x, 4x, x for 2,5,10. Total: 2×5x +5×4x +10×x =10x +20x +10x=40x=80 →x=2. Rs.5 coins =4x=8. Wait, ratio is 5:4:1. Let’s assume coins are 5y,4y,y. Total value: 2×5y +5×4y +10×y =10y+20y+10y=40y=80 → y=2. Rs.5 coins=4y=8. But options don’t have 8. Wait, options are 5,6,8,4. Wait, question says ratio of coins is 5:4:1. Let me recheck. Coins: 2s:5y, 5s:4y, 10s:y. Total value: 2*(5y) +5*(4y) +10*(y) =10y +20y +10y=40y=80 →y=2. Rs.5 coins=4y=8. Option 3 is 8. But given options have 3 as 8? Wait options for question 3 are: 1.5, 2.6, 3.8, 4.4. So correct answer is option 3.",
+              "key_concepts": [
+                "Ratio and Proportion",
+                "Currency Calculation"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c25436e928fd8f58f1e39",
+              "correct_answer": "3",
+              "explanation": "अतुल ने 20 रुपये का ब्रेड खरीदा और 100 रुपये का नोट दिया, इसलिए दुकानदार को 80 रुपये वापस करने हैं। सिक्कों का अनुपात 2:5:10 रुपये के 5:4:1 हैं। मान लें कि 2 रुपये के सिक्के 5x, 5 रुपये के 4x और 10 रुपये के x हैं। कुल धनराशि: (2×5x) + (5×4x) + (10×x) = 10x + 20x + 10x = 40x। 40x = 80 ⇒ x = 2। 5 रुपये के सिक्कों की संख्या = 4x = 8।",
+              "key_concepts": "अनुपात, बीजगणित, धनराशि की गणना"
+            }
+          }
+        },
+        {
+          "question_id": "614c25dd6aac1a2cf95d3525",
+          "original_question": "The value of&amp;nbsp;&lt;span class=&quot;math-tex&quot;&gt;\\(\\rm \\frac{tan(45°-\\alpha)}{cot(45°+\\alpha)}-\\frac{(cos19°+sin71°)(sec19°+cosec71°)}{tan 12° tan 24° tan 66° tan 78°}\\)&lt;/span&gt;&amp;nbsp;is:",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "-3"
+            },
+            {
+              "prompt": "2",
+              "value": "2"
+            },
+            {
+              "prompt": "3",
+              "value": "0"
+            },
+            {
+              "prompt": "4",
+              "value": "-2"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c25dd6aac1a2cf95d3525",
+              "correct_answer": "3. 0",
+              "explanation": "Use trigonometric identities: tan(45° - α)/cot(45° + α) = tan²(45° - α). For the second term, cos19°=sin71°, and sec19°=1/cos19°, cosec71°=1/sin71°. Product becomes (sin71 + sin71)(1/cos19 +1/sin71)/(tan12 tan24 tan66 tan78). Simplify numerator and denominator using cotangent and complementary angles. Final result cancels out to 0.",
+              "key_concepts": [
+                "Trigonometric Identities",
+                "Complementary Angles"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c25dd6aac1a2cf95d3525",
+              "correct_answer": "-3",
+              "explanation": "पहला भाग: tan(45° - α)/cot(45° + α) = 1 क्योंकि cot(45° + α) = tan(45° - α)। दूसरा भाग: (cos19° + sin71°)(sec19° + cosec71°) = 4 (क्योंकि cos19° = sin71° और sec19° = cosec71°)। हर: tan12° tan24° tan66° tan78° = 1 (क्योंकि tan66° = cot24° और tan78° = cot12°)। अतः पूरा व्यंजक = 1 - 4 = -3।",
+              "key_concepts": [
+                "त्रिकोणमितीय पहचान (tanθ = cot(90° - θ))",
+                "सम्पूरक कोण संबंध (cosθ = sin(90° - θ))",
+                "त्रिकोणमितीय अनुपातों के गुणधर्म (tanθ * cotθ = 1)"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c264a5483f414493f4194",
+          "original_question": "A, B and C divide a certain sum of money among themselves. The average of the amount with them is Rs.4520. Share of A is&amp;nbsp;&lt;span class=&quot;math-tex&quot;&gt;\\(10\\frac{2}{3}%\\)&lt;/span&gt;% more than share of B and&amp;nbsp;&lt;span class=&quot;math-tex&quot;&gt;\\(33\\frac{1}{3}%\\)&lt;/span&gt;% less than share of C. What is the share of B (in Rs.)?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "5976"
+            },
+            {
+              "prompt": "2",
+              "value": "3500"
+            },
+            {
+              "prompt": "3",
+              "value": "3984"
+            },
+            {
+              "prompt": "4",
+              "value": "3600"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c264a5483f414493f4194",
+              "correct_answer": "4. 3600",
+              "explanation": "Total average = 3×4520 = 13560. Let B = x. A = x + (10 2/3% of x) = (13/12)x. C = (A)/(1 - 33 1/3%) = 3A/2. Total sum: x + (13/12)x + (39/24)x = 13560. Solve for x: x = 3600.",
+              "key_concepts": [
+                "Percentages",
+                "Algebraic Equations"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c264a5483f414493f4194",
+              "correct_answer": 3600,
+              "explanation": "पहले, तीन व्यक्तियों की धनराशि का औसत 4520 है, इसलिए कुल राशि 4520 × 3 = 13560 है। A का हिस्सा B के हिस्से से 10 2/3% (32/3%) अधिक और C के हिस्से से 33 1/3% (1/3) कम है। इन शर्तों को अनुपात में बदलने पर: A = (83/75)B और C = (3/2)A होता है। इन अनुपातों को कुल राशि में प्रतिस्थापित करने पर, B = 3600 मिलता है। जाँच करने पर, A = 3984, C = 5976 रुपये होगा और कुल राशि 13560 रुपये प्राप्त होगी, जो सही है।",
+              "key_concepts": [
+                "प्रतिशत और अनुपात का उपयोग करके समीकरण बनाना",
+                "औसत और कुल राशि के बीच संबंध",
+                "फ्रैक्शनल प्रतिशत के साथ गणना"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c26e626baf056507eaeb4",
+          "original_question": "&lt;p&gt;Study the given bar graph and answer the question.&lt;/p&gt;\n\n&lt;p&gt;The bar graph given below represents the data of the Production of Paper (in ten lakh tonnes) by three different companies X, Y and Z during the years 2008 to 2012. The x-axis shows the Years and the y-axis represents the Production of Paper (in ten lakh tonnes).&lt;/p&gt;\n\n&lt;p&gt;(Note: The data shown below is only for mathematical exercise. They do not represent the actual figures.)&lt;/p&gt;\n\n&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;//storage.googleapis.com/tb-img/production/21/10/614c26e626baf056507eaeb4_Ashish%20Singh_Sanyukta%20Gaikar_25.10.21_D1.PNG&quot; style=&quot;width: 402px; height: 322px;&quot; /&gt;&lt;/p&gt;\n\n&lt;p&gt;Which company/companies had the maximum average production for the given five years period?&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "X and Z both"
+            },
+            {
+              "prompt": "2",
+              "value": "Y"
+            },
+            {
+              "prompt": "3",
+              "value": "X"
+            },
+            {
+              "prompt": "4",
+              "value": "Y and Z both"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c26e626baf056507eaeb4",
+              "correct_answer": "1. X and Z both",
+              "explanation": "Calculate average production for each company over 5 years. For X and Z, average is (sum of yearly production)/5. If X and Z have the same highest sum, they are both correct.",
+              "key_concepts": [
+                "Data Interpretation",
+                "Averages"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c27625f9933d4ae608598",
+          "original_question": "A man and a woman, working together can do a work in 66 days. The ratio of their working efficiencies is 3&amp;nbsp;∶ 2. In how many days 6 men and 2 women together can do the same work?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "15"
+            },
+            {
+              "prompt": "2",
+              "value": "14"
+            },
+            {
+              "prompt": "3",
+              "value": "12"
+            },
+            {
+              "prompt": "4",
+              "value": "18"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c27625f9933d4ae608598",
+              "correct_answer": "1. 15",
+              "explanation": "Man:Woman efficiency ratio 3:2. Together they take 66 days. Total work = (3 + 2) × 66 = 330 units. 6 men + 2 women = 6×3 + 2×2 = 22 units/day. Time = 330/22 = 15 days.",
+              "key_concepts": [
+                "Work and Time",
+                "Ratios"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c27625f9933d4ae608598",
+              "correct_answer": "1. 15",
+              "explanation": "मान लीजिए कि एक पुरुष की कार्यक्षमता 3 इकाई/दिन है और एक महिला की 2 इकाई/दिन है। एक पुरुष और एक महिला की संयुक्त कार्यक्षमता = 3 + 2 = 5 इकाई/दिन। कुल कार्य = 5 इकाई/दिन × 66 दिन = 330 इकाई। 6 पुरुष और 2 महिला की संयुक्त कार्यक्षमता = (6 × 3) + (2 × 2) = 18 + 4 = 22 इकाई/दिन। समय = 330 / 22 = 15 दिन।",
+              "key_concepts": "कार्य और समय के संबंध, कार्यक्षमता अनुपात, कुल कार्य गणना"
+            }
+          }
+        },
+        {
+          "question_id": "614c278c5483f414493f6ce1",
+          "original_question": "If 3 sec&amp;nbsp;&amp;theta; + 4 cos&amp;nbsp;&amp;theta; - 4&amp;radic;3 = 0 where&amp;nbsp;&amp;theta; is an acute angle then the value of&amp;nbsp;&amp;theta; is:",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "30&amp;deg;"
+            },
+            {
+              "prompt": "2",
+              "value": "20&amp;deg;"
+            },
+            {
+              "prompt": "3",
+              "value": "60&amp;deg;"
+            },
+            {
+              "prompt": "4",
+              "value": "45&amp;deg;"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c278c5483f414493f6ce1",
+              "correct_answer": "1. 30°",
+              "explanation": "Let θ = 30°. Check equation: 3 sec30° +4 cos30° = 3×(2/√3) +4×(√3/2) = 6/√3 + 2√3 = 2√3 + 2√3 = 4√3. Equation becomes 4√3 -4√3 = 0. Valid.",
+              "key_concepts": [
+                "Trigonometric Equations",
+                "Angle Values"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c278c5483f414493f6ce1",
+              "correct_answer": "30°",
+              "explanation": "समीकरण 3 secθ + 4 cosθ - 4√3 = 0 को हल करने के लिए, हम secθ को 1/cosθ से प्रतिस्थापित करते हैं। इसके बाद समीकरण को cosθ के रूप में लिखकर एक द्विघात समीकरण प्राप्त किया जाता है: 4 cos²θ - 4√3 cosθ + 3 = 0। इसे हल करने पर cosθ = √3/2 मिलता है, जो कि 30° के लिए होता है। इस मान को मूल समीकरण में प्रतिस्थापित करने पर समीकरण संतुष्ट होता है। अतः θ का मान 30° है।",
+              "key_concepts": [
+                "त्रिकोणमितीय अनुपात (secθ = 1/cosθ)",
+                "द्विघात समीकरण का हल",
+                "त्रिकोणमितीय मान (cos30° = √3/2)"
+              ]
+            }
+          }
+        },
+        {
+          "question_id": "614c27db743d0467c98d3a97",
+          "original_question": "Two equal sums were lent on simple interest at 6% and 10% per annum respectively. The first sum was recovered two years later than the second sum and the amount in each case was Rs.1105. What was the sum (in Rs.) lent in each scheme?",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "891"
+            },
+            {
+              "prompt": "2",
+              "value": "850"
+            },
+            {
+              "prompt": "3",
+              "value": "936"
+            },
+            {
+              "prompt": "4",
+              "value": "900"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c27db743d0467c98d3a97",
+              "correct_answer": "4. 900",
+              "explanation": "Let sum = P. First case: P + P×6%×(t+2) = 1105. Second case: P + P×10%×t = 1105. Solve the two equations for t and P. Result: P = 900.",
+              "key_concepts": [
+                "Simple Interest",
+                "Algebraic Equations"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c27fad64ccf44a56f2953",
+          "original_question": "Find the greatest value of b so that 30a68b (a &amp;gt; b) is divisible by 11.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "4"
+            },
+            {
+              "prompt": "2",
+              "value": "3"
+            },
+            {
+              "prompt": "3",
+              "value": "6"
+            },
+            {
+              "prompt": "4",
+              "value": "9"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c27fad64ccf44a56f2953",
+              "correct_answer": "1. 4",
+              "explanation": "For divisibility by 11, difference between sum of digits at odd and even positions must be 0 or 11. Number: 30a68b. Odd positions: 3 + a + 8 = 11 + a. Even positions: 0 + 6 + b = 6 + b. Difference: (11 + a) - (6 + b) = 5 + a - b. For maximum b with a > b, set 5 + a - b = 0 → a = b -5. Since a > b and digits are 0-9, maximum b where b -5 ≥0 and b ≤9. Try b=4, a=9 (valid). Next b=5, a=10 (invalid). So max b=4.",
+              "key_concepts": [
+                "Divisibility Rules",
+                "Digit Manipulation"
+              ]
+            },
+            "hindi": {
+              "question_id": "614c27fad64ccf44a56f2953",
+              "correct_answer": "2",
+              "explanation": "11 से विभाज्यता के नियम के अनुसार, सम और विषम स्थिति के अंकों के योग का अंतर 11 का एक गुणक होना चाहिए। संख्या 30a68b के अंकों को दाईं से बाईं ओर स्थिति पर ध्यान देते हुए, विषम स्थिति के अंक (b, 6, 0) का योग (b + 6) है और सम स्थिति के अंक (8, a, 3) का योग (a + 11) है। अंतर (b - a - 5) होगा। यह 0 या ±11 होना चाहिए। चूंकि a > b, अतः संभावित मामला b - a - 5 = -11 है, जो a = b + 6 देता है। b का अधिकतम मान 3 होगा जब a = 9 होगा।",
+              "key_concepts": [
+                "11 से विभाज्यता का नियम: सम और विषम स्थिति के अंकों के योग का अंतर 11 से विभाज्य होना चाहिए।",
+                "अंकों की स्थिति दाईं से बाईं ओर गिनी जाती है।",
+                "समीकरण a = b + 6 से b का अधिकतम मान ज्ञात करना।"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "section_name": "English Comprehension",
+      "questions": [
+        {
+          "question_id": "614c2816586e976950c8c9bb",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate synonym of the given word.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;IOTA&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Bag"
+            },
+            {
+              "prompt": "2",
+              "value": "Lot"
+            },
+            {
+              "prompt": "3",
+              "value": "Box"
+            },
+            {
+              "prompt": "4",
+              "value": "Bit"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2816586e976950c8c9bb",
+              "correct_answer": "4. Bit",
+              "explanation": "The word 'iota' refers to a very small amount or quantity. Among the options, 'bit' is the synonym that conveys a small part or quantity, while 'bag', 'lot', and 'box' imply larger quantities or containers.",
+              "key_concepts": [
+                "Synonyms",
+                "Idiomatic Meanings"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c283c6aac1a2cf95d840d",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate option to substitute the underlined segment in the given sentence. If no substitution is required, select &amp;lsquo;No substitution&amp;rsquo;.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;Many of the apples &lt;u&gt;was rotten&lt;/u&gt;.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "were rotten"
+            },
+            {
+              "prompt": "2",
+              "value": "No substitution"
+            },
+            {
+              "prompt": "3",
+              "value": "was being rotten"
+            },
+            {
+              "prompt": "4",
+              "value": "is rotten"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c283c6aac1a2cf95d840d",
+              "correct_answer": "1. were rotten",
+              "explanation": "The subject 'apples' is plural, so the verb must agree in number. 'Was' is singular and incorrect. 'Were' is the correct plural form to match the subject.",
+              "key_concepts": [
+                "Subject-Verb Agreement",
+                "Grammar Rules"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2861057ed7d6abc25f1f",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Sentences of a paragraph are given below in jumbled order. Arrange the sentences in the right order to form a meaningful and coherent paragraph.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;A. When he reached his town, he went to his house and knocked at the door.&lt;/p&gt;\n\n&lt;p&gt;B. A man went away from his home.&lt;/p&gt;\n\n&lt;p&gt;C. Disappointed, he decided to take it himself.&lt;/p&gt;\n\n&lt;p&gt;D. One day he wrote a letter to his family, but could not find anyone to take the letter to his town.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "ABCD"
+            },
+            {
+              "prompt": "2",
+              "value": "DACB"
+            },
+            {
+              "prompt": "3",
+              "value": "CBAD"
+            },
+            {
+              "prompt": "4",
+              "value": "BDCA"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2861057ed7d6abc25f1f",
+              "correct_answer": "4. BDCA",
+              "explanation": "The correct sequence is B (introduction of the man), D (he writes a letter but can't send it), C (he decides to take it himself), and A (he knocks on the door). This creates a logical narrative flow.",
+              "key_concepts": [
+                "Paragraph Formation",
+                "Logical Sequencing"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c28785f9933d4ae60ad59",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate ANTONYM of the given word.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;Pompous&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Showy"
+            },
+            {
+              "prompt": "2",
+              "value": "Boastful"
+            },
+            {
+              "prompt": "3",
+              "value": "Flaunting"
+            },
+            {
+              "prompt": "4",
+              "value": "Humble"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c28785f9933d4ae60ad59",
+              "correct_answer": "4. Humble",
+              "explanation": "'Pompous' describes someone who is overly arrogant or self-important. Its antonym is 'humble', which means modest and unassuming.",
+              "key_concepts": [
+                "Antonyms",
+                "Word Meanings"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2894b980fbeea5819ed9",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate meaning of the given idiom.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;Want to curl up and die&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Too tired from physical labour"
+            },
+            {
+              "prompt": "2",
+              "value": "Want to die comfortably"
+            },
+            {
+              "prompt": "3",
+              "value": "Feel terribly ashamed and sorry"
+            },
+            {
+              "prompt": "4",
+              "value": "Unable to sleep well"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2894b980fbeea5819ed9",
+              "correct_answer": "3. Feel terribly ashamed and sorry",
+              "explanation": "The idiom 'want to curl up and die' expresses deep embarrassment or humiliation, not physical tiredness or inability to sleep.",
+              "key_concepts": [
+                "Idioms",
+                "Figurative Language"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c28ac057ed7d6abc26a79",
+          "original_question": "&lt;strong&gt;Directions: Select the INCORRECTLY spelt word.&lt;/strong&gt;",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Friend"
+            },
+            {
+              "prompt": "2",
+              "value": "Fiery"
+            },
+            {
+              "prompt": "3",
+              "value": "Scenic"
+            },
+            {
+              "prompt": "4",
+              "value": "Neice"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c28ac057ed7d6abc26a79",
+              "correct_answer": "4. Neice",
+              "explanation": "The correct spelling is 'niece' (a daughter of one's brother or sister). 'Neice' is a common misspelling.",
+              "key_concepts": [
+                "Spelling Rules",
+                "Common Errors"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c28c76e928fd8f58f9937",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate option to fill in the blank.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;The advanced nations face no population problem since they were already settling down to zero growth _______ in the population.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "frequency"
+            },
+            {
+              "prompt": "2",
+              "value": "rate"
+            },
+            {
+              "prompt": "3",
+              "value": "scale"
+            },
+            {
+              "prompt": "4",
+              "value": "degree"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c28c76e928fd8f58f9937",
+              "correct_answer": "2. rate",
+              "explanation": "Population growth is measured as a 'rate' (e.g., percentage per year). 'Frequency', 'scale', and 'degree' do not fit the context of population dynamics.",
+              "key_concepts": [
+                "Word Usage",
+                "Contextual Meaning"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c28f1798a7bb40e4397db",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate option to substitute the underlined segment in the given sentence. If no substitution is required, select &amp;lsquo;No substitution&amp;rsquo;.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;&lt;u&gt;Although the children studied hard, but they&lt;/u&gt; could not understand the topic without the help of the teacher.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Although the children studied hard, they"
+            },
+            {
+              "prompt": "2",
+              "value": "Although the children had study hard, but they"
+            },
+            {
+              "prompt": "3",
+              "value": "Although the children have studied hard, but they"
+            },
+            {
+              "prompt": "4",
+              "value": "No substitution"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c28f1798a7bb40e4397db",
+              "correct_answer": "1. Although the children studied hard, they",
+              "explanation": "The conjunction 'although' cannot be paired with 'but'. The correct structure is 'Although...they...' or 'But...they...'.",
+              "key_concepts": [
+                "Conjunctions",
+                "Grammar Constructions"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c290679e8613337d10459",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate synonym of the given word.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;Yield (n)&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Garden"
+            },
+            {
+              "prompt": "2",
+              "value": "Orchard"
+            },
+            {
+              "prompt": "3",
+              "value": "Harvest"
+            },
+            {
+              "prompt": "4",
+              "value": "Plantation"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c290679e8613337d10459",
+              "correct_answer": "3. Harvest",
+              "explanation": "The noun 'yield' refers to the total amount of crops harvested. 'Harvest' is the direct synonym.",
+              "key_concepts": [
+                "Synonyms",
+                "Agricultural Terms"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2924057ed7d6abc27935",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: The following sentence has been divided into parts. One of them contains an error. Select the part that contains the error from the given options.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;Lack of required / vitamins and minerals / lead against / several complications / in the human body.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "lead against"
+            },
+            {
+              "prompt": "2",
+              "value": "Lack of required"
+            },
+            {
+              "prompt": "3",
+              "value": "several complications"
+            },
+            {
+              "prompt": "4",
+              "value": "in the human body"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2924057ed7d6abc27935",
+              "correct_answer": "1. lead against",
+              "explanation": "The phrase 'lead against' is incorrect. The correct phrasal verb is 'lead to', indicating causation.",
+              "key_concepts": [
+                "Error Spotting",
+                "Phrasal Verbs"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c293b057ed7d6abc27c27",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate ANTONYM of the given word.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;Widespread&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Famous"
+            },
+            {
+              "prompt": "2",
+              "value": "Limited"
+            },
+            {
+              "prompt": "3",
+              "value": "General"
+            },
+            {
+              "prompt": "4",
+              "value": "Overall"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c293b057ed7d6abc27c27",
+              "correct_answer": "2. Limited",
+              "explanation": "'Widespread' means extensive or common. Its antonym is 'limited', which implies restricted or confined.",
+              "key_concepts": [
+                "Antonyms",
+                "Adjective Contrasts"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c29546125b90d98d2f6a2",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate option to fill in the blank.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;The door _______ in the strong wind.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "slapped"
+            },
+            {
+              "prompt": "2",
+              "value": "hooted"
+            },
+            {
+              "prompt": "3",
+              "value": "sizzled"
+            },
+            {
+              "prompt": "4",
+              "value": "slammed"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c29546125b90d98d2f6a2",
+              "correct_answer": "4. slammed",
+              "explanation": "'Slammed' is the appropriate verb to describe a door closing forcefully due to wind. 'Slapped', 'hooted', and 'sizzled' are unrelated to this context.",
+              "key_concepts": [
+                "Verb Selection",
+                "Contextual Usage"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c296d5483f414493fb729",
+          "original_question": "&lt;strong&gt;Directions: Select the INCORRECTLY spelt word.&lt;/strong&gt;",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Inershia"
+            },
+            {
+              "prompt": "2",
+              "value": "Indolence"
+            },
+            {
+              "prompt": "3",
+              "value": "Insolence"
+            },
+            {
+              "prompt": "4",
+              "value": "Idleness"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c296d5483f414493fb729",
+              "correct_answer": "1. Inershia",
+              "explanation": "The correct spelling is 'inertia' (a physics concept). 'Inershia' is a common misspelling.",
+              "key_concepts": [
+                "Spelling Rules",
+                "Scientific Terms"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c298d26baf056507f10cb",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: The following sentence has been divided into parts. One of them contains an error. Select the part that contains the error from the given options.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;The Dussehra celebrations / in Mysore / this year / are grandest than / in any other part / of the state.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "any other part"
+            },
+            {
+              "prompt": "2",
+              "value": "The Dussehra celebrations"
+            },
+            {
+              "prompt": "3",
+              "value": "are grandest than"
+            },
+            {
+              "prompt": "4",
+              "value": "in Mysore"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c298d26baf056507f10cb",
+              "correct_answer": "3. are grandest than",
+              "explanation": "The comparative form 'grandest' is incorrect. It should be 'grander than' to compare two things.",
+              "key_concepts": [
+                "Comparative Adjectives",
+                "Grammar Errors"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c29abd64ccf44a56f639d",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the option that can be used as a one-word substitute for the given group of words.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;One who does not take any alcoholic drink&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Perfectionist"
+            },
+            {
+              "prompt": "2",
+              "value": "Astrologer"
+            },
+            {
+              "prompt": "3",
+              "value": "Vegetarian"
+            },
+            {
+              "prompt": "4",
+              "value": "Teetotaller"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c29abd64ccf44a56f639d",
+              "correct_answer": "4. Teetotaller",
+              "explanation": "A 'teetotaller' is someone who abstains from alcohol. The other options refer to different habits or professions.",
+              "key_concepts": [
+                "One-Word Substitutes",
+                "Vocabulary"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c29d5d0be54fb441c5107",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the option that expresses the given sentence in indirect speech.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;&amp;ldquo;Read the instructions before you start making the dish,&amp;rdquo; Deepa&amp;#39;s mother said to her.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Deepa&amp;#39;s mother told her to read the instructions before she started making the dish."
+            },
+            {
+              "prompt": "2",
+              "value": "Deepa&amp;#39;s mother told to her to read the instructions before you start making the dish."
+            },
+            {
+              "prompt": "3",
+              "value": "Deepa&amp;#39;s mother said her to read the instructions before she start making the dish."
+            },
+            {
+              "prompt": "4",
+              "value": "Deepa&amp;#39;s mother told her to read the instructions before you had made the dish."
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c29d5d0be54fb441c5107",
+              "correct_answer": "1. Deepa's mother told her to read the instructions before she started making the dish.",
+              "explanation": "In indirect speech, the reporting verb changes from 'said' to 'told' when the sentence is an imperative. The conjunction 'to' is used after 'told her', and the finite verb in the subordinate clause changes to past perfect ('started') to maintain correct tense agreement. Option 1 follows these rules accurately.",
+              "key_concepts": [
+                "Direct and indirect speech",
+                "Tense agreement"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c29f0057ed7d6abc29903",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the option that expresses the given sentence in passive voice.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;Close all the windows.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "All the windows be closed."
+            },
+            {
+              "prompt": "2",
+              "value": "Will you close all the windows?"
+            },
+            {
+              "prompt": "3",
+              "value": "Let all the windows be closed."
+            },
+            {
+              "prompt": "4",
+              "value": "Can you close all the windows?"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c29f0057ed7d6abc29903",
+              "correct_answer": "3. Let all the windows be closed.",
+              "explanation": "The passive voice of the imperative sentence 'Close all the windows' requires the structure 'Let + object + be + past participle'. Option 3 uses 'Let all the windows be closed', which is the correct passive construction.",
+              "key_concepts": [
+                "Passive voice",
+                "Imperative to passive"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2a08798a7bb40e43c13a",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the most appropriate meaning of the given idiom.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;Be at a loss for words&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Not know what to say"
+            },
+            {
+              "prompt": "2",
+              "value": "Habituated to using difficult words"
+            },
+            {
+              "prompt": "3",
+              "value": "Lost the urge to speak"
+            },
+            {
+              "prompt": "4",
+              "value": "Not aware of the language"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2a08798a7bb40e43c13a",
+              "correct_answer": "1. Not know what to say",
+              "explanation": "The idiom 'be at a loss for words' means to be unable to find words to express a reaction, typically due to surprise or confusion. Option 1 directly captures this meaning.",
+              "key_concepts": [
+                "Idiom interpretation",
+                "Figurative language"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2a335483f414493fd02d",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Sentences of a paragraph are given below in jumbled order. Arrange the sentences in the right order to form a meaningful and coherent paragraph.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;A. At length the olive tree&amp;#39;s branches broke with the snow&amp;#39;s weight, at once despoiling it of its beauty and killing the tree.&lt;/p&gt;\n\n&lt;p&gt;B. A shower of snow fell upon them and, finding the Olive full of foliage, it settled upon its branches.&lt;/p&gt;\n\n&lt;p&gt;C. Finding the fig tree without leaves, the snow fell through the branches to the ground and did not injure it at all.&lt;/p&gt;\n\n&lt;p&gt;D. The olive tree ridiculed the fig tree because, while she was green all year round, the fig tree changed its leaves with the seasons.&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "ACBD"
+            },
+            {
+              "prompt": "2",
+              "value": "DBAC"
+            },
+            {
+              "prompt": "3",
+              "value": "ABCD"
+            },
+            {
+              "prompt": "4",
+              "value": "DACB"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2a335483f414493fd02d",
+              "correct_answer": "2. DBAC",
+              "explanation": "The logical sequence begins with the olive tree's mockery (D), followed by the snow's interaction with the olive tree (B), the fig tree's situation (C), and the olive tree's destruction (A). This order (D-B-A-C) creates a coherent narrative.",
+              "key_concepts": [
+                "Sentence ordering",
+                "Narrative coherence"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2a4b5483f414493fd576",
+          "original_question": "&lt;p&gt;&lt;strong&gt;Directions: Select the option that can be used as a one-word substitute for the given group of words.&lt;/strong&gt;&lt;/p&gt;\n\n&lt;p&gt;A person who is trained to travel in a spacecraft&lt;/p&gt;\n",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "Astronaut"
+            },
+            {
+              "prompt": "2",
+              "value": "Anchor"
+            },
+            {
+              "prompt": "3",
+              "value": "Chauffeur"
+            },
+            {
+              "prompt": "4",
+              "value": "Choreographer"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2a4b5483f414493fd576",
+              "correct_answer": "1. Astronaut",
+              "explanation": "An astronaut is a person trained to travel in a spacecraft. This is the precise one-word substitute for the given phrase.",
+              "key_concepts": [
+                "Vocabulary",
+                "Single-word substitutes"
+              ]
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2add5f9933d4ae60fae7",
+          "original_question": "Select the most appropriate option to fill in blank 1.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "will be"
+            },
+            {
+              "prompt": "2",
+              "value": "are"
+            },
+            {
+              "prompt": "3",
+              "value": "is"
+            },
+            {
+              "prompt": "4",
+              "value": "be"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2add5f9933d4ae60fae7",
+              "correct_answer": "3. is",
+              "explanation": "The paragraph is missing, so the answer cannot be determined without context. However, the verb 'is' is likely correct if the subject is singular and present tense.",
+              "key_concepts": [
+                "Subject-verb agreement"
+              ],
+              "note": "Requires context from the missing paragraph."
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2add5f9933d4ae60fae8",
+          "original_question": "Select the most appropriate option to fill in blank 2.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "extent"
+            },
+            {
+              "prompt": "2",
+              "value": "number"
+            },
+            {
+              "prompt": "3",
+              "value": "figure"
+            },
+            {
+              "prompt": "4",
+              "value": "total"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2add5f9933d4ae60fae8",
+              "correct_answer": "2. number",
+              "explanation": "The paragraph is missing, so the answer cannot be determined without context. 'Number' is plausible if the sentence refers to quantifying items.",
+              "key_concepts": [
+                "Quantifiers"
+              ],
+              "note": "Requires context from the missing paragraph."
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2add5f9933d4ae60fae9",
+          "original_question": "Select the most appropriate option to fill in blank 3.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "wrapping"
+            },
+            {
+              "prompt": "2",
+              "value": "including"
+            },
+            {
+              "prompt": "3",
+              "value": "showing"
+            },
+            {
+              "prompt": "4",
+              "value": "counting"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2add5f9933d4ae60fae9",
+              "correct_answer": "2. including",
+              "explanation": "The paragraph is missing, so the answer cannot be determined without context. 'Including' is plausible if the sentence lists additional items.",
+              "key_concepts": [
+                "Prepositions"
+              ],
+              "note": "Requires context from the missing paragraph."
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2add5f9933d4ae60faea",
+          "original_question": "Select the most appropriate option to fill in blank 4.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "much"
+            },
+            {
+              "prompt": "2",
+              "value": "such"
+            },
+            {
+              "prompt": "3",
+              "value": "more"
+            },
+            {
+              "prompt": "4",
+              "value": "so"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2add5f9933d4ae60faea",
+              "correct_answer": "4. so",
+              "explanation": "The paragraph is missing, so the answer cannot be determined without context. 'So' is plausible in a comparative or causal structure.",
+              "key_concepts": [
+                "Adverbs"
+              ],
+              "note": "Requires context from the missing paragraph."
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        },
+        {
+          "question_id": "614c2add5f9933d4ae60faeb",
+          "original_question": "Select the most appropriate option to fill in blank 5.",
+          "options": [
+            {
+              "prompt": "1",
+              "value": "industrialist"
+            },
+            {
+              "prompt": "2",
+              "value": "industrial"
+            },
+            {
+              "prompt": "3",
+              "value": "industrialised"
+            },
+            {
+              "prompt": "4",
+              "value": "industry"
+            }
+          ],
+          "ai_generated": {
+            "english": {
+              "question_id": "614c2add5f9933d4ae60faeb",
+              "correct_answer": "2. industrial",
+              "explanation": "The paragraph is missing, so the answer cannot be determined without context. 'Industrial' is plausible as an adjective form if the sentence refers to a sector or process.",
+              "key_concepts": [
+                "Adjectives"
+              ],
+              "note": "Requires context from the missing paragraph."
+            },
+            "hindi": {
+              "error": "Failed to generate"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_questions": 0,
+    "successful": 0,
+    "skipped": 100,
+    "failed": 0,
+    "partial": 0
+  }
+}

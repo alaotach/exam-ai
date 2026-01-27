@@ -26,7 +26,7 @@ import {
   Swords,
   BarChart3,
   Trophy,
-  Fire,
+  Flame as Fire, // Replaced Fire with Flame
   Users,
   Globe,
   Sparkles,
@@ -58,6 +58,7 @@ export default function EnhancedHomeScreen() {
   const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
   const [questionStats, setQuestionStats] = useState<any>(null);
   const [refreshing, setRefreshing] = useState(false);
+
   const [loading, setLoading] = useState(true);
 
   const loadDashboardData = async () => {
@@ -65,11 +66,12 @@ export default function EnhancedHomeScreen() {
       setLoading(true);
       
       // Load user performance
-      const userPerformance = await EnhancedQuestionDatabase.getUserPerformance('default_user');
+      const db = EnhancedQuestionDatabase.getInstance();
+      const userPerformance = await db.getUserPerformance('default_user');
       setPerformance(userPerformance);
       
       // Load question statistics
-      const qStats = await EnhancedQuestionDatabase.getQuestionStats();
+      const qStats = await db.getQuestionStats();
       setQuestionStats(qStats);
       
       // Calculate dashboard stats
@@ -161,7 +163,7 @@ export default function EnhancedHomeScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['bottom']}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#667eea" />
           <Text style={styles.loadingText}>Loading your dashboard...</Text>
@@ -235,6 +237,56 @@ export default function EnhancedHomeScreen() {
             </View>
           </View>
         </LinearGradient>
+
+        {/* Mock Tests - NEW! */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <BookOpen size={20} color="#FF6B35" />
+            <Text style={styles.sectionTitle}>SSC CGL Mock Tests</Text>
+            <View style={styles.newBadge}>
+              <Text style={styles.newBadgeText}>NEW</Text>
+            </View>
+          </View>
+
+          <TouchableOpacity style={styles.mockTestCard} onPress={() => router.push('/test-list')}>
+            <LinearGradient
+              colors={['#4A90E2', '#357ABD']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.mockTestGradient}
+            >
+              <View style={styles.mockTestContent}>
+                <View style={styles.mockTestIcon}>
+                  <BookOpen size={32} color="#FFFFFF" />
+                </View>
+                <View style={styles.mockTestInfo}>
+                  <Text style={styles.mockTestTitle}>Take Full-Length Mock Tests</Text>
+                  <Text style={styles.mockTestSubtitle}>
+                    50+ SSC CGL papers with AI-generated explanations
+                  </Text>
+                  <View style={styles.mockTestFeatures}>
+                    <View style={styles.mockTestFeature}>
+                      <Clock size={14} color="rgba(255,255,255,0.9)" />
+                      <Text style={styles.mockTestFeatureText}>Timed Tests</Text>
+                    </View>
+                    <View style={styles.mockTestFeature}>
+                      <Target size={14} color="rgba(255,255,255,0.9)" />
+                      <Text style={styles.mockTestFeatureText}>Detailed Analytics</Text>
+                    </View>
+                    <View style={styles.mockTestFeature}>
+                      <Brain size={14} color="rgba(255,255,255,0.9)" />
+                      <Text style={styles.mockTestFeatureText}>Detailed Solutions</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.mockTestAction}>
+                <Text style={styles.mockTestActionText}>Browse Tests</Text>
+                <Text style={styles.mockTestArrow}>→</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
 
         {/* AI-Powered Quick Actions */}
         <View style={styles.section}>
@@ -552,6 +604,95 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#1E293B',
+  },
+  newBadge: {
+    backgroundColor: '#FF6B35',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginLeft: 8,
+  },
+  newBadgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  mockTestCard: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  mockTestGradient: {
+    padding: 20,
+  },
+  mockTestContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    gap: 16,
+  },
+  mockTestIcon: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mockTestInfo: {
+    flex: 1,
+  },
+  mockTestTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  mockTestSubtitle: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.9)',
+    marginBottom: 12,
+  },
+  mockTestFeatures: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  mockTestFeature: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  mockTestFeatureText: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.9)',
+    fontWeight: '600',
+  },
+  mockTestAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderRadius: 12,
+  },
+  mockTestActionText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  mockTestArrow: {
+    fontSize: 24,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
   },
   aiActionsRow: {
     flexDirection: 'row',

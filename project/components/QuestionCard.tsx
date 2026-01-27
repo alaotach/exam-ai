@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 import { Question } from '@/types';
 import Card from './Card';
 import Button from './Button';
@@ -11,6 +12,7 @@ interface QuestionCardProps {
 }
 
 export default function QuestionCard({ question, onAnswerSelect, showAnswer = false }: QuestionCardProps) {
+  const { width } = useWindowDimensions();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
 
@@ -49,7 +51,17 @@ export default function QuestionCard({ question, onAnswerSelect, showAnswer = fa
         <Text style={styles.difficulty}>{question.difficulty}</Text>
       </View>
       
-      <Text style={styles.questionText}>{question.question}</Text>
+      <View style={styles.questionContainer}>
+        <RenderHtml
+          contentWidth={width - 64}
+          source={{ html: question.question }}
+          baseStyle={{ fontFamily: 'Inter-Medium', fontSize: 16, color: '#1C1C1E', lineHeight: 24 }}
+          tagsStyles={{
+             img: { maxWidth: '100%' },
+             p: { marginBottom: 8 }
+          }}
+        />
+      </View>
       
       <View style={styles.optionsContainer}>
         {question.options.map((option, index) => (
@@ -61,7 +73,13 @@ export default function QuestionCard({ question, onAnswerSelect, showAnswer = fa
           >
             <View style={styles.optionContent}>
               <Text style={styles.optionLabel}>{String.fromCharCode(65 + index)}</Text>
-              <Text style={styles.optionText}>{option}</Text>
+              <View style={{ flex: 1 }}>
+                <RenderHtml
+                    contentWidth={width - 120}
+                    source={{ html: option }}
+                    baseStyle={{ fontFamily: 'Inter-Regular', fontSize: 15, color: '#1C1C1E' }}
+                />
+              </View>
             </View>
           </TouchableOpacity>
         ))}
@@ -70,7 +88,14 @@ export default function QuestionCard({ question, onAnswerSelect, showAnswer = fa
       {(showExplanation || showAnswer) && (
         <View style={styles.explanationContainer}>
           <Text style={styles.explanationTitle}>Explanation:</Text>
-          <Text style={styles.explanationText}>{question.explanation}</Text>
+          <RenderHtml
+            contentWidth={width - 64}
+            source={{ html: question.explanation || 'No explanation provided.' }}
+            baseStyle={{ fontFamily: 'Inter-Regular', fontSize: 14, color: '#3A3A3C', lineHeight: 20 }}
+            tagsStyles={{
+                img: { maxWidth: '100%' }
+            }}
+          />
         </View>
       )}
     </Card>
@@ -98,15 +123,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 12,
   },
-  questionText: {
-    fontSize: 16,
-    fontFamily: 'Inter-Medium',
-    color: '#1C1C1E',
-    marginBottom: 16,
-    lineHeight: 22,
+  questionContainer: {
+    marginBottom: 20,
   },
   optionsContainer: {
-    gap: 8,
+    gap: 12,
   },
   option: {
     borderWidth: 1,
@@ -138,20 +159,15 @@ const styles = StyleSheet.create({
   },
   optionContent: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 12,
   },
   optionLabel: {
     fontSize: 14,
     fontFamily: 'Inter-Bold',
-    color: '#1C1C1E',
+    color: '#8E8E93',
     minWidth: 20,
-  },
-  optionText: {
-    fontSize: 14,
-    fontFamily: 'Inter-Regular',
-    color: '#1C1C1E',
-    flex: 1,
+    marginTop: 2,
   },
   explanationContainer: {
     marginTop: 16,
@@ -164,11 +180,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-SemiBold',
     color: '#1C1C1E',
     marginBottom: 4,
-  },
-  explanationText: {
-    fontSize: 14,
-    fontFamily: 'Inter-Regular',
-    color: '#3A3A3C',
-    lineHeight: 20,
   },
 });

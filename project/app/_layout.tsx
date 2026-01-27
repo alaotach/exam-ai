@@ -14,6 +14,8 @@ import {
 import * as SplashScreen from 'expo-splash-screen';
 import * as SystemUI from 'expo-system-ui';
 
+import { AuthProvider } from '@/context/auth-context';
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -38,12 +40,13 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <AuthProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="light" backgroundColor="#667eea" translucent={true} />
-    </>
+    </AuthProvider>
   );
 }

@@ -9,9 +9,13 @@
     "start": "node dist/index.js",
     "process-pdf": "tsx src/cli/process-pdf.ts",
     "process-folder": "tsx src/cli/process-folder.ts",
-    "db:stats": "tsx src/cli/db-stats.ts"
+    "db:stats": "tsx src/cli/db-stats.ts",
+    "migrate:s3": "tsx scripts/migrate-to-s3.ts",
+    "estimate:costs": "tsx ../estimate-costs.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.699.0",
+    "@aws-sdk/s3-request-presigner": "^3.699.0",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",

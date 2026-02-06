@@ -10,6 +10,7 @@ import {
   StatusBar,
   RefreshControl,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -322,7 +323,25 @@ export default function ProgressScreen() {
               <Text style={styles.cardTitle}>Recent Tests</Text>
               <View style={styles.testsContainer}>
                 {testHistory.slice(0, 5).map((test, index) => (
-                  <View key={index} style={styles.testItem}>
+                  <TouchableOpacity 
+                    key={index} 
+                    style={styles.testItem}
+                    onPress={() => {
+                      // Check if evaluation is complete
+                      if (test.evaluationStatus === 'pending') {
+                        Alert.alert(
+                          'Evaluation Pending',
+                          'We are still generating answers and evaluating your test. You will be notified when it\'s ready.',
+                          [{ text: 'OK' }]
+                        );
+                      } else {
+                        router.push({
+                          pathname: '/test-result',
+                          params: { attemptId: test.attemptId }
+                        });
+                      }
+                    }}
+                  >
                     <View style={styles.testInfo}>
                       <Text style={styles.testTitle} numberOfLines={1}>
                         {test.testTitle || 'Test'}
@@ -330,14 +349,26 @@ export default function ProgressScreen() {
                       <Text style={styles.testDate}>
                         {new Date(test.date).toLocaleDateString()}
                       </Text>
+                      {test.evaluationStatus === 'pending' && (
+                        <View style={styles.pendingBadge}>
+                          <ActivityIndicator size="small" color="#FF9500" />
+                          <Text style={styles.pendingText}>Evaluating...</Text>
+                        </View>
+                      )}
                     </View>
-                    <View style={styles.testStats}>
-                      <Text style={styles.testAccuracy}>{test.accuracy.toFixed(1)}%</Text>
-                      <Text style={styles.testScore}>
-                        {test.correctAnswers}/{test.totalQuestions}
-                      </Text>
-                    </View>
-                  </View>
+                    {test.evaluationStatus === 'completed' ? (
+                      <View style={styles.testStats}>
+                        <Text style={styles.testAccuracy}>{test.accuracy.toFixed(1)}%</Text>
+                        <Text style={styles.testScore}>
+                          {test.correctAnswers}/{test.totalQuestions}
+                        </Text>
+                      </View>
+                    ) : (
+                      <View style={styles.testStats}>
+                        <Text style={styles.pendingStatusText}>Pending</Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
                 ))}
               </View>
             </Card>
@@ -786,5 +817,21 @@ const styles = StyleSheet.create({
   },
   lockedText: {
     color: '#8E8E93',
+  },
+  pendingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 4,
+  },
+  pendingText: {
+    fontSize: 12,
+    fontFamily: 'Inter-Medium',
+    color: '#FF9500',
+  },
+  pendingStatusText: {
+    fontSize: 14,
+    fontFamily: 'Inter-SemiBold',
+    color: '#FF9500',
   },
 });

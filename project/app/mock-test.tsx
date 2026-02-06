@@ -35,6 +35,7 @@ import SSCCGLService, {
   UserAnswer,
 } from '@/services/ssc-cgl-service';
 import { TestProgressService, SavedTestState, TestResult } from '@/services/test-progress-service';
+import TestSeriesService from '@/services/testseries-service';
 
 const { width } = Dimensions.get('window');
 
@@ -59,6 +60,9 @@ export default function MockTestScreen() {
   const params = useLocalSearchParams();
   const testId = params.testId as string;
   const resume = params.resume === 'true';
+  const source = params.source as string; // 'testseries' or undefined
+  const seriesFolder = params.seriesFolder as string;
+  const sectionFolder = params.sectionFolder as string;
 
   const [test, setTest] = useState<ParsedMockTest | null>(null);
   const [attempt, setAttempt] = useState<TestAttempt | null>(null);
@@ -337,6 +341,48 @@ export default function MockTestScreen() {
       // Use attempt.id since we ensure it is populated
       const attemptId = attempt.id!;
       console.log('Submitting test with attemptId:', attemptId);
+      
+      // Check if this is a testseries test and if answers are ready
+      if (source === 'testseries') {
+        console.log('Testseries test detected, checking answer status...');
+        
+        // Check if answers exist
+        const answersStatus = await TestSeriesService.checkAnswerGenerationStatus(testId);
+        
+        if (answersStatus.status === 'not-found' || !answersStatus.answersAvailable) {
+          // Answers still not ready (generation might still be in progress)
+          console.log('Answers not yet ready, saving with pending status...');
+          Alert.alert(
+            'Evaluation Pending',
+            'Your answers are being processed. You can check your results in the Test History page once evaluation is complete.',
+            [{ text: 'OK' }]
+          );
+
+          // Save partial result with pending status
+          const partialAnalytics = SSCCGLService.submitTest(attemptId);
+          if (partialAnalytics) {
+            await TestProgressService.saveTestResult({
+              ...partialAnalytics,
+              date: new Date().toISOString(),
+              testTitle: test?.title,
+              answerGenerationStatus: answersStatus.status === 'not-found' ? 'pending' : answersStatus.status as any,
+              evaluationStatus: 'pending'
+            });
+          }
+
+          // Clear active test
+          await TestProgressService.clearCurrentTest();
+
+          // Navigate to progress tab
+          router.replace('/(tabs)/progress');
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Answers are ready, proceed with normal submission
+        console.log('Answers available, proceeding with evaluation');
+      }
+
       const analytics = SSCCGLService.submitTest(attemptId);
 
       if (analytics) {
@@ -345,7 +391,9 @@ export default function MockTestScreen() {
         await TestProgressService.saveTestResult({
             ...analytics,
             date: new Date().toISOString(),
-            testTitle: test?.title
+            testTitle: test?.title,
+            answerGenerationStatus: source === 'testseries' ? 'completed' : 'not-needed',
+            evaluationStatus: 'completed'
         });
         
         console.log('Test result saved, clearing active test...');

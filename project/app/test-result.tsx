@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
+  Alert,
+  Modal,
+  TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
@@ -26,6 +29,8 @@ import {
   Home,
   Share2,
   BookOpen,
+  Flag,
+  X as CloseIcon,
 } from 'lucide-react-native';
 import RenderHtml from 'react-native-render-html';
 import SSCCGLService, {
@@ -36,6 +41,7 @@ import SSCCGLService, {
   UserAnswer,
 } from '@/services/ssc-cgl-service';
 import { TestProgressService } from '@/services/test-progress-service';
+import ReportService, { ReportType } from '@/services/report-service';
 
 const { width } = Dimensions.get('window');
 
@@ -46,6 +52,10 @@ export default function TestResultScreen() {
   const [analytics, setAnalytics] = useState<TestAnalytics | null>(null);
   const [test, setTest] = useState<ParsedMockTest | null>(null);
   const [selectedTab, setSelectedTab] = useState<'overview' | 'sections' | 'solutions'>('overview');
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportingQuestion, setReportingQuestion] = useState<ParsedQuestion | null>(null);
+  const [reportType, setReportType] = useState<ReportType>('wrong_answer');
+  const [reportDescription, setReportDescription] = useState('');
 
   useEffect(() => {
     loadResults();
@@ -98,6 +108,45 @@ export default function TestResultScreen() {
       return `${mins}m ${secs}s`;
     }
     return `${secs}s`;
+  };
+
+  const handleReportQuestion = (question: ParsedQuestion) => {
+    setReportingQuestion(question);
+    setReportType('wrong_answer');
+    setReportDescription('');
+    setShowReportModal(true);
+  };
+
+  const submitReport = async () => {
+    if (!reportingQuestion || !reportDescription.trim()) {
+      Alert.alert('Error', 'Please provide a description for your report');
+      return;
+    }
+
+    try {
+      await ReportService.submitReport({
+        userId: '',
+        testId: analytics?.testId || '',
+        testTitle: test?.title,
+        questionId: reportingQuestion.id,
+        questionText: reportingQuestion.questionText.substring(0, 200),
+        reportType,
+        description: reportDescription,
+      });
+
+      Alert.alert(
+        'Thank You!',
+        'Your report has been submitted. We will review it and take appropriate action.',
+        [{ text: 'OK' }]
+      );
+
+      setShowReportModal(false);
+      setReportingQuestion(null);
+      setReportDescription('');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to submit report. Please try again.');
+      console.error('Report submission error:', error);
+    }
   };
 
   const getScoreColor = (score: number, maxScore: number): string => {
@@ -387,8 +436,8 @@ export default function TestResultScreen() {
 
                   <View style={styles.solutionOptions}>
                     {question.options.map((option, optIndex) => {
-                      const isUserAnswer = userAnswer?.selectedOption === optIndex;
                       const isCorrectAnswer = optIndex === question.correctAnswerIndex;
+                      const isUserAnswer = optIndex === userAnswer?.selectedOption;
 
                       return (
                         <View
@@ -426,7 +475,16 @@ export default function TestResultScreen() {
                   </View>
 
                   <View style={styles.solutionExplanation}>
-                    <Text style={styles.solutionExplanationTitle}>Explanation</Text>
+                    <View style={styles.solutionExplanationHeader}>
+                      <Text style={styles.solutionExplanationTitle}>Explanation</Text>
+                      <TouchableOpacity
+                        style={styles.reportButton}
+                        onPress={() => handleReportQuestion(question)}
+                      >
+                        <Flag size={16} color="#FF9500" />
+                        <Text style={styles.reportButtonText}>Report</Text>
+                      </TouchableOpacity>
+                    </View>
                     <Text style={styles.solutionExplanationText}>
                       {question.explanation.english}
                     </Text>
@@ -538,6 +596,85 @@ export default function TestResultScreen() {
           <Text style={styles.footerButtonText}>Share Result</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Report Modal */}
+      <Modal
+        visible={showReportModal}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowReportModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Report Question</Text>
+              <TouchableOpacity
+                onPress={() => setShowReportModal(false)}
+                style={styles.modalCloseButton}
+              >
+                <CloseIcon size={24} color="#666" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.modalBody}>
+              <Text style={styles.modalLabel}>Report Type</Text>
+              <View style={styles.reportTypeContainer}>
+                {[
+                  { value: 'wrong_answer' as ReportType, label: 'Wrong Answer' },
+                  { value: 'incorrect_question' as ReportType, label: 'Incorrect Question' },
+                  { value: 'typo' as ReportType, label: 'Typo/Error' },
+                  { value: 'inappropriate' as ReportType, label: 'Inappropriate' },
+                  { value: 'other' as ReportType, label: 'Other' },
+                ].map((type) => (
+                  <TouchableOpacity
+                    key={type.value}
+                    style={[
+                      styles.reportTypeButton,
+                      reportType === type.value && styles.reportTypeButtonActive,
+                    ]}
+                    onPress={() => setReportType(type.value)}
+                  >
+                    <Text
+                      style={[
+                        styles.reportTypeButtonText,
+                        reportType === type.value && styles.reportTypeButtonTextActive,
+                      ]}
+                    >
+                      {type.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <Text style={styles.modalLabel}>Description</Text>
+              <TextInput
+                style={styles.reportInput}
+                multiline
+                numberOfLines={4}
+                placeholder="Please describe the issue in detail..."
+                value={reportDescription}
+                onChangeText={setReportDescription}
+                textAlignVertical="top"
+              />
+
+              <View style={styles.modalActions}>
+                <TouchableOpacity
+                  style={styles.modalButtonCancel}
+                  onPress={() => setShowReportModal(false)}
+                >
+                  <Text style={styles.modalButtonCancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalButtonSubmit}
+                  onPress={submitReport}
+                >
+                  <Text style={styles.modalButtonSubmitText}>Submit Report</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -969,11 +1106,32 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
     borderLeftColor: '#FF9800',
   },
+  solutionExplanationHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   solutionExplanationTitle: {
     fontSize: 14,
     fontWeight: '700',
     color: '#333',
-    marginBottom: 8,
+  },
+  reportButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: 'rgba(255, 149, 0, 0.1)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FF9500',
+  },
+  reportButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#FF9500',
   },
   solutionExplanationText: {
     fontSize: 14,
@@ -1031,5 +1189,106 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#4A90E2',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    maxHeight: '80%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#333',
+  },
+  modalCloseButton: {
+    padding: 4,
+  },
+  modalBody: {
+    padding: 20,
+  },
+  modalLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 12,
+  },
+  reportTypeContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 20,
+  },
+  reportTypeButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#f5f5f5',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  reportTypeButtonActive: {
+    backgroundColor: '#E3F2FD',
+    borderColor: '#4A90E2',
+  },
+  reportTypeButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#666',
+  },
+  reportTypeButtonTextActive: {
+    color: '#4A90E2',
+  },
+  reportInput: {
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 12,
+    padding: 12,
+    fontSize: 14,
+    color: '#333',
+    minHeight: 100,
+    marginBottom: 20,
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  modalButtonCancel: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 12,
+    backgroundColor: '#f5f5f5',
+    alignItems: 'center',
+  },
+  modalButtonCancelText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666',
+  },
+  modalButtonSubmit: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 12,
+    backgroundColor: '#4A90E2',
+    alignItems: 'center',
+  },
+  modalButtonSubmitText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#fff',
   },
 });

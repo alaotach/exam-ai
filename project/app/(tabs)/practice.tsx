@@ -6,16 +6,39 @@ import { ActivityIndicator } from 'react-native';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import SSCCGLService from '@/services/ssc-cgl-service';
+import TestSeriesService from '@/services/testseries-service';
+import { TestProgressService } from '@/services/test-progress-service';
 
 export default function PracticeScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [onlinePapers, setOnlinePapers] = useState<any[]>([]);
+  const [testSeriesCount, setTestSeriesCount] = useState<number>(0);
+  const [resumableTests, setResumableTests] = useState<any[]>([]);
 
   React.useEffect(() => {
+    // Load SSC CGL papers
     SSCCGLService.fetchPapersList().then(papers => {
          const withAns = papers.filter((p: any) => p.hasAnswers);
          setOnlinePapers(withAns);
      }).catch(err => console.error(err));
+
+    // Load test series count
+    TestSeriesService.fetchAllTestSeries().then(series => {
+      setTestSeriesCount(series.length);
+    }).catch(err => console.error(err));
+
+    // Load resumable test
+    TestProgressService.getCurrentTest().then(savedTest => {
+      if (savedTest) {
+        setResumableTests([{
+          testId: savedTest.testId,
+          attemptId: savedTest.attemptId,
+          testTitle: 'Resume Test',
+          currentQuestionIndex: savedTest.currentQuestionIndex,
+          totalQuestions: savedTest.answers ? Object.keys(savedTest.answers).length : 100
+        }]);
+      }
+    }).catch(err => console.error(err));
   }, []);
 
   const handleStartCGLPaper = async (paper: any) => {
@@ -39,6 +62,58 @@ export default function PracticeScreen() {
   };
 
   return (
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.title}>Practice Tests</Text>
+        
+        {/* Resume Tests Section */}
+        {resumableTests.length > 0 && (
+          <Card>
+            <Text style={styles.cardTitle}>Resume Test</Text>
+            <Text style={styles.cardDescription}>
+              Continue where you left off
+            </Text>
+            <View style={styles.mockTestsContainer}>
+              {resumableTests.map((test) => (
+                <View key={test.attemptId} style={styles.mockTestItem}>
+                  <View style={styles.mockTestInfo}>
+                    <Text style={styles.mockTestName} numberOfLines={2}>{test.testTitle || 'Test'}</Text>
+                    <Text style={{fontSize: 12, color: '#666', marginTop: 4}}>
+                      Progress: {Math.round((test.currentQuestionIndex / test.totalQuestions) * 100)}%
+                    </Text>
+                  </View>
+                  <Button
+                    title="Resume"
+                    onPress={() => router.push({
+                      pathname: '/mock-test',
+                      params: { testId: test.testId, resume: 'true' }
+                    })}
+                    variant="primary"
+                    size="small"
+                  />
+                </View>
+              ))}
+            </View>
+          </Card>
+        )}
+
+        {/* Testbook Test Series */}
+        <Card>
+          <Text style={styles.cardTitle}>Testbook Test Series ({testSeriesCount > 0 ? `${testSeriesCount} series` : 'Loading...'})</Text>
+          <Text style={styles.cardDescription}>
+            Access 1.8 lakh+ test papers from Testbook
+          </Text>
+          <Button
+            title="Browse All Test Series"
+            onPress={() => {
+              // @ts-ignore - Route will be registered
+              router.push('/testseries-browse');
+            }}
+            variant="primary"
+            size="large"
+            style={{marginTop: 10}}
+          />
+        </Card>
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView style={styles.scrollView}>
         <Text style={styles.title}>Practice Tests</Text>

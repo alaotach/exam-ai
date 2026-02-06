@@ -1,0 +1,189 @@
+import { Router, Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
+import zlib from 'zlib';
+import { promisify } from 'util';
+
+const router = Router();
+const gunzip = promisify(zlib.gunzip);
+
+// Root directory containing testseries folder
+const DATA_ROOT = path.resolve(__dirname, '../../../');
+const TESTSERIES_DIR = path.join(DATA_ROOT, 'testseries');
+
+/**
+ * GET /api/testseries - List all test series with their sections
+ */
+router.get('/', (req: Request, res: Response) => {
+  try {
+    if (!fs.existsSync(TESTSERIES_DIR)) {
+      return res.status(500).json({ error: 'Testseries directory not found', path: TESTSERIES_DIR });
+    }
+
+    const testSeriesFolders = fs.readdirSync(TESTSERIES_DIR, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => dirent.name);
+
+    const testSeriesList: any[] = [];
+
+    for (const seriesFolder of testSeriesFolders) {
+      const seriesPath = path.join(TESTSERIES_DIR, seriesFolder);
+      
+      // Get all section folders
+      const sectionFolders = fs.readdirSync(seriesPath, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => dirent.name);
+
+      const sections: any[] = [];
+
+      for (const sectionFolder of sectionFolders) {
+        const sectionPath = path.join(seriesPath, sectionFolder);
+        const infoFilePath = path.join(sectionPath, '_section_info.json');
+
+        let sectionInfo: any = {
+          id: sectionFolder,
+          title: sectionFolder,
+          tests: []
+        };
+
+        // Read section info if available
+        if (fs.existsSync(infoFilePath)) {
+          try {
+            const infoContent = fs.readFileSync(infoFilePath, 'utf-8');
+            const info = JSON.parse(infoContent);
+            sectionInfo = {
+              id: info.id || sectionFolder,
+              title: info.title || sectionFolder,
+              tests: info.tests || []
+            };
+          } catch (err) {
+            console.error(`Error reading section info for ${sectionFolder}:`, err);
+          }
+        }
+
+        // Count available test files
+        const testFiles = fs.readdirSync(sectionPath)
+          .filter(f => f.endsWith('.json.gz'));
+        
+        sectionInfo.availableTests = testFiles.length;
+        sections.push(sectionInfo);
+      }
+
+      // Extract series ID from folder name (last part after last underscore)
+      const seriesIdMatch = seriesFolder.match(/_([a-f0-9]{24})$/);
+      const seriesId = seriesIdMatch ? seriesIdMatch[1] : seriesFolder;
+
+      testSeriesList.push({
+        id: seriesId,
+        folderName: seriesFolder,
+        title: seriesFolder.replace(/_/g, ' ').replace(/\s+[a-f0-9]{24}$/i, ''),
+        sections: sections,
+        totalSections: sections.length,
+        totalTests: sections.reduce((sum, s) => sum + s.availableTests, 0)
+      });
+    }
+
+    res.json({
+      total: testSeriesList.length,
+      testSeries: testSeriesList
+    });
+
+  } catch (error: any) {
+    console.error('Error listing test series:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * GET /api/testseries/:seriesFolder/:sectionFolder - List tests in a section
+ */
+router.get('/:seriesFolder/:sectionFolder', (req: Request, res: Response) => {
+  try {
+    const { seriesFolder, sectionFolder } = req.params;
+    const sectionPath = path.join(TESTSERIES_DIR, seriesFolder, sectionFolder);
+
+    if (!fs.existsSync(sectionPath)) {
+      return res.status(404).json({ error: 'Section not found' });
+    }
+
+    // Read section info
+    const infoFilePath = path.join(sectionPath, '_section_info.json');
+    let sectionInfo: any = { tests: [] };
+
+    if (fs.existsSync(infoFilePath)) {
+      const infoContent = fs.readFileSync(infoFilePath, 'utf-8');
+      sectionInfo = JSON.parse(infoContent);
+    }
+
+    // Get available test files
+    const testFiles = fs.readdirSync(sectionPath)
+      .filter(f => f.endsWith('.json.gz'))
+      .map(filename => {
+        const testId = filename.replace('.json.gz', '');
+        const testInfo = sectionInfo.tests?.find((t: any) => t.id === testId) || {
+          id: testId,
+          title: testId.replace(/_/g, ' ')
+        };
+        
+        return {
+          ...testInfo,
+          filename: filename,
+          compressed: true
+        };
+      });
+
+    res.json({
+      section: sectionInfo,
+      tests: testFiles,
+      total: testFiles.length
+    });
+
+  } catch (error: any) {
+    console.error('Error listing section tests:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * GET /api/testseries/:seriesFolder/:sectionFolder/:testId - Get decompressed test paper
+ */
+router.get('/:seriesFolder/:sectionFolder/:testId', async (req: Request, res: Response) => {
+  try {
+    const { seriesFolder, sectionFolder, testId } = req.params;
+    const compressedPath = path.join(TESTSERIES_DIR, seriesFolder, sectionFolder, `${testId}.json.gz`);
+    const uncompressedPath = path.join(TESTSERIES_DIR, seriesFolder, sectionFolder, `${testId}.json`);
+
+    let filePath: string;
+    let needsDecompression = false;
+
+    // Check for compressed file first
+    if (fs.existsSync(compressedPath)) {
+      filePath = compressedPath;
+      needsDecompression = true;
+    } else if (fs.existsSync(uncompressedPath)) {
+      filePath = uncompressedPath;
+    } else {
+      return res.status(404).json({ error: 'Test paper not found' });
+    }
+
+    if (needsDecompression) {
+      // Read and decompress
+      const compressedData = fs.readFileSync(filePath);
+      const decompressedData = await gunzip(compressedData);
+      const jsonString = decompressedData.toString('utf-8');
+      const testData = JSON.parse(jsonString);
+
+      res.json(testData);
+    } else {
+      // Stream uncompressed file
+      res.setHeader('Content-Type', 'application/json');
+      fs.createReadStream(filePath).pipe(res);
+    }
+
+  } catch (error: any) {
+    console.error('Error serving test paper:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+export default router;

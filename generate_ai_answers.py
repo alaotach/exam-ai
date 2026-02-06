@@ -2,6 +2,7 @@ import json
 import os
 import requests
 import time
+import argparse
 from datetime import datetime, timedelta
 from pathlib import Path
 from dotenv import load_dotenv
@@ -529,4 +530,27 @@ if __name__ == "__main__":
         print("Please create a .env file with: HACKCLUB_API_KEY=your-api-key")
         exit(1)
     
-    main()
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Generate AI answers for test papers')
+    parser.add_argument('--file', type=str, help='Process a specific test file instead of all files')
+    parser.add_argument('--dir', type=str, help='Override input directory (default: SSC_CGL)')
+    parser.add_argument('--output', type=str, help='Override output directory (default: ai_generated_answers)')
+    
+    args = parser.parse_args()
+    
+    # Override directories if specified
+    if args.dir:
+        TESTBOOK_DIR = args.dir
+    if args.output:
+        OUTPUT_DIR = args.output
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+    
+    # Process single file if specified
+    if args.file:
+        print(f"Processing single file: {args.file}")
+        result = process_test_paper(args.file)
+        exit(0 if result else 1)
+    else:
+        # Process all files
+        main()
+

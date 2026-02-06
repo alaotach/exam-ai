@@ -622,6 +622,14 @@ class SSCCGLService {
   getAttempt(attemptId: string): TestAttempt | undefined {
     return this.attempts.get(attemptId);
   }
+
+  /**
+   * Store a paper in memory for immediate use (for testseries tests)
+   */
+  async storePaperInMemory(testData: any): Promise<void> {
+    const parsed = this.parseTestPaper(testData, null);
+    this.parsedTests.set(parsed.id, parsed);
+  }
 }
 
 export default new SSCCGLService();

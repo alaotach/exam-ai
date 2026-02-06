@@ -28,6 +28,9 @@ export interface TestResult extends TestAnalytics {
   date: string; // ISO string
   testTitle?: string;
   id?: string; // Firestore ID
+  answerGenerationStatus?: 'not-needed' | 'pending' | 'in-progress' | 'completed' | 'failed';
+  evaluationStatus?: 'pending' | 'completed';
+  answerGenerationError?: string;
 }
 
 export const TestProgressService = {
@@ -148,6 +151,37 @@ export const TestProgressService = {
     } catch (e) {
       console.error('Failed to get test result', e);
       return undefined;
+    }
+  },
+
+  // Update answer generation status for a test result
+  async updateAnswerGenerationStatus(
+    attemptId: string, 
+    status: 'pending' | 'in-progress' | 'completed' | 'failed',
+    error?: string
+  ): Promise<void> {
+    try {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const docRef = doc(db, 'users', user.uid, 'history', attemptId);
+      const updateData: any = { 
+        answerGenerationStatus: status,
+        lastUpdated: Date.now()
+      };
+      
+      if (error) {
+        updateData.answerGenerationError = error;
+      }
+
+      // If completed, also update evaluation status
+      if (status === 'completed') {
+        updateData.evaluationStatus = 'completed';
+      }
+
+      await setDoc(docRef, updateData, { merge: true });
+    } catch (e) {
+      console.error('Failed to update answer generation status', e);
     }
   }
 };

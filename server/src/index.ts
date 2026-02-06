@@ -22,6 +22,9 @@ import testRoutes from './routes/tests';
 import statsRoutes from './routes/stats';
 import processingRoutes from './routes/processing';
 import paperRoutes from './routes/papers';
+import testseriesRoutes from './routes/testseries';
+import answerGenerationRoutes from './routes/answer-generation';
+import reportsRoutes from './routes/reports';
 
 // Initialize Express app
 const app: Express = express();
@@ -61,6 +64,9 @@ app.use('/api/tests', testRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/processing', processingRoutes);
 app.use('/api/papers', paperRoutes);
+app.use('/api/testseries', testseriesRoutes);
+app.use('/api/answers', answerGenerationRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

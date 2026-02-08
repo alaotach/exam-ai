@@ -13,6 +13,9 @@ const DATA_ROOT = path.resolve(__dirname, '../../../');
 const PYTHON_SCRIPT = path.join(DATA_ROOT, 'generate_ai_answers.py');
 const ANSWERS_DIR = path.join(DATA_ROOT, 'ai_generated_answers');
 
+// Python command (python3 on Linux, python on Windows)
+const PYTHON_CMD = process.env.PYTHON_CMD || (process.platform === 'win32' ? 'python' : 'python3');
+
 // In-memory queue for tracking generation status
 // In production, use Redis or a database
 const generationQueue: Map<string, {
@@ -219,7 +222,7 @@ async function generateAnswersInBackground(testId: string, testFilePath: string)
     }
 
     // Run Python script for this specific test
-    const pythonProcess = spawn('python', [
+    const pythonProcess = spawn(PYTHON_CMD, [
       PYTHON_SCRIPT,
       '--file', tempTestFile
     ]);

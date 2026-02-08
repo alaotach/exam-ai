@@ -207,8 +207,16 @@ async function generateAnswersInBackground(testId: string, testFilePath: string)
       fs.mkdirSync(tempDir, { recursive: true });
     }
 
-    // Copy test file to temp location
-    fs.copyFileSync(testFilePath, tempTestFile);
+    // Decompress if needed and copy to temp location
+    const fullTestFilePath = path.join(DATA_ROOT, testFilePath);
+    if (testFilePath.endsWith('.json.gz')) {
+      console.log(`[Answer Gen] Decompressing ${testFilePath}...`);
+      const compressedData = fs.readFileSync(fullTestFilePath);
+      const decompressedData = await gunzip(compressedData);
+      fs.writeFileSync(tempTestFile, decompressedData);
+    } else {
+      fs.copyFileSync(fullTestFilePath, tempTestFile);
+    }
 
     // Run Python script for this specific test
     const pythonProcess = spawn('python', [

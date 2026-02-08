@@ -172,6 +172,7 @@ export interface SectionAnalytics {
 class SSCCGLService {
   private papers: Map<string, ParsedMockTest> = new Map();
   private attempts: Map<string, TestAttempt> = new Map();
+  private parsedTests: Map<string, ParsedMockTest> = new Map(); // For testseries tests
 
   /**
    * Fetch list of available papers from server

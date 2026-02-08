@@ -120,20 +120,35 @@ router.get('/:seriesFolder/:sectionFolder', (req: Request, res: Response) => {
 
     // Get available test files
     const testFiles = fs.readdirSync(sectionPath)
-      .filter(f => f.endsWith('.json.gz'))
+      .filter(f => f.endsWith('.json.gz') || f.endsWith('.json'))
       .map(filename => {
-        const testId = filename.replace('.json.gz', '');
-        const testInfo = sectionInfo.tests?.find((t: any) => t.id === testId) || {
-          id: testId,
-          title: testId.replace(/_/g, ' ')
-        };
+        // Remove extension to get the ID
+        const testId = filename.replace(/\.(json\.gz|json)$/, '');
         
-        return {
-          ...testInfo,
-          filename: filename,
-          compressed: true
-        };
+        // Try to find matching test info from _section_info.json
+        const testInfo = sectionInfo.tests?.find((t: any) => 
+          t.id === testId || t.filename === filename
+        );
+        
+        if (testInfo) {
+          return {
+            ...testInfo,
+            id: testId, // Use actual filename (without extension) as ID
+            filename: filename,
+            compressed: filename.endsWith('.gz')
+          };
+        } else {
+          // No info found, create basic info from filename
+          return {
+            id: testId,
+            title: testId.replace(/_/g, ' '),
+            filename: filename,
+            compressed: filename.endsWith('.gz')
+          };
+        }
       });
+
+    console.log(`[TestSeries] Section ${sectionFolder}: Found ${testFiles.length} test files`);
 
     res.json({
       section: sectionInfo,
@@ -156,27 +171,43 @@ router.get('/:seriesFolder/:sectionFolder/:testId', async (req: Request, res: Re
     
     console.log(`[TestSeries] Fetching test: ${seriesFolder}/${sectionFolder}/${testId}`);
     
-    const compressedPath = path.join(TESTSERIES_DIR, seriesFolder, sectionFolder, `${testId}.json.gz`);
-    const uncompressedPath = path.join(TESTSERIES_DIR, seriesFolder, sectionFolder, `${testId}.json`);
-
-    console.log(`[TestSeries] Checking paths:`);
-    console.log(`  - Compressed: ${compressedPath}`);
-    console.log(`  - Uncompressed: ${uncompressedPath}`);
-
-    let filePath: string;
-    let needsDecompression = false;
-
-    // Check for compressed file first
-    if (fs.existsSync(compressedPath)) {
-      filePath = compressedPath;
-      needsDecompression = true;
-      console.log(`[TestSeries] Found compressed file`);
-    } else if (fs.existsSync(uncompressedPath)) {
-      filePath = uncompressedPath;
-      console.log(`[TestSeries] Found uncompressed file`);
+    const sectionPath = path.join(TESTSERIES_DIR, seriesFolder, sectionFolder);
+    
+    // List all files in the section to help debug
+    if (fs.existsSync(sectionPath)) {
+      const files = fs.readdirSync(sectionPath);
+      console.log(`[TestSeries] Files in section:`, files.slice(0, 5)); // Show first 5 files
     } else {
-      console.error(`[TestSeries] Test paper not found at either path`);
-      return res.status(404).json({ error: 'Test paper not found' });
+      console.error(`[TestSeries] Section path does not exist: ${sectionPath}`);
+      return res.status(404).json({ error: 'Section not found' });
+    }
+    
+    // Try multiple filename patterns
+    const possibleFilenames = [
+      `${testId}.json.gz`,
+      `${testId}.json`,
+    ];
+    
+    let filePath: string | null = null;
+    let needsDecompression = false;
+    
+    for (const filename of possibleFilenames) {
+      const fullPath = path.join(sectionPath, filename);
+      if (fs.existsSync(fullPath)) {
+        filePath = fullPath;
+        needsDecompression = filename.endsWith('.gz');
+        console.log(`[TestSeries] Found file: ${filename}`);
+        break;
+      }
+    }
+    
+    if (!filePath) {
+      console.error(`[TestSeries] Test paper not found. Tried: ${possibleFilenames.join(', ')}`);
+      return res.status(404).json({ 
+        error: 'Test paper not found',
+        testId,
+        triedFiles: possibleFilenames
+      });
     }
 
     if (needsDecompression) {

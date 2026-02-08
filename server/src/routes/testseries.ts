@@ -12,13 +12,19 @@ const DATA_ROOT = path.resolve(__dirname, '../../../');
 const TESTSERIES_DIR = path.join(DATA_ROOT, 'testseries');
 
 /**
- * GET /api/testseries - List all test series with their sections
+ * GET /api/testseries - List all test series with their sections (paginated)
+ * Query params: page (default 1), limit (default 20)
  */
 router.get('/', (req: Request, res: Response) => {
   try {
     if (!fs.existsSync(TESTSERIES_DIR)) {
       return res.status(500).json({ error: 'Testseries directory not found', path: TESTSERIES_DIR });
     }
+
+    // Pagination
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const skip = (page - 1) * limit;
 
     const testSeriesFolders = fs.readdirSync(TESTSERIES_DIR, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
@@ -38,37 +44,25 @@ router.get('/', (req: Request, res: Response) => {
 
       for (const sectionFolder of sectionFolders) {
         const sectionPath = path.join(seriesPath, sectionFolder);
-        const infoFilePath = path.join(sectionPath, '_section_info.json');
-
-        let sectionInfo: any = {
+        
+        // Only load minimal section info - don't read _section_info.json
+        // to avoid loading thousands of test metadata objects
+        const sectionInfo: any = {
           id: sectionFolder,
-          title: sectionFolder,
-          tests: []
+          folderName: sectionFolder,
+          title: sectionFolder.replace(/_/g, ' ')
         };
 
-        // Read section info if available
-        if (fs.existsSync(infoFilePath)) {
-          try {
-            const infoContent = fs.readFileSync(infoFilePath, 'utf-8');
-            const info = JSON.parse(infoContent);
-            sectionInfo = {
-              id: info.id || sectionFolder,
-              folderName: sectionFolder, // Keep actual folder name
-              title: info.title || sectionFolder,
-              tests: info.tests || []
-            };
-          } catch (err) {
-            console.error(`Error reading section info for ${sectionFolder}:`, err);
-          }
-        } else {
-          sectionInfo.folderName = sectionFolder; // Add folder name if no info file
+        // Only count test files, don't load metadata
+        try {
+          const testFiles = fs.readdirSync(sectionPath)
+            .filter(f => f.endsWith('.json.gz') || f.endsWith('.json'));
+          sectionInfo.availableTests = testFiles.length;
+        } catch (err) {
+          console.error(`Error counting tests in ${sectionFolder}:`, err);
+          sectionInfo.availableTests = 0;
         }
-
-        // Count available test files
-        const testFiles = fs.readdirSync(sectionPath)
-          .filter(f => f.endsWith('.json.gz'));
         
-        sectionInfo.availableTests = testFiles.length;
         sections.push(sectionInfo);
       }
 
@@ -86,9 +80,17 @@ router.get('/', (req: Request, res: Response) => {
       });
     }
 
+    // Apply pagination
+    const totalSeries = testSeriesList.length;
+    const paginatedSeries = testSeriesList.slice(skip, skip + limit);
+
     res.json({
-      total: testSeriesList.length,
-      testSeries: testSeriesList
+      total: totalSeries,
+      page,
+      limit,
+      totalPages: Math.ceil(totalSeries / limit),
+      hasMore: skip + limit < totalSeries,
+      testSeries: paginatedSeries
     });
 
   } catch (error: any) {

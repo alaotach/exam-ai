@@ -14,11 +14,13 @@ import { ChevronLeft } from 'lucide-react-native';
 import TestSeriesService, { Section, Test } from '@/services/testseries-service';
 import SSCCGLService from '@/services/ssc-cgl-service';
 
+type SectionWithTests = Section & { tests?: Test[] };
+
 export default function TestSeriesDetailScreen() {
   const params = useLocalSearchParams();
   const { seriesFolder, seriesTitle } = params;
 
-  const [sections, setSections] = useState<Section[]>([]);
+  const [sections, setSections] = useState<SectionWithTests[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
 
@@ -43,12 +45,29 @@ export default function TestSeriesDetailScreen() {
     }
   };
 
-  const toggleSection = (sectionId: string) => {
+  const toggleSection = async (sectionId: string) => {
     const newExpanded = new Set(expandedSections);
     if (newExpanded.has(sectionId)) {
       newExpanded.delete(sectionId);
     } else {
       newExpanded.add(sectionId);
+      
+      // Load tests for this section if not already loaded
+      const section = sections.find(s => s.id === sectionId || s.folderName === sectionId);
+      if (section && !section.tests) {
+        try {
+          const { tests } = await TestSeriesService.fetchSectionTests(
+            seriesFolder as string,
+            section.folderName
+          );
+          setSections(prev => prev.map(s => 
+            (s.id === sectionId || s.folderName === sectionId) ? { ...s, tests } : s
+          ));
+        } catch (error) {
+          console.error('Error loading section tests:', error);
+          Alert.alert('Error', 'Failed to load tests for this section');
+        }
+      }
     }
     setExpandedSections(newExpanded);
   };

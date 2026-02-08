@@ -16,7 +16,6 @@ export interface Section {
   id: string;
   folderName: string; // Actual folder name on server
   title: string;
-  tests: Test[];
   availableTests: number;
 }
 
@@ -55,11 +54,34 @@ export interface AnswerGenerationStatus {
 
 const TestSeriesService = {
   /**
-   * Fetch all test series
+   * Fetch test series with pagination
+   */
+  async fetchTestSeries(page: number = 1, limit: number = 20): Promise<{
+    testSeries: TestSeries[];
+    total: number;
+    hasMore: boolean;
+    page: number;
+    totalPages: number;
+  }> {
+    try {
+      const response = await fetch(`${SERVER_URL}/api/testseries?page=${page}&limit=${limit}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch test series: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching test series:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Fetch all test series (for backward compatibility)
    */
   async fetchAllTestSeries(): Promise<TestSeries[]> {
     try {
-      const response = await fetch(`${SERVER_URL}/api/testseries`);
+      const response = await fetch(`${SERVER_URL}/api/testseries?limit=9999`);
       if (!response.ok) {
         throw new Error(`Failed to fetch test series: ${response.statusText}`);
       }

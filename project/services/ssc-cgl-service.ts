@@ -627,7 +627,7 @@ class SSCCGLService {
    * Store a paper in memory for immediate use (for testseries tests)
    */
   async storePaperInMemory(testData: any): Promise<void> {
-    const parsed = this.parseTestPaper(testData, null);
+    const parsed = await this.loadPaper(testData, undefined);
     this.parsedTests.set(parsed.id, parsed);
   }
 }

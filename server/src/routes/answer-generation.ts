@@ -46,8 +46,23 @@ router.post('/generate', async (req: Request, res: Response) => {
       });
     }
 
+    // Resolve actual file path if testFilePath doesn't include title prefix
+    let actualTestFilePath = testFilePath;
+    if (!fs.existsSync(path.join(DATA_ROOT, testFilePath))) {
+      // Try to find file with title prefix - extract directory and look for _testId pattern
+      const testFileDir = path.dirname(path.join(DATA_ROOT, testFilePath));
+      if (fs.existsSync(testFileDir)) {
+        const files = fs.readdirSync(testFileDir);
+        const matchingFile = files.find(f => f.endsWith(`_${testId}.json.gz`) || f === `${testId}.json.gz`);
+        if (matchingFile) {
+          actualTestFilePath = path.join(path.dirname(testFilePath), matchingFile);
+          console.log(`[Answer Gen] Resolved file: ${matchingFile}`);
+        }
+      }
+    }
+
     // Check if answers already exist (both .json and .json.gz)
-    const answerFileName = path.basename(testFilePath).replace('.json.gz', '.json');
+    const answerFileName = path.basename(actualTestFilePath).replace('.json.gz', '.json');
     const answerFilePath = path.join(ANSWERS_DIR, answerFileName);
     const answerFilePathGz = path.join(ANSWERS_DIR, answerFileName + '.gz');
 
@@ -64,13 +79,13 @@ router.post('/generate', async (req: Request, res: Response) => {
     generationQueue.set(testId, {
       status: 'pending',
       testId,
-      testFilePath,
+      testFilePath: actualTestFilePath,
       progress: 0,
       startedAt: new Date().toISOString()
     });
 
     // Start background generation (don't await)
-    generateAnswersInBackground(testId, testFilePath);
+    generateAnswersInBackground(testId, actualTestFilePath);
 
     res.json({
       testId,

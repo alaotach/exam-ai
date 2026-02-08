@@ -3,7 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
+  FlatList,
   TouchableOpacity,
   Alert,
   ActivityIndicator,
@@ -18,7 +18,11 @@ export default function TestSeriesBrowseScreen() {
   const [testSeries, setTestSeries] = useState<TestSeries[]>([]);
   const [filteredSeries, setFilteredSeries] = useState<TestSeries[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     loadTestSeries();
@@ -35,17 +39,37 @@ export default function TestSeriesBrowseScreen() {
     }
   }, [searchQuery, testSeries]);
 
-  const loadTestSeries = async () => {
+  const loadTestSeries = async (page: number = 1, append: boolean = false) => {
     try {
-      setIsLoading(true);
-      const series = await TestSeriesService.fetchAllTestSeries();
-      setTestSeries(series);
-      setFilteredSeries(series);
+      if (page === 1) {
+        setIsLoading(true);
+      } else {
+        setIsLoadingMore(true);
+      }
+      
+      const data = await TestSeriesService.fetchTestSeries(page, 20);
+      
+      const newSeries = append ? [...testSeries, ...data.testSeries] : data.testSeries;
+      setTestSeries(newSeries);
+      setFilteredSeries(searchQuery ? newSeries.filter((s) =>
+        s.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ) : newSeries);
+      
+      setHasMore(data.hasMore);
+      setCurrentPage(page);
+      setTotalCount(data.total);
     } catch (error) {
       console.error('Error loading test series:', error);
       Alert.alert('Error', 'Failed to load test series');
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
+    }
+  };
+
+  const loadMore = () => {
+    if (!isLoadingMore && hasMore && searchQuery === '') {
+      loadTestSeries(currentPage + 1, true);
     }
   };
 
@@ -87,14 +111,19 @@ export default function TestSeriesBrowseScreen() {
           <Text style={styles.loadingText}>Loading test series...</Text>
         </View>
       ) : (
-        <ScrollView style={styles.scrollView}>
-          <Text style={styles.countText}>
-            {filteredSeries.length} test series • {filteredSeries.reduce((sum, s) => sum + s.totalTests, 0)} tests available
-          </Text>
-
-          {filteredSeries.map((series) => (
+        <FlatList
+          data={filteredSeries}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={filteredSeries.length === 0 ? styles.scrollView : undefined}
+          ListHeaderComponent={
+            filteredSeries.length > 0 ? (
+              <Text style={styles.countText}>
+                {filteredSeries.length} of {totalCount} test series • {filteredSeries.reduce((sum, s) => sum + s.totalTests, 0)} tests
+              </Text>
+            ) : null
+          }
+          renderItem={({ item: series }) => (
             <TouchableOpacity
-              key={series.id}
               style={styles.seriesCard}
               onPress={() => handleSeriesPress(series)}
             >
@@ -120,15 +149,26 @@ export default function TestSeriesBrowseScreen() {
                 <Text style={styles.exploreText}>Tap to explore →</Text>
               </View>
             </TouchableOpacity>
-          ))}
-
-          {filteredSeries.length === 0 && !isLoading && (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No test series found</Text>
-              <Text style={styles.emptySubtext}>Try a different search term</Text>
-            </View>
           )}
-        </ScrollView>
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.3}
+          ListEmptyComponent={
+            !isLoading ? (
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>No test series found</Text>
+                <Text style={styles.emptySubtext}>Try a different search term</Text>
+              </View>
+            ) : null
+          }
+          ListFooterComponent={
+            isLoadingMore ? (
+              <View style={styles.footerLoader}>
+                <ActivityIndicator size="small" color="#667eea" />
+                <Text style={styles.loadingMoreText}>Loading more...</Text>
+              </View>
+            ) : null
+          }
+        />
       )}
     </SafeAreaView>
   );
@@ -267,5 +307,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     color: '#8E8E93',
     marginTop: 8,
+  },
+  footerLoader: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  loadingMoreText: {
+    marginLeft: 10,
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+    color: '#667eea',
   },
 });

@@ -108,7 +108,7 @@ Provide ONLY the translated text without any explanation or comments.`;
         throw new Error(`Translation API error: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as any;
       return data.choices[0]?.message?.content?.trim() || '';
     } catch (error) {
       console.error('Translation API error:', error);

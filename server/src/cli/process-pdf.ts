@@ -67,7 +67,7 @@ async function main() {
       // Show errors if any
       if (result.errors && result.errors.length > 0) {
         console.log('\n⚠️  Errors encountered:');
-        result.errors.forEach(err => {
+        result.errors.forEach((err: any) => {
           console.log(`  - [${err.stage}] ${err.message}`);
         });
       }
@@ -82,7 +82,7 @@ async function main() {
       console.error('\n❌ Processing failed completely');
       if (result.errors && result.errors.length > 0) {
         console.log('\n🔍 Errors:');
-        result.errors.forEach(err => {
+        result.errors.forEach((err: any) => {
           console.log(`  - [${err.stage}] ${err.message}`);
         });
       }

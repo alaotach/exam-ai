@@ -117,8 +117,8 @@ router.get('/status/:testId', (req: Request, res: Response) => {
     }
 
     res.json({
-      testId,
       ...status,
+      testId,
       answersAvailable: status.status === 'completed'
     });
 

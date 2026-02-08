@@ -35,7 +35,7 @@ export class PDFProcessingPipeline {
     this.extractionService = new QuestionExtractionService(this.vlmService);
     this.translationService = new TranslationService(this.vlmService, {
       apiKey: config.vlm.apiKey,
-      endpoint: config.vlm.endpoints?.translation,
+      endpoint: config.vlm.endpoint,
       translationModel: config.vlm.translationModel,
     });
     this.exportService = new DataExportService(config.export);
@@ -156,7 +156,7 @@ export class PDFProcessingPipeline {
 
       return job;
     } catch (error) {
-      job.status = 'partial_failure';
+      job.status = 'failed';
       
       // Initialize errors array if not exists
       if (!job.errors) {
@@ -318,6 +318,7 @@ export class PDFProcessingPipeline {
       currentStage: 'ingestion',
       progress: 0,
       totalPages: 0,
+      errors: [],
       processedPages: 0,
       startTime: new Date(),
     };
@@ -422,27 +423,29 @@ export class PDFProcessingPipeline {
       
       // Create cache directory if needed
       const cacheDir = this.config.processing.cacheDirectory;
-      try {
-        await fs.mkdir(cacheDir, { recursive: true });
-      } catch (error) {
-        // Directory might already exist
+      if (cacheDir) {
+        try {
+          await fs.mkdir(cacheDir, { recursive: true });
+        } catch (error) {
+          // Directory might already exist
+        }
+      
+        // Save to cache file
+        const cacheFile = path.join(cacheDir, `job_${job.jobId}_progress.json`);
+        const progressData = {
+          jobId: job.jobId,
+          status: job.status,
+          currentStage: job.currentStage,
+          progress: job.progress,
+          processedPages: job.processedPages,
+          totalPages: job.totalPages,
+          timestamp: new Date().toISOString(),
+          data
+        };
+        
+        await fs.writeFile(cacheFile, JSON.stringify(progressData, null, 2), 'utf-8');
+        console.log(`💾 Progress saved (${job.processedPages}/${job.totalPages} pages)`);
       }
-      
-      // Save to cache file
-      const cacheFile = path.join(cacheDir, `job_${job.jobId}_progress.json`);
-      const progressData = {
-        jobId: job.jobId,
-        status: job.status,
-        currentStage: job.currentStage,
-        progress: job.progress,
-        processedPages: job.processedPages,
-        totalPages: job.totalPages,
-        timestamp: new Date().toISOString(),
-        data
-      };
-      
-      await fs.writeFile(cacheFile, JSON.stringify(progressData, null, 2), 'utf-8');
-      console.log(`💾 Progress saved (${job.processedPages}/${job.totalPages} pages)`);
     } catch (error) {
       // Don't fail the job if saving fails
       console.warn('⚠️  Failed to save intermediate results:', error);

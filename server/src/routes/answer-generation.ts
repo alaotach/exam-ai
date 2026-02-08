@@ -94,13 +94,13 @@ router.get('/status/:testId', (req: Request, res: Response) => {
 
     const status = generationQueue.get(testId);
     
-    if (!status) { (both .json and .json.gz)
+    // Check if status not in queue - check for completed files (both .json and .json.gz)
+    if (!status) {
       const testFileName = `${testId}.json`;
       const answerFilePath = path.join(ANSWERS_DIR, testFileName);
       const answerFilePathGz = path.join(ANSWERS_DIR, testFileName + '.gz');
       
-      if (fs.existsSync(answerFilePath) || fs.existsSync(answerFilePathGz
-      if (fs.existsSync(answerFilePath)) {
+      if (fs.existsSync(answerFilePath) || fs.existsSync(answerFilePathGz)) {
         return res.json({
           testId,
           status: 'completed',
@@ -128,7 +128,8 @@ router.get('/status/:testId', (req: Request, res: Response) => {
   }
 });
 
-/** (supports both .json and .json.gz)
+/**
+ * GET /api/answers/:testFileName - Get generated answers (supports both .json and .json.gz)
  */
 router.get('/:testFileName', async (req: Request, res: Response) => {
   try {
@@ -159,8 +160,7 @@ router.get('/:testFileName', async (req: Request, res: Response) => {
     } else {
       // Stream uncompressed file
       fs.createReadStream(filePath).pipe(res);
-    }n');
-    fs.createReadStream(answerFilePath).pipe(res);
+    }
 
   } catch (error: any) {
     console.error('Error serving answers:', error);
@@ -202,7 +202,23 @@ async function generateAnswersInBackground(testId: string, testFilePath: string)
     ]);
 
     let output = '';
-    let errorOutput = '';async (code) => {
+    let errorOutput = '';
+
+    // Update progress based on output
+    pythonProcess.stdout.on('data', (data) => {
+      if (data.toString().includes('Processing')) {
+        queueItem.progress = 30;
+      } else if (data.toString().includes('Section:')) {
+        queueItem.progress = Math.min(queueItem.progress + 10, 80);
+      }
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+      console.error(`[Answer Gen Error ${testId}]:`, data.toString().trim());
+    });
+
+    pythonProcess.on('close', async (code) => {
       // Clean up temp file
       if (fs.existsSync(tempTestFile)) {
         fs.unlinkSync(tempTestFile);
@@ -230,26 +246,7 @@ async function generateAnswersInBackground(testId: string, testFilePath: string)
           console.error(`Failed to compress answer file for ${testId}:`, compressError);
           // Continue anyway, file exists uncompressed
         }
-s based on output
-      if (data.toString().includes('Processing')) {
-        queueItem.progress = 30;
-      } else if (data.toString().includes('Section:')) {
-        queueItem.progress = Math.min(queueItem.progress + 10, 80);
-      }
-    });
 
-    pythonProcess.stderr.on('data', (data) => {
-      errorOutput += data.toString();
-      console.error(`[Answer Gen Error ${testId}]:`, data.toString().trim());
-    });
-
-    pythonProcess.on('close', (code) => {
-      // Clean up temp file
-      if (fs.existsSync(tempTestFile)) {
-        fs.unlinkSync(tempTestFile);
-      }
-
-      if (code === 0) {
         queueItem.status = 'completed';
         queueItem.progress = 100;
         queueItem.completedAt = new Date().toISOString();

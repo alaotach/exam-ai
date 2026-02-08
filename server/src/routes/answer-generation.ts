@@ -13,8 +13,21 @@ const DATA_ROOT = path.resolve(__dirname, '../../../');
 const PYTHON_SCRIPT = path.join(DATA_ROOT, 'generate_ai_answers.py');
 const ANSWERS_DIR = path.join(DATA_ROOT, 'ai_generated_answers');
 
-// Python command (python3 on Linux, python on Windows)
-const PYTHON_CMD = process.env.PYTHON_CMD || (process.platform === 'win32' ? 'python' : 'python3');
+// Python command - check for venv first, then fall back to system python
+const getVenvPython = () => {
+  const venvPython = process.platform === 'win32' 
+    ? path.join(DATA_ROOT, 'venv', 'Scripts', 'python.exe')
+    : path.join(DATA_ROOT, 'venv', 'bin', 'python3');
+  
+  if (fs.existsSync(venvPython)) {
+    return venvPython;
+  }
+  
+  // Fall back to system python
+  return process.env.PYTHON_CMD || (process.platform === 'win32' ? 'python' : 'python3');
+};
+
+const PYTHON_CMD = getVenvPython();
 
 // In-memory queue for tracking generation status
 // In production, use Redis or a database

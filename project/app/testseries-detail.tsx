@@ -23,6 +23,7 @@ export default function TestSeriesDetailScreen() {
   const [sections, setSections] = useState<SectionWithTests[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
+  const [loadingTestId, setLoadingTestId] = useState<string | null>(null);
 
   useEffect(() => {
     loadSections();
@@ -74,8 +75,7 @@ export default function TestSeriesDetailScreen() {
 
   const handleTestPress = async (sectionFolder: string, test: Test) => {
     try {
-      // Show loading
-      Alert.alert('Loading Test', 'Please wait...');
+      setLoadingTestId(test.id);
 
       // Fetch the test paper
       const testPaper = await TestSeriesService.fetchTestPaper(
@@ -100,33 +100,19 @@ export default function TestSeriesDetailScreen() {
         })
         .catch((err) => console.error('Failed to check answer status:', err));
 
-      // Convert to SSC CGL format and load into service
-      const convertedTest = {
-        id: test.id,
-        title: test.title || testPaper.data.title || 'Test',
-        sections: testPaper.data.sections.map((section: any) => ({
-          title: section.title,
-          questions: section.questions.map((q: any) => ({
-            ...q,
-            hasAIAnswer: false, // Will be checked when submitting
-          })),
-        })),
-        totalQuestions: testPaper.data.sections.reduce(
-          (sum: number, s: any) => sum + s.questions.length,
-          0
-        ),
-        duration: test.duration || testPaper.data.totalTime || 60,
-        totalMarks: test.totalMark || testPaper.data.totalMarks || 100,
-      };
+      // Store test paper in SSC CGL service
+      // The testPaper already has the correct format from server
+      console.log('Storing test paper with ID:', testPaper.data?._id || testPaper._id, 'Expected:', test.id);
+      await SSCCGLService.storePaperInMemory(testPaper);
 
-      // Store in SSC CGL service
-      await SSCCGLService.storePaperInMemory(convertedTest);
-
-      // Navigate to test
+      // Navigate to test - use the ID from the stored paper
+      const storedId = testPaper.data?._id || testPaper._id || test.id;
+      console.log('Navigating to test with ID:', storedId);
+      
       router.push({
         pathname: '/mock-test',
         params: {
-          testId: test.id,
+          testId: storedId,
           source: 'testseries',
           seriesFolder: seriesFolder,
           sectionFolder: sectionFolder,
@@ -135,6 +121,8 @@ export default function TestSeriesDetailScreen() {
     } catch (error) {
       console.error('Error starting test:', error);
       Alert.alert('Error', 'Failed to start test: ' + (error as any).message);
+    } finally {
+      setLoadingTestId(null);
     }
   };
 
@@ -192,6 +180,7 @@ export default function TestSeriesDetailScreen() {
                     key={test.id}
                     style={styles.testItem}
                     onPress={() => handleTestPress(section.folderName || section.id, test)}
+                    disabled={loadingTestId === test.id}
                   >
                     <View style={styles.testInfo}>
                       <Text style={styles.testTitle} numberOfLines={2}>
@@ -216,9 +205,13 @@ export default function TestSeriesDetailScreen() {
                         )}
                       </View>
                     </View>
-                    <View style={styles.startButton}>
-                      <Text style={styles.startButtonText}>Start</Text>
-                    </View>
+                    {loadingTestId === test.id ? (
+                      <ActivityIndicator size="small" color="#667eea" />
+                    ) : (
+                      <View style={styles.startButton}>
+                        <Text style={styles.startButtonText}>Start</Text>
+                      </View>
+                    )}
                   </TouchableOpacity>
                 ))}
                 {section.tests.length > 10 && (

@@ -401,7 +401,11 @@ class SSCCGLService {
    * Get paper by ID
    */
   getPaper(paperId: string): ParsedMockTest | undefined {
-    return this.papers.get(paperId);
+    // Check both regular papers and testseries tests
+    const paper = this.papers.get(paperId) || this.parsedTests.get(paperId);
+    console.log('[SSCCGLService] getPaper:', paperId, 'Found:', !!paper, 
+      'Available tests:', Array.from(this.parsedTests.keys()));
+    return paper;
   }
 
   /**
@@ -629,6 +633,7 @@ class SSCCGLService {
    */
   async storePaperInMemory(testData: any): Promise<void> {
     const parsed = await this.loadPaper(testData, undefined);
+    console.log('[SSCCGLService] Storing test with ID:', parsed.id, 'Title:', parsed.title);
     this.parsedTests.set(parsed.id, parsed);
   }
 }

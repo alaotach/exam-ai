@@ -190,5 +190,40 @@ export const TestProgressService = {
     } catch (e) {
       console.error('❌ Failed to update answer generation status:', e);
     }
+  },
+
+  /**
+   * Re-evaluate a test with AI-generated answers
+   */
+  async reevaluateTest(attemptId: string, aiAnswers: any): Promise<TestResult | null> {
+    try {
+      const user = auth.currentUser;
+      if (!user) return null;
+
+      // Get original test result
+      const testResult = await this.getTestResult(attemptId);
+      if (!testResult) return null;
+
+      console.log('Re-evaluating test:', attemptId);
+      
+      // TODO: Implement actual re-evaluation logic
+      // This would need to fetch the user's answers and compare with AI answers
+      // For now, just update the status
+      
+      const docRef = doc(db, 'users', user.uid, 'history', attemptId);
+      const updateData = {
+        evaluationStatus: 'completed',
+        answerGenerationStatus: 'completed',
+        lastUpdated: Date.now()
+      };
+
+      await setDoc(docRef, updateData, { merge: true });
+      
+      // Return updated result
+      return await this.getTestResult(attemptId);
+    } catch (e) {
+      console.error('Failed to re-evaluate test:', e);
+      return null;
+    }
   }
 };

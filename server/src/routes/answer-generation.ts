@@ -164,6 +164,44 @@ router.get('/status/:testId', (req: Request, res: Response) => {
       });
     }
 
+    // If status is 'completed', verify file actually exists
+    if (status.status === 'completed') {
+      const possibleFiles = [];
+      
+      if (fs.existsSync(ANSWERS_DIR)) {
+        const allFiles = fs.readdirSync(ANSWERS_DIR);
+        
+        for (const file of allFiles) {
+          if (file.endsWith(`_${testId}.json`) || 
+              file.endsWith(`_${testId}.json.gz`) ||
+              file === `${testId}.json` || 
+              file === `${testId}.json.gz`) {
+            possibleFiles.push(file);
+          }
+        }
+      }
+      
+      // If marked completed but no file exists, it actually failed
+      if (possibleFiles.length === 0) {
+        console.log(`[Answer Status] Marked completed but no file found for ${testId}`);
+        return res.json({
+          ...status,
+          testId,
+          status: 'failed',
+          answersAvailable: false,
+          error: 'Generation completed but output file not found'
+        });
+      }
+      
+      // File exists, return success
+      return res.json({
+        ...status,
+        testId,
+        answersAvailable: true,
+        answerFile: possibleFiles[0]
+      });
+    }
+
     res.json({
       ...status,
       testId,
@@ -252,7 +290,9 @@ async function generateAnswersInBackground(testId: string, testFilePath: string)
     }
 
     // Create a temporary file with just this test for processing
-    const tempTestFile = path.join(DATA_ROOT, 'temp', `temp_${testId}.json`);
+    // Use original filename to preserve title for output
+    const originalFileName = path.basename(testFilePath, '.json.gz').replace('.json', '');
+    const tempTestFile = path.join(DATA_ROOT, 'temp', `${originalFileName}.json`);
     const tempDir = path.dirname(tempTestFile);
     
     if (!fs.existsSync(tempDir)) {
@@ -269,6 +309,8 @@ async function generateAnswersInBackground(testId: string, testFilePath: string)
     } else {
       fs.copyFileSync(fullTestFilePath, tempTestFile);
     }
+
+    console.log(`[Answer Gen] Processing ${originalFileName}...`);
 
     // Run Python script for this specific test
     const pythonProcess = spawn(PYTHON_CMD, [
@@ -300,13 +342,28 @@ async function generateAnswersInBackground(testId: string, testFilePath: string)
       }
 
       if (code === 0) {
-        // Compress the generated answer file
-        const answerFileName = `${testId}.json`;
-        const answerFilePath = path.join(ANSWERS_DIR, answerFileName);
-        const answerFilePathGz = path.join(ANSWERS_DIR, answerFileName + '.gz');
+        // Find the generated answer file - Python uses input filename stem
+        // So temp_testId.json -> temp_testId.json output
+        let answerFilePath: string | undefined;
+        
+        if (fs.existsSync(ANSWERS_DIR)) {
+          const files = fs.readdirSync(ANSWERS_DIR);
+          // Look for files ending with _testId.json or exactly testId.json
+          const matchingFile = files.find(f => 
+            f.endsWith(`_${testId}.json`) || 
+            f === `${testId}.json`
+          );
+          
+          if (matchingFile) {
+            answerFilePath = path.join(ANSWERS_DIR, matchingFile);
+            console.log(`📄 Found generated answer file: ${matchingFile}`);
+          }
+        }
 
-        try {
-          if (fs.existsSync(answerFilePath)) {
+        // Compress the generated answer file if found
+        if (answerFilePath && fs.existsSync(answerFilePath)) {
+          try {
+            const answerFilePathGz = answerFilePath + '.gz';
             // Read the JSON file
             const jsonData = fs.readFileSync(answerFilePath);
             // Compress it
@@ -315,17 +372,26 @@ async function generateAnswersInBackground(testId: string, testFilePath: string)
             fs.writeFileSync(answerFilePathGz, compressed);
             // Delete original uncompressed file
             fs.unlinkSync(answerFilePath);
-            console.log(`📦 Compressed answer file: ${answerFileName}.gz`);
+            console.log(`📦 Compressed answer file: ${path.basename(answerFilePathGz)}`);
+            
+            queueItem.status = 'completed';
+            queueItem.progress = 100;
+            queueItem.completedAt = new Date().toISOString();
+            console.log(`✅ Answer generation completed for ${testId}`);
+          } catch (compressError) {
+            console.error(`Failed to compress answer file for ${testId}:`, compressError);
+            // Mark as completed anyway, file exists uncompressed
+            queueItem.status = 'completed';
+            queueItem.progress = 100;
+            queueItem.completedAt = new Date().toISOString();
           }
-        } catch (compressError) {
-          console.error(`Failed to compress answer file for ${testId}:`, compressError);
-          // Continue anyway, file exists uncompressed
+        } else {
+          // Python exited successfully but no output file found
+          queueItem.status = 'failed';
+          queueItem.error = 'Generation completed but output file not found';
+          queueItem.completedAt = new Date().toISOString();
+          console.error(`❌ Answer generation failed for ${testId}: Output file not found`);
         }
-
-        queueItem.status = 'completed';
-        queueItem.progress = 100;
-        queueItem.completedAt = new Date().toISOString();
-        console.log(`✅ Answer generation completed for ${testId}`);
       } else {
         queueItem.status = 'failed';
         queueItem.error = errorOutput || 'Unknown error';

@@ -10,6 +10,7 @@ import {
   Alert,
   Modal,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
@@ -30,6 +31,7 @@ import {
   Share2,
   BookOpen,
   Flag,
+  RefreshCw,
   X as CloseIcon,
 } from 'lucide-react-native';
 import RenderHtml from 'react-native-render-html';
@@ -41,6 +43,7 @@ import SSCCGLService, {
   UserAnswer,
 } from '@/services/ssc-cgl-service';
 import { TestProgressService } from '@/services/test-progress-service';
+import TestSeriesService from '@/services/testseries-service';
 import ReportService, { ReportType } from '@/services/report-service';
 
 const { width } = Dimensions.get('window');
@@ -56,6 +59,7 @@ export default function TestResultScreen() {
   const [reportingQuestion, setReportingQuestion] = useState<ParsedQuestion | null>(null);
   const [reportType, setReportType] = useState<ReportType>('wrong_answer');
   const [reportDescription, setReportDescription] = useState('');
+  const [isReevaluating, setIsReevaluating] = useState(false);
 
   useEffect(() => {
     loadResults();
@@ -90,6 +94,55 @@ export default function TestResultScreen() {
                     testData = await SSCCGLService.fetchPaper(paperInfo.filename);
                 }
             }
+            
+            // Check if AI answers are available and merge them
+            if (testData && result.evaluationStatus === 'completed') {
+              try {
+                const status = await TestSeriesService.checkAnswerGenerationStatus(result.testId);
+                if (status.answersAvailable) {
+                  console.log('Loading AI-generated answers...');
+                  const aiAnswers = await TestSeriesService.fetchAnswers(result.testId);
+                  
+                  if (aiAnswers && aiAnswers.sections) {
+                    // Merge AI explanations into test data
+                    testData.sections.forEach((section: any) => {
+                      const aiSection = aiAnswers.sections.find(
+                        (s: any) => s.section_name === section.title
+                      );
+                      
+                      if (aiSection) {
+                        section.questions.forEach((question: any) => {
+                          const aiQuestion = aiSection.questions.find(
+                            (q: any) => q.question_id === question.id
+                          );
+                          
+                          if (aiQuestion && aiQuestion.ai_generated) {
+                            const aiData = aiQuestion.ai_generated;
+                            
+                            // Update explanation
+                            if (aiData.english && aiData.english.explanation) {
+                              question.explanation = {
+                                english: aiData.english.explanation,
+                                hindi: aiData.hindi?.explanation || aiData.english.explanation
+                              };
+                            }
+                            
+                            // Update key concepts
+                            if (aiData.english && aiData.english.key_concepts) {
+                              question.keyConcepts = aiData.english.key_concepts;
+                            }
+                          }
+                        });
+                      }
+                    });
+                    console.log('AI answers merged successfully');
+                  }
+                }
+              } catch (error) {
+                console.error('Error fetching AI answers:', error);
+              }
+            }
+            
             setTest(testData || null);
         }
     } catch (error) {
@@ -108,6 +161,55 @@ export default function TestResultScreen() {
       return `${mins}m ${secs}s`;
     }
     return `${secs}s`;
+  };
+
+  const handleReevaluate = async () => {
+    if (!analytics) return;
+    
+    Alert.alert(
+      'Re-evaluate Test',
+      'This will check for AI-generated answers and update your test evaluation. Continue?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Re-evaluate',
+          onPress: async () => {
+            try {
+              setIsReevaluating(true);
+              
+              // Check if answers are available
+              const status = await TestSeriesService.checkAnswerGenerationStatus(analytics.testId);
+              
+              if (!status.answersAvailable || status.status !== 'completed') {
+                Alert.alert(
+                  'Not Ready',
+                  'AI answers are not yet available for this test. Please try again later.',
+                  [{ text: 'OK' }]
+                );
+                return;
+              }
+              
+              // Update status in Firebase
+              await TestProgressService.updateAnswerGenerationStatus(attemptId, 'completed');
+              
+              // Reload results
+              await loadResults();
+              
+              Alert.alert(
+                'Success',
+                'Test has been re-evaluated with AI answers.',
+                [{ text: 'OK' }]
+              );
+            } catch (error) {
+              console.error('Re-evaluation error:', error);
+              Alert.alert('Error', 'Failed to re-evaluate test');
+            } finally {
+              setIsReevaluating(false);
+            }
+          }
+        }
+      ]
+    );
   };
 
   const handleReportQuestion = (question: ParsedQuestion) => {
@@ -589,6 +691,19 @@ export default function TestResultScreen() {
         >
           <Home size={20} color="#4A90E2" />
           <Text style={styles.footerButtonText}>Back to Tests</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.footerButton}
+          onPress={handleReevaluate}
+          disabled={isReevaluating}
+        >
+          {isReevaluating ? (
+            <ActivityIndicator size="small" color="#4A90E2" />
+          ) : (
+            <RefreshCw size={20} color="#4A90E2" />
+          )}
+          <Text style={styles.footerButtonText}>Re-evaluate</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.footerButton}>

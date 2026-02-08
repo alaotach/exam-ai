@@ -34,6 +34,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Card from '@/components/Card';
 import UserService, { UserStats, UserProfile } from '@/services/user-service';
 import { TestProgressService, TestResult } from '@/services/test-progress-service';
+import TestSeriesService from '@/services/testseries-service';
 
 const { width } = Dimensions.get('window');
 
@@ -48,6 +49,13 @@ export default function ProgressScreen() {
 
   useEffect(() => {
     loadProgressData();
+    
+    // Poll for pending evaluations every 30 seconds
+    const pollInterval = setInterval(() => {
+      checkPendingEvaluations();
+    }, 30000); // 30 seconds
+    
+    return () => clearInterval(pollInterval);
   }, []);
 
   const loadProgressData = async () => {
@@ -101,8 +109,68 @@ export default function ProgressScreen() {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await loadProgressData();
+    await Promise.all([
+      loadProgressData(),
+      checkPendingEvaluations()
+    ]);
     setRefreshing(false);
+  };
+
+  const checkPendingEvaluations = async () => {
+    try {
+      const pendingTests = testHistory.filter(t => t.evaluationStatus === 'pending');
+      
+      if (pendingTests.length === 0) {
+        console.log('No pending tests to check');
+        return;
+      }
+      
+      console.log(`🔍 Checking ${pendingTests.length} pending evaluations...`);
+      
+      let updatedAny = false;
+      
+      for (const test of pendingTests) {
+        console.log(`Checking test: ${test.testId} (${test.testTitle})`);
+        console.log(`  AttemptId: ${test.attemptId}`);
+        
+        // Check if answers are now available
+        const status = await TestSeriesService.checkAnswerGenerationStatus(test.testId);
+        
+        console.log(`  Status response:`, JSON.stringify(status, null, 2));
+        
+        if (status.answersAvailable && status.status === 'completed') {
+          console.log(`✅ Answers ready! Updating status for attemptId: ${test.attemptId}`);
+          
+          // Update the evaluation status to completed
+          await TestProgressService.updateAnswerGenerationStatus(
+            test.attemptId,
+            'completed'
+          );
+          
+          console.log(`✅ Status updated successfully`);
+          updatedAny = true;
+        } else {
+          console.log(`⏳ Still pending: status=${status.status}, answersAvailable=${status.answersAvailable}`);
+        }
+      }
+      
+      // Reload data if any test was updated
+      if (updatedAny) {
+        console.log('✅ Updated test statuses, reloading data...');
+        await loadProgressData();
+        
+        // Show notification
+        Alert.alert(
+          'Evaluation Complete! ✅',
+          'Your test results are now ready. Check your test history!',
+          [{ text: 'OK' }]
+        );
+      } else {
+        console.log('No updates needed');
+      }
+    } catch (error) {
+      console.error('❌ Error checking pending evaluations:', error);
+    }
   };
 
   const calculateRank = (accuracy: number): string => {
@@ -330,9 +398,15 @@ export default function ProgressScreen() {
                       // Check if evaluation is complete
                       if (test.evaluationStatus === 'pending') {
                         Alert.alert(
-                          'Evaluation Pending',
-                          'We are still generating answers and evaluating your test. You will be notified when it\'s ready.',
-                          [{ text: 'OK' }]
+                          'Evaluation Pending ⏳',
+                          'We are still generating AI answers and evaluating your test. Pull down to refresh or check back in a few minutes.',
+                          [
+                            { text: 'Check Now', onPress: async () => {
+                              console.log('Manual check triggered');
+                              await checkPendingEvaluations();
+                            }},
+                            { text: 'OK' }
+                          ]
                         );
                       } else {
                         router.push({

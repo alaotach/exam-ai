@@ -125,18 +125,35 @@ router.get('/status/:testId', (req: Request, res: Response) => {
 
     const status = generationQueue.get(testId);
     
-    // Check if status not in queue - check for completed files (both .json and .json.gz)
+    // Check if status not in queue - check for completed files
     if (!status) {
-      const testFileName = `${testId}.json`;
-      const answerFilePath = path.join(ANSWERS_DIR, testFileName);
-      const answerFilePathGz = path.join(ANSWERS_DIR, testFileName + '.gz');
+      // Look for files with either just ID or title prefix
+      const possibleFiles = [];
       
-      if (fs.existsSync(answerFilePath) || fs.existsSync(answerFilePathGz)) {
+      if (fs.existsSync(ANSWERS_DIR)) {
+        const allFiles = fs.readdirSync(ANSWERS_DIR);
+        
+        // Find files ending with _testId.json or _testId.json.gz or exactly testId.json(.gz)
+        for (const file of allFiles) {
+          if (file.endsWith(`_${testId}.json`) || 
+              file.endsWith(`_${testId}.json.gz`) ||
+              file === `${testId}.json` || 
+              file === `${testId}.json.gz`) {
+            possibleFiles.push(file);
+          }
+        }
+      }
+      
+      if (possibleFiles.length > 0) {
+        const file = possibleFiles[0];
+        console.log(`[Answer Status] Found answer file: ${file}`);
+        
         return res.json({
           testId,
           status: 'completed',
           progress: 100,
-          answersAvailable: true
+          answersAvailable: true,
+          answerFile: file
         });
       }
 
@@ -165,19 +182,38 @@ router.get('/status/:testId', (req: Request, res: Response) => {
 router.get('/:testFileName', async (req: Request, res: Response) => {
   try {
     const { testFileName } = req.params;
-    const answerFilePath = path.join(ANSWERS_DIR, testFileName);
-    const answerFilePathGz = path.join(ANSWERS_DIR, testFileName + '.gz');
-
-    let filePath: string;
+    
+    // Extract testId from filename (last part after '_' or whole name)
+    const testId = testFileName.includes('_') 
+      ? testFileName.split('_').pop()?.replace(/\.json(\.gz)?$/, '')
+      : testFileName.replace(/\.json(\.gz)?$/, '');
+    
+    console.log(`[Fetch Answers] Looking for testId: ${testId}`);
+    
+    // Look for answer file with title prefix or just ID
+    let filePath: string | undefined;
     let needsDecompression = false;
-
-    // Check for compressed file first
-    if (fs.existsSync(answerFilePathGz)) {
-      filePath = answerFilePathGz;
-      needsDecompression = true;
-    } else if (fs.existsSync(answerFilePath)) {
-      filePath = answerFilePath;
-    } else {
+    
+    if (fs.existsSync(ANSWERS_DIR)) {
+      const allFiles = fs.readdirSync(ANSWERS_DIR);
+      
+      for (const file of allFiles) {
+        if (file.endsWith(`_${testId}.json.gz`) || file === `${testId}.json.gz`) {
+          filePath = path.join(ANSWERS_DIR, file);
+          needsDecompression = true;
+          console.log(`[Fetch Answers] Found compressed: ${file}`);
+          break;
+        } else if (file.endsWith(`_${testId}.json`) || file === `${testId}.json`) {
+          filePath = path.join(ANSWERS_DIR, file);
+          needsDecompression = false;
+          console.log(`[Fetch Answers] Found uncompressed: ${file}`);
+          break;
+        }
+      }
+    }
+    
+    if (!filePath) {
+      console.error(`[Fetch Answers] Not found for testId: ${testId}`);
       return res.status(404).json({ error: 'Answers not found' });
     }
 

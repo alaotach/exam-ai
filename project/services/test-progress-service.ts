@@ -162,8 +162,13 @@ export const TestProgressService = {
   ): Promise<void> {
     try {
       const user = auth.currentUser;
-      if (!user) return;
+      if (!user) {
+        console.error('No user logged in, cannot update status');
+        return;
+      }
 
+      console.log(`Updating answer status for attemptId: ${attemptId} to ${status}`);
+      
       const docRef = doc(db, 'users', user.uid, 'history', attemptId);
       const updateData: any = { 
         answerGenerationStatus: status,
@@ -177,11 +182,13 @@ export const TestProgressService = {
       // If completed, also update evaluation status
       if (status === 'completed') {
         updateData.evaluationStatus = 'completed';
+        console.log('Also updating evaluationStatus to completed');
       }
 
       await setDoc(docRef, updateData, { merge: true });
+      console.log('✅ Status update successful in Firebase');
     } catch (e) {
-      console.error('Failed to update answer generation status', e);
+      console.error('❌ Failed to update answer generation status:', e);
     }
   }
 };

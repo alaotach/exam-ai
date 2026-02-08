@@ -122,8 +122,13 @@ router.get('/:seriesFolder/:sectionFolder', (req: Request, res: Response) => {
     const testFiles = fs.readdirSync(sectionPath)
       .filter(f => f.endsWith('.json.gz') || f.endsWith('.json'))
       .map(filename => {
-        // Remove extension to get the ID
-        const testId = filename.replace(/\.(json\.gz|json)$/, '');
+        // Extract ID from filename - format is either:
+        // 1. "Title_ID.json.gz" or
+        // 2. "ID.json.gz"
+        const withoutExt = filename.replace(/\.(json\.gz|json)$/, '');
+        const parts = withoutExt.split('_');
+        const testId = parts[parts.length - 1]; // ID is always the last part
+        const title = parts.length > 1 ? parts.slice(0, -1).join(' ') : withoutExt;
         
         // Try to find matching test info from _section_info.json
         const testInfo = sectionInfo.tests?.find((t: any) => 
@@ -133,7 +138,7 @@ router.get('/:seriesFolder/:sectionFolder', (req: Request, res: Response) => {
         if (testInfo) {
           return {
             ...testInfo,
-            id: testId, // Use actual filename (without extension) as ID
+            id: testId,
             filename: filename,
             compressed: filename.endsWith('.gz')
           };
@@ -141,7 +146,7 @@ router.get('/:seriesFolder/:sectionFolder', (req: Request, res: Response) => {
           // No info found, create basic info from filename
           return {
             id: testId,
-            title: testId.replace(/_/g, ' '),
+            title: title.replace(/_/g, ' '),
             filename: filename,
             compressed: filename.endsWith('.gz')
           };
@@ -182,31 +187,38 @@ router.get('/:seriesFolder/:sectionFolder/:testId', async (req: Request, res: Re
       return res.status(404).json({ error: 'Section not found' });
     }
     
-    // Try multiple filename patterns
-    const possibleFilenames = [
-      `${testId}.json.gz`,
-      `${testId}.json`,
-    ];
+    // Find file by ID - it might have a title prefix
+    const allFiles = fs.readdirSync(sectionPath);
     
     let filePath: string | null = null;
     let needsDecompression = false;
+    let matchedFilename: string | null = null;
     
-    for (const filename of possibleFilenames) {
-      const fullPath = path.join(sectionPath, filename);
-      if (fs.existsSync(fullPath)) {
-        filePath = fullPath;
-        needsDecompression = filename.endsWith('.gz');
-        console.log(`[TestSeries] Found file: ${filename}`);
+    // Look for files ending with _[testId].json.gz or _[testId].json or exactly [testId].json.gz
+    for (const file of allFiles) {
+      if (file.endsWith(`_${testId}.json.gz`) || file === `${testId}.json.gz`) {
+        filePath = path.join(sectionPath, file);
+        needsDecompression = true;
+        matchedFilename = file;
+        break;
+      } else if (file.endsWith(`_${testId}.json`) || file === `${testId}.json`) {
+        filePath = path.join(sectionPath, file);
+        needsDecompression = false;
+        matchedFilename = file;
         break;
       }
     }
     
+    if (filePath) {
+      console.log(`[TestSeries] Found file: ${matchedFilename}`);
+    }
+    
     if (!filePath) {
-      console.error(`[TestSeries] Test paper not found. Tried: ${possibleFilenames.join(', ')}`);
+      console.error(`[TestSeries] Test paper not found. TestID: ${testId}, Available files:`, allFiles.slice(0, 3));
       return res.status(404).json({ 
         error: 'Test paper not found',
         testId,
-        triedFiles: possibleFilenames
+        hint: 'File might have a title prefix. Available files: ' + allFiles.slice(0, 3).join(', ')
       });
     }
 

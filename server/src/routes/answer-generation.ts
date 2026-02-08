@@ -202,10 +202,11 @@ router.get('/status/:testId', (req: Request, res: Response) => {
       });
     }
 
+    // Not completed yet or in other status
     res.json({
       ...status,
       testId,
-      answersAvailable: status.status === 'completed'
+      answersAvailable: false
     });
 
   } catch (error: any) {

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import pako from 'pako'; // For gzip decompression in app
 
-const SERVER_URL = process.env.EXPO_PUBLIC_SERVER_URL || 'http://localhost:3000';
+const SERVER_URL = process.env.EXPO_PUBLIC_SERVER_URL || 'https://exambc.alaotach.com';
 
 export interface TestSeries {
   id: string;
@@ -14,6 +14,7 @@ export interface TestSeries {
 
 export interface Section {
   id: string;
+  folderName: string; // Actual folder name on server
   title: string;
   tests: Test[];
   availableTests: number;
@@ -102,13 +103,17 @@ const TestSeriesService = {
         return JSON.parse(cached);
       }
 
-      console.log('Fetching test from server...');
-      const response = await fetch(
-        `${SERVER_URL}/api/testseries/${encodeURIComponent(seriesFolder)}/${encodeURIComponent(sectionFolder)}/${encodeURIComponent(testId)}`
-      );
+      const url = `${SERVER_URL}/api/testseries/${encodeURIComponent(seriesFolder)}/${encodeURIComponent(sectionFolder)}/${encodeURIComponent(testId)}`;
+      console.log('Fetching test from server:', url);
+      
+      const response = await fetch(url);
+      
+      console.log('Response status:', response.status, response.statusText);
       
       if (!response.ok) {
-        throw new Error(`Failed to fetch test paper: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('Server error response:', errorText);
+        throw new Error(`Failed to fetch test paper: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
       const testData = await response.json();

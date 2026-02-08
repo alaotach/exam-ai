@@ -114,10 +114,7 @@ export default function PracticeScreen() {
             style={{marginTop: 10}}
           />
         </Card>
-    <SafeAreaView style={styles.container} edges={['bottom']}>
-      <ScrollView style={styles.scrollView}>
-        <Text style={styles.title}>Practice Tests</Text>
-        
+
         <Card>
           <Text style={styles.cardTitle}>Official SSC CGL Papers ({onlinePapers.length})</Text>
           <Text style={styles.cardDescription}>

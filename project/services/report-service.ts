@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { auth } from './firebaseConfig';
 
-const API_URL = Platform.OS === 'android' ? 'http://192.168.200.60:3000/api' : 'http://localhost:3000/api';
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://exambc.alaotach.com/api';
 
 export type ReportType = 'wrong_answer' | 'incorrect_question' | 'typo' | 'inappropriate' | 'other';
 export type ReportStatus = 'pending' | 'reviewed' | 'resolved' | 'dismissed';

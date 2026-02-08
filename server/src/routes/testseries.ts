@@ -53,12 +53,15 @@ router.get('/', (req: Request, res: Response) => {
             const info = JSON.parse(infoContent);
             sectionInfo = {
               id: info.id || sectionFolder,
+              folderName: sectionFolder, // Keep actual folder name
               title: info.title || sectionFolder,
               tests: info.tests || []
             };
           } catch (err) {
             console.error(`Error reading section info for ${sectionFolder}:`, err);
           }
+        } else {
+          sectionInfo.folderName = sectionFolder; // Add folder name if no info file
         }
 
         // Count available test files
@@ -150,8 +153,15 @@ router.get('/:seriesFolder/:sectionFolder', (req: Request, res: Response) => {
 router.get('/:seriesFolder/:sectionFolder/:testId', async (req: Request, res: Response) => {
   try {
     const { seriesFolder, sectionFolder, testId } = req.params;
+    
+    console.log(`[TestSeries] Fetching test: ${seriesFolder}/${sectionFolder}/${testId}`);
+    
     const compressedPath = path.join(TESTSERIES_DIR, seriesFolder, sectionFolder, `${testId}.json.gz`);
     const uncompressedPath = path.join(TESTSERIES_DIR, seriesFolder, sectionFolder, `${testId}.json`);
+
+    console.log(`[TestSeries] Checking paths:`);
+    console.log(`  - Compressed: ${compressedPath}`);
+    console.log(`  - Uncompressed: ${uncompressedPath}`);
 
     let filePath: string;
     let needsDecompression = false;
@@ -160,9 +170,12 @@ router.get('/:seriesFolder/:sectionFolder/:testId', async (req: Request, res: Re
     if (fs.existsSync(compressedPath)) {
       filePath = compressedPath;
       needsDecompression = true;
+      console.log(`[TestSeries] Found compressed file`);
     } else if (fs.existsSync(uncompressedPath)) {
       filePath = uncompressedPath;
+      console.log(`[TestSeries] Found uncompressed file`);
     } else {
+      console.error(`[TestSeries] Test paper not found at either path`);
       return res.status(404).json({ error: 'Test paper not found' });
     }
 
@@ -173,15 +186,17 @@ router.get('/:seriesFolder/:sectionFolder/:testId', async (req: Request, res: Re
       const jsonString = decompressedData.toString('utf-8');
       const testData = JSON.parse(jsonString);
 
+      console.log(`[TestSeries] Successfully decompressed and parsed test`);
       res.json(testData);
     } else {
       // Stream uncompressed file
       res.setHeader('Content-Type', 'application/json');
+      console.log(`[TestSeries] Streaming uncompressed test`);
       fs.createReadStream(filePath).pipe(res);
     }
 
   } catch (error: any) {
-    console.error('Error serving test paper:', error);
+    console.error('[TestSeries] Error serving test paper:', error);
     res.status(500).json({ error: error.message });
   }
 });

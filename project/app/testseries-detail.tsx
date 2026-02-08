@@ -172,7 +172,7 @@ export default function TestSeriesDetailScreen() {
                   <TouchableOpacity
                     key={test.id}
                     style={styles.testItem}
-                    onPress={() => handleTestPress(section.id, test)}
+                    onPress={() => handleTestPress(section.folderName || section.id, test)}
                   >
                     <View style={styles.testInfo}>
                       <Text style={styles.testTitle} numberOfLines={2}>
